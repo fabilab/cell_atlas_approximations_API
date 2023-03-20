@@ -16,6 +16,8 @@ This documentation details two interfaces for the API:
    :maxdepth: 2
    :caption: Contents:
 
+   rest/index
+   python/index
 
 
 Indices and tables
