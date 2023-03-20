@@ -8,6 +8,7 @@ from flask_restful import Api
 from config import configuration as config
 from api.endpoints import get_api_endpoint
 from api.objects import (
+    Organisms,
     Organs,
 )
 
@@ -15,8 +16,6 @@ from api.objects import (
 ##############################
 app = Flask(__name__, static_url_path="/static", template_folder="templates")
 app_api = Api(app)
-# NOTE: this might be unsafe
-CORS(app)
 with open('secret_key.txt') as f:
     app.config['SECRET_KEY'] = f.read()
 ##############################

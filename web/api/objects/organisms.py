@@ -10,9 +10,10 @@ from models import (
 
 class Organisms(Resource):
     """Get list of organisms"""
+
     def get(self):
         """Get list of organisms"""
         organisms = get_organisms()
         return {
-            "organisms": organism,
+            "organisms": organisms,
         }

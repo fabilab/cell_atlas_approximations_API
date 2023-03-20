@@ -6,11 +6,11 @@ feature_types: ['gene_expression']
 
 paths:
   compressed_atlas:
-    "mouse": "./static/atlas_data/tabula_muris_senis.h5"
-    "human": "./static/atlas_data/tabula_sapiens.h5"
-    "lemur": "./static/atlas_data/tabula_microcebus.h5"
-    "celegans": "./static/atlas_data/c_elegans.h5"
-    "drerio": "./static/atlas_data/d_rerio.h5"
+    "m_musculus": "./static/atlas_data/tabula_muris_senis.h5"
+    "h_sapiens": "./static/atlas_data/tabula_sapiens.h5"
+    "m_myoxinus": "./static/atlas_data/tabula_microcebus.h5"
+    "c_elegans": "./static/atlas_data/c_elegans.h5"
+    "d_rerio": "./static/atlas_data/d_rerio.h5"
 
   # NOTE: this one is used for all species, depending on the column
   # FIXME: generalize to all species/pairs somehow

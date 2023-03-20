@@ -12,7 +12,7 @@ from models.exceptions import (
 
 def get_organisms():
     """Get a list of organisms supported"""
-    organisms = config["paths"]["compressed_atlas"].keys()
+    organisms = list(config["paths"]["compressed_atlas"].keys())
     organisms.sort()
     return organisms
 
@@ -31,6 +31,6 @@ def get_organs(
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}"
             )
-        organs = db[measurement_type]["by_tissue"].keys()
+        organs = list(db[measurement_type]["by_tissue"].keys())
     organs.sort()
     return organs

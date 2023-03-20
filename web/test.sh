@@ -10,7 +10,7 @@ set -e
 CLEAN=0
 UPDATE=0  # Change this to run pip every time (slows down dev a little)
 VENV_DIR=.venv
-VERBOSE=0
+VERBOSE=1
 MAIN_FLASK_FILE=app.py
 CERT=0
 FLASK=${VENV_DIR}/bin/flask
