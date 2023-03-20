@@ -1,3 +1,5 @@
+[![Documentation Status](https://readthedocs.org/projects/atlasapprox/badge/?version=latest)](https://apidocs.atlasapprox.org/en/latest/?badge=latest)
+
 Cell Atlas Approximations - API
 ===============================
 (WIP!)
