@@ -4,12 +4,13 @@ from flask_restful import Resource
 
 # Helper functions
 from models import (
-        get_organs,
-    )
+    get_organs,
+)
 
 
 class Organs(Resource):
     """Get list of tissues for an organism"""
+
     def get(self):
         """Get list of tissues"""
         args = request.args

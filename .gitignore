@@ -1,6 +1,11 @@
+# Virtual env for web
+web/.venv
+
 # Web secret key
 web/secret_key.txt
 
+# Processed data files
+web/static/atlas_data
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

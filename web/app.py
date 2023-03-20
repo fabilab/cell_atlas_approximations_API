@@ -23,6 +23,7 @@ with open('secret_key.txt') as f:
 
 
 # Connect to endpoints
+app_api.add_resource(Organisms, get_api_endpoint('organisms'))
 app_api.add_resource(Organs, get_api_endpoint('organs'))
 
 
