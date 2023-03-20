@@ -4,32 +4,29 @@ from flask_restful import Resource
 
 # Helper functions
 from models import (
-    get_organs,
+    get_features,
 )
 
 
-class Organs(Resource):
-    """Get list of tissues for an organism"""
+class Features(Resource):
+    """Get list of features for an organism"""
 
     def get(self):
-        """Get list of tissues"""
+        """Get list of features (genes)"""
         args = request.args
         organism = args.get("organism", None)
-
-        print(organism)
-
         if organism is None:
-            organs = None
+            features = None
         else:
             try:
-                organs = get_organs(organism=organism)
-            except ValueError:
-                organs = None
+                features = get_features(organism=organism)
+            except KeyError:
+                features = None
 
-        if organs is not None:
+        if features is not None:
             return {
                 "organism": organism,
-                "organs": organs,
+                "features": list(features),
             }
 
         # TODO

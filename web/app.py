@@ -10,6 +10,7 @@ from api.endpoints import get_api_endpoint
 from api.objects import (
     Organisms,
     Organs,
+    Features,
 )
 
 
@@ -24,6 +25,7 @@ with open('secret_key.txt') as f:
 # Connect to endpoints
 app_api.add_resource(Organisms, get_api_endpoint('organisms'))
 app_api.add_resource(Organs, get_api_endpoint('organs'))
+app_api.add_resource(Features, get_api_endpoint('features'))
 
 
 # Main loop
