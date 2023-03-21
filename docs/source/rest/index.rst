@@ -136,7 +136,7 @@ fraction_detected
 
 
 markers
-+++++++++++++++
++++++++
 **Endpoint**: ``/markers``
 
 **Parameters**:

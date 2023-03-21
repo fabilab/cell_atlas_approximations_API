@@ -4,3 +4,11 @@ class OrganismNotFoundError(KeyError):
 
 class MeasurementTypeNotFoundError(KeyError):
     pass
+
+
+class FeatureNotFoundError(KeyError):
+    pass
+
+
+class TooManyFeaturesError(ValueError):
+    pass

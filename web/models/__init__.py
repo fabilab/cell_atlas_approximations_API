@@ -8,6 +8,14 @@ from config import configuration as config
 from models.exceptions import (
     OrganismNotFoundError,
     MeasurementTypeNotFoundError,
+    TooManyFeaturesError,
+)
+from models.features import (
+    get_features,
+)
+from models.measurement import (
+    get_averages,
+    get_fraction_detected,
 )
 
 
@@ -37,8 +45,7 @@ def get_organs(
     return organs
 
 
-def get_features(organism, measurement_type="gene_expression"):
-    """Get a list of features"""
+def get_celltypes(organism, organ, measurement_type="gene_expression"):
     h5_path = config["paths"]["compressed_atlas"].get(organism, None)
     if h5_path is None:
         raise OrganismNotFoundError(f"Organism not found: {organism}")
@@ -48,5 +55,10 @@ def get_features(organism, measurement_type="gene_expression"):
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}"
             )
-        features = db[measurement_type]["features"].asstr()[:]
-    return features
+        if organ not in db[measurement_type]["by_tissue"]:
+            raise MeasurementTypeNotFoundError(f"Organ not found: {organ}")
+
+        celltypes = db[measurement_type]["by_tissue"][organ]["celltype"][
+            "index"
+        ].asstr()[:]
+    return celltypes

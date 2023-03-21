@@ -16,8 +16,6 @@ class Organs(Resource):
         args = request.args
         organism = args.get("organism", None)
 
-        print(organism)
-
         if organism is None:
             organs = None
         else:

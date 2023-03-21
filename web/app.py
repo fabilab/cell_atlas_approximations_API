@@ -8,9 +8,12 @@ from flask_restful import Api
 from config import configuration as config
 from api.endpoints import get_api_endpoint
 from api.objects import (
+    Average,
+    Celltypes,
+    Features,
+    FractionDetected,
     Organisms,
     Organs,
-    Features,
 )
 
 
@@ -26,6 +29,9 @@ with open('secret_key.txt') as f:
 app_api.add_resource(Organisms, get_api_endpoint('organisms'))
 app_api.add_resource(Organs, get_api_endpoint('organs'))
 app_api.add_resource(Features, get_api_endpoint('features'))
+app_api.add_resource(Celltypes, get_api_endpoint('celltypes'))
+app_api.add_resource(Average, get_api_endpoint('average'))
+app_api.add_resource(FractionDetected, get_api_endpoint('fraction_detected'))
 
 
 # Main loop
