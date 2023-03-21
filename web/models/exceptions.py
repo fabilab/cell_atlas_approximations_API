@@ -12,3 +12,7 @@ class FeatureNotFoundError(KeyError):
 
 class TooManyFeaturesError(ValueError):
     pass
+
+
+class CellTypeNotFoundError(KeyError):
+    pass

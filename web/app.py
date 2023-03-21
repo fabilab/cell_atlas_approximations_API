@@ -12,6 +12,7 @@ from api.objects import (
     Celltypes,
     Features,
     FractionDetected,
+    Markers,
     Organisms,
     Organs,
 )
@@ -32,6 +33,7 @@ app_api.add_resource(Features, get_api_endpoint('features'))
 app_api.add_resource(Celltypes, get_api_endpoint('celltypes'))
 app_api.add_resource(Average, get_api_endpoint('average'))
 app_api.add_resource(FractionDetected, get_api_endpoint('fraction_detected'))
+app_api.add_resource(Markers, get_api_endpoint('markers'))
 
 
 # Main loop
