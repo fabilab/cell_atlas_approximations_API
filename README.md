@@ -29,7 +29,15 @@ requests.get(
 
 Usage (Python)
 --------------
-The Python API is currently in pre-alpha and undocumented.
+The Python API is currently undocumented. If you are impatient:
+
+```python
+import atlasapprox
+
+api = atlasapprox.API()
+print(api.organisms())
+print(api.celltypes(organism="c_elegans", organ="whole"))
+```
 
 
 Usage (R)
