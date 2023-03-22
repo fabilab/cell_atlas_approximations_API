@@ -2,6 +2,10 @@ class OrganismNotFoundError(KeyError):
     pass
 
 
+class OrganNotFoundError(KeyError):
+    pass
+
+
 class MeasurementTypeNotFoundError(KeyError):
     pass
 

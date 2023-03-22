@@ -1,11 +1,13 @@
 # Web imports
 from flask import request
-from flask_restful import Resource
+from flask_restful import Resource, abort
 
 # Helper functions
 from models import (
     get_organs,
     get_celltypes,
+    OrganismNotFoundError,
+    OrganNotFoundError,
 )
 
 
@@ -16,27 +18,21 @@ class Celltypes(Resource):
         """Get list of cell types for an organ and organism"""
         args = request.args
         organism = args.get("organism", None)
+        if organism is None:
+            abort(400, message='The "organism" parameter is required.')
         organ = args.get("organ", None)
-        if (organism is None) or (organ is None):
-            celltypes = None
-        elif organ != "whole":
-            try:
-                celltypes = list(get_celltypes(organism=organism, organ=organ))
-            except KeyError:
-                celltypes = None
-        else:
-            organs = get_organs(organism)
-            celltypes = set()
-            for organ in organs:
-                celltypes |= set(get_celltypes(organism=organism, organ=organ))
-            celltypes = list(celltypes)
+        if organ is None:
+            abort(400, message='The "organ" parameter is required.')
 
-        if celltypes is not None:
-            return {
-                "organism": organism,
-                "organ": organ,
-                "celltypes": celltypes,
-            }
+        try:
+            celltypes = list(get_celltypes(organism=organism, organ=organ))
+        except OrganismNotFoundError:
+            abort(400, message=f"Organism not found: {organism}.")
+        except OrganNotFoundError:
+            abort(400, message=f"Organ not found: {organ}.")
 
-        # TODO
-        return None
+        return {
+            "organism": organism,
+            "organ": organ,
+            "celltypes": celltypes,
+        }

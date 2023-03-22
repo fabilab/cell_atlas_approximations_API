@@ -7,8 +7,10 @@ import h5py
 from config import configuration as config
 from models.exceptions import (
     OrganismNotFoundError,
+    OrganNotFoundError,
     MeasurementTypeNotFoundError,
     TooManyFeaturesError,
+    FeatureNotFoundError,
     CellTypeNotFoundError,
 )
 from models.features import (
@@ -58,7 +60,7 @@ def get_celltypes(organism, organ, measurement_type="gene_expression"):
                 f"Measurement type not found: {measurement_type}"
             )
         if organ not in db[measurement_type]["by_tissue"]:
-            raise MeasurementTypeNotFoundError(f"Organ not found: {organ}")
+            raise OrganNotFoundError(f"Organ not found: {organ}")
 
         celltypes = db[measurement_type]["by_tissue"][organ]["celltype"][
             "index"

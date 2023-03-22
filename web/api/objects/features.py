@@ -1,10 +1,11 @@
 # Web imports
 from flask import request
-from flask_restful import Resource
+from flask_restful import Resource, abort
 
 # Helper functions
 from models import (
     get_features,
+    OrganismNotFoundError,
 )
 
 
@@ -16,18 +17,14 @@ class Features(Resource):
         args = request.args
         organism = args.get("organism", None)
         if organism is None:
-            features = None
-        else:
-            try:
-                features = get_features(organism=organism)
-            except KeyError:
-                features = None
+            abort(400, message='The "organism" parameter is required.')
 
-        if features is not None:
-            return {
-                "organism": organism,
-                "features": list(features),
-            }
+        try:
+            features = get_features(organism=organism)
+        except OrganismNotFoundError:
+            abort(400, message=f"Organism not found: {organism}.")
 
-        # TODO
-        return None
+        return {
+            "organism": organism,
+            "features": list(features),
+        }
