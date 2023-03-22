@@ -138,7 +138,7 @@ class API:
             organ: The organ to query.
             cell_type: The cell type to get markers for.
             number: The number of markers to look for. The actual number might
-              be lower if not enough distinctive features were found.
+                be lower if not enough distinctive features were found.
 
         Returns: A list of markers for the specified cell type in that organ.
             The number of markers might be less than requested if the cell type
@@ -150,6 +150,7 @@ class API:
                 "organism": organism,
                 "organ": organ,
                 "celltype": cell_type,
+                "number": number,
             },
         )
         if response.ok:

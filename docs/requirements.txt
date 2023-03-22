@@ -1,1 +1,3 @@
 sphinx-tabs
+pandas
+requests

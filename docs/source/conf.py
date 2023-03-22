@@ -13,7 +13,10 @@ author = 'Fabio Zanini'
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
-extensions = ['sphinx_tabs.tabs']
+extensions = [
+    'sphinx_tabs.tabs',
+    'sphinx.ext.napoleon',
+]
 sphinx_tabs_disable_tab_closing = True
 
 templates_path = ['_templates']
