@@ -22,6 +22,8 @@ ADD api api
 ADD models models
 
 # App file
+COPY config.yml .
+COPY config.py .
 COPY app.py .
 
 # Specify the command to run on container start
