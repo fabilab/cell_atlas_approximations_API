@@ -18,12 +18,12 @@ build:
 
   jobs:
     pre_build:
-      - /home/docs/checkouts/readthedocs.org/user_builds/atlasapprox/envs/${READTHEDOCS_VERSION}/bin/pip install -q --force-reinstall Python/
+      - python -m pip install -q --force-reinstall Python/
 
 
 # Build documentation in the docs/ directory with Sphinx
 sphinx:
-   configuration: doc/source/conf.py
+   configuration: docs/source/conf.py
 
 # If using Sphinx, optionally build your docs in additional formats such as PDF
 # formats:
