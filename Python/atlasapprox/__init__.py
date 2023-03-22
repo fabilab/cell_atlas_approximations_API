@@ -1,12 +1,16 @@
 """
 Cell atlas approximations, Python API interface.
 """
+import os
 import requests
 import pandas as pd
 from typing import Sequence
 
 
-baseurl = "http://127.0.0.1:5000/api/v1/"
+baseurl = os.getenv(
+    "ATLASAPPROX_BASEURL",
+    "http://api.atlasapprox.org/v1/",
+    )
 
 
 class API:
