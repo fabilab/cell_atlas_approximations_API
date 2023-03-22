@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 # version
 version_file = pathlib.Path(__file__).parent / "VERSION"
 with open(version_file) as f:
-    version = f.read()
+    version = f.read().rstrip('\n')
 
 
 setup(
