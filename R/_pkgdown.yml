@@ -1,0 +1,20 @@
+url: ~
+
+template:
+  bootstrap: 5
+
+
+navbar:
+  structure:
+    left:
+    - intro
+    - reference
+    right: github
+  components:
+    intro:
+      text: Get started
+      menu:
+      - text: Intro
+        href: articles/atlasapprox.html
+
+
