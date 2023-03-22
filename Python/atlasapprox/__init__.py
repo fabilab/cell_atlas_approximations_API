@@ -6,7 +6,7 @@ import pandas as pd
 from typing import Sequence
 
 
-baseurl = "http://127.0.0.1:5000/api/v1"
+baseurl = "http://127.0.0.1:5000/api/v1/"
 
 
 class API:

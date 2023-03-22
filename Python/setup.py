@@ -20,6 +20,10 @@ setup(
     author_email="fabio.zanini@unsw.edu.au",
     version=version,
     packages=find_packages(),
+    install_requires=[
+        "requests",
+        "pandas",
+    ],
     python_requires=">=3.7",
     platforms="ALL",
     keywords=[
