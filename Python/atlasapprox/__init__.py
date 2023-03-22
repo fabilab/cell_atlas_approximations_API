@@ -10,7 +10,7 @@ from typing import Sequence
 baseurl = os.getenv(
     "ATLASAPPROX_BASEURL",
     "http://api.atlasapprox.org/v1/",
-    )
+)
 
 
 class API:
@@ -138,7 +138,7 @@ class API:
             organ: The organ to query.
             cell_type: The cell type to get markers for.
             number: The number of markers to look for. The actual number might
-                be lower if not enough distinctive features were found.
+            be lower if not enough distinctive features were found.
 
         Returns: A list of markers for the specified cell type in that organ.
             The number of markers might be less than requested if the cell type

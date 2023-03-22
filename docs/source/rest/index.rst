@@ -1,5 +1,5 @@
-RESTful API
-===========
+REST
+====
 Cell atlas approximations are designed to be readable by machines independent of programming language. For this purpose, a RESTful API is provided.
 
 The current version of the RESTful API is **v1**.

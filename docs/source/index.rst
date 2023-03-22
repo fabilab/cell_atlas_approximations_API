@@ -9,8 +9,11 @@ Cell atlases such as Tabula Muris and Tabula Sapiens are multi-organ single cell
 
 This documentation details two interfaces for the API:
 
-- :doc:`RESTful <rest/index>`
+- :doc:`REST <rest/index>`
 - :doc:`Python <python/index>`
+
+.. note::
+   The **R** API is described in the ``atlasapprox`` package vignette (TBA).
 
 .. toctree::
    :maxdepth: 2
