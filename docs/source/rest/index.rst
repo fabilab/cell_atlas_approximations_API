@@ -93,7 +93,7 @@ features
   - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
   - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
 
-**Returns**: A dict with two keys, one for the organismand one for the list of features (e.g. genes) of that organism.
+**Returns**: A dict with two keys, one for the organism and one for the list of features (e.g. genes) of that organism.
    
 .. note::
    All organs within one organism use the same features, in the same order.
