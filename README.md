@@ -2,16 +2,25 @@
 
 Cell Atlas Approximations - API
 ===============================
-Cell atlases such as Tabula Muris and Tabula Sapiens are multi-organ single cell omics data sets describing entire organisms. A cell atlas approximation is a lossy and lightweight compression of a cell atlas that can be streamed over a RESTful API.
+Cell atlases such as Tabula Muris and Tabula Sapiens are multi-organ single cell omics data sets describing entire organisms. A cell atlas approximation is a lossy and lightweight compression of a cell atlas that can be streamed via the internet.
 
-This repo contains:
-- code implementing such an API
-- documentation for end users of the API itself
-- a Python package to interface with the API
+This project enables biologists, doctors, and data scientist to quickly find answers for questions such as:
+
+- *What is the expression of a specific gene in human lung?*
+- *What are the marker genes of a specific cell type in mouse pancreas*?
+- *What fraction of cells (of a specific type) express a gene of interest?*
+
+These questions can be asked in Python or R using the provided packages (see below), or in a language agnostic manner using the REST API.
 
 Version
 -------
 The latest API version is `v1`.
+
+We support several organs and organisms: human, mouse, lemur (a type of monkey), zebrafish, C. elegans. More organisms and organs are planned for the near future.
+
+Documentation
+-------------
+Documentation for the API is available at: https://atlasapprox.readthedocs.io
 
 Usage (REST)
 ------------

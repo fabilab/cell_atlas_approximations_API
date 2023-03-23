@@ -72,7 +72,7 @@ organisms
 
 **Parameters**: None 
 
-**Returns**: A list of organisms for which an atlas approximation is available.
+**Returns**: A dict with only one key, containing a list of organisms for which an atlas approximation is available.
 
 
 organs
@@ -82,7 +82,7 @@ organs
 **Parameters**:
   - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
 
-**Returns**: A list of organs for one organism, for which an atlas approximation is available.
+**Returns**: A dict with two keys, one for the organism requested and one for the list of organs in that organism.
 
 
 features
@@ -93,7 +93,7 @@ features
   - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
   - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
 
-**Returns**: A list of features (e.g. genes) for one organism, for which an atlas approximation is available.
+**Returns**: A dict with two keys, one for the organismand one for the list of features (e.g. genes) of that organism.
    
 .. note::
    All organs within one organism use the same features, in the same order.
@@ -107,7 +107,7 @@ celltypes
   - ``organ``: The organ of interest. Must be among the available ones for the chosen organism. A special value, ``whole``, returns the union of all cell types across all organs.
   - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
 
-**Returns**: A list of cell types for one organism and organ. To obtain a list with the union of all cell types across organs, set ``organ`` equal to ``whole`` in your request.
+**Returns**: A dict with three keys: one for the organism, one for the organ, and one for a list of cell types for that organism and organ.
 
 average
 +++++++
@@ -119,7 +119,7 @@ average
   - ``features``: A list of features (e.g. genes) for which the average measurement in the atlas is requested.
   - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
 
-**Returns**: A map. Each key is a cell type in the chosen organ, each value is a list of average measurement in the cell atlas for the requested features, in the same order.
+**Returns**: A dict containing organism, organ, features found, and averages. The latter is a list of lists, with the outer dimension determined by the cell types and the inner dimension determined by the features. To get a list of cell types from the same organism and organ, in the same order, make a request to the ``celltypes`` endpoint.
 
 
 fraction_detected
@@ -132,7 +132,7 @@ fraction_detected
   - ``features``: A list of features (e.g. genes) for which the average measurement in the atlas is requested.
   - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
 
-**Returns**: A map. Each key is a cell type in the chosen organ, each value is a list, with each element corresponding to a queried feature, in the same order. Each item represents the fraction of cells within that type in which the requested feature was detected (e.g. nonzero).
+**Returns**: A dict containing organism, organ, features found, and fractions. The latter is a list of lists, with the outer dimension determined by the cell types and the inner dimension determined by the features. To get a list of cell types from the same organism and organ, in the same order, make a request to the ``celltypes`` endpoint.
 
 
 markers
@@ -146,7 +146,7 @@ markers
   - ``number``: The number of marker features to return.
   - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
 
-**Returns**: A list of features (e.g. genes) that mark one cell type, i.e. they are detected at higher levels in that cell type than in the other ones from the same organ.
+**Returns**: A dict with four keys: one for the organism, one for the organ, one for the cell type, and one containing a list of features (e.g. genes) that mark the chosen cell type, i.e. they are detected at higher levels in that cell type than in the other ones from the same organ.
 
 .. note::
    There are multiple methods to determine marker features (e.g. genes). Future versions of the API might allow the user to choose between methods. For the time being, the method is fixed.
