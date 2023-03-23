@@ -8,4 +8,4 @@ def get_api_endpoint(resource_name, api_version='latest'):
     if api_version == 'latest':
         api_version = current_version
 
-    return f'/api/{api_version}/{resource_name}'
+    return f'/{api_version}/{resource_name}'

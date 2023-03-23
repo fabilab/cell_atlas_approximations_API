@@ -1,6 +1,6 @@
 {
     "atlasapprox-container": {
-        "image": ":atlasapprox-service.atlasapprox.1",
+        "image": ":atlasapprox-service.atlasapprox.25",
         "ports": {
             "5000": "HTTP"
         }
