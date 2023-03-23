@@ -11,10 +11,19 @@ with open(version_file) as f:
     version = f.read().rstrip('\n')
 
 
+long_description = """# Python interface to cell atlas approximations.
+
+**Documentation**: https://atlasapprox.readthedocs.io
+**Development**: https://github.com/fabilab/cell_atlas_approximations_API
+"""
+
+
 setup(
     name="atlasapprox",
     url="https://apidocs.atlasapprox.org",
     description="Cell atlas approximations, Python API",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     license="MIT",
     author="Fabio Zanini",
     author_email="fabio.zanini@unsw.edu.au",

@@ -7,9 +7,18 @@ import pandas as pd
 from typing import Sequence
 
 
+__all__ = (
+    "api_version",
+    "BadRequestError",
+    "API",
+)
+
+
+api_version = "v1"
+
 baseurl = os.getenv(
     "ATLASAPPROX_BASEURL",
-    "http://api.atlasapprox.org/v1/",
+    f"http://api.atlasapprox.org/{api_version}/",
 )
 
 
