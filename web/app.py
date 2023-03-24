@@ -6,15 +6,9 @@ from flask import (
 )
 from flask_restful import Api
 from config import configuration as config
-from api.endpoints import get_api_endpoint
-from api.objects import (
-    Average,
-    Celltypes,
-    Features,
-    FractionDetected,
-    Markers,
-    Organisms,
-    Organs,
+from api import (
+    get_api_endpoint,
+    api_dict,
 )
 
 
@@ -27,13 +21,8 @@ with open('secret_key.txt') as f:
 
 
 # Connect to endpoints
-app_api.add_resource(Organisms, get_api_endpoint('organisms'))
-app_api.add_resource(Organs, get_api_endpoint('organs'))
-app_api.add_resource(Features, get_api_endpoint('features'))
-app_api.add_resource(Celltypes, get_api_endpoint('celltypes'))
-app_api.add_resource(Average, get_api_endpoint('average'))
-app_api.add_resource(FractionDetected, get_api_endpoint('fraction_detected'))
-app_api.add_resource(Markers, get_api_endpoint('markers'))
+for api_name, api_object in api_dict.items():
+    app_api.add_resource(api_object, get_api_endpoint(api_name))
 
 
 # Main loop

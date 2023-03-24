@@ -150,3 +150,9 @@ markers
 
 .. note::
    There are multiple methods to determine marker features (e.g. genes). Future versions of the API might allow the user to choose between methods. For the time being, the method is fixed.
+
+data_sources
+++++++++++++
+**Endpoint**: ``/data_sources``
+
+**Returns**: A dict with a key per organism listing the cell atlases (data sources) used for the approximations.

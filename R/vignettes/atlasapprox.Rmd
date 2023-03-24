@@ -1,0 +1,117 @@
+---
+title: "atlasapprox (R interface)"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    toc_depth: 2
+vignette: >
+  %\VignetteIndexEntry{atlasapprox (R interface)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Cell atlases such as Tabula Muris and Tabula Sapiens are multi-organ single cell omics data sets describing entire organisms. A cell atlas approximation is a lossy and lightweight compression of a cell atlas that can be streamed via the internet.
+
+This project enables biologists, doctors, and data scientist to quickly find answers for questions such as:
+
+- *What is the expression of a specific gene in human lung?*
+- *What are the marker genes of a specific cell type in mouse pancreas*?
+- *What fraction of cells (of a specific type) express a gene of interest?*
+
+***
+**NOTE:** These questions can be also asked in Python or in a language agnostic manner using the REST API (see [https://atlasapprox.readthedocs.io](https://atlasapprox.readthedocs.io)).
+
+***
+
+
+## Installation
+To install the R interface of `atlasapprox` from CRAN, use:
+```{r echo = TRUE, eval = FALSE}
+install.packages("atlasapprox")
+```
+
+## Usage
+To use the package, you must first load it:
+```{r echo = FALSE}
+knitr::opts_chunk$set(fig.width=6, fig.height=6)
+```
+
+```{r setup}
+library("atlasapprox")
+```
+
+Now you have all `atlasapprox` functions available.
+
+## Available organisms or species
+The easiest way to explore atlas approximations is to query a list of available organisms:
+
+```{r}
+organisms <- list_organisms()
+```
+
+## Organs in a single organism
+Once you know what species you are interested in, you can explore the list of organs from that species for which an atlas approximation is available:
+
+```{r}
+human_organs <- list_organs(organism = 'h_sapiens')
+```
+
+## Cell types within an organ
+The next level of zoom is to query the list of cell types that make up an organ of choice, e.g.:
+
+```{r}
+cell_types <- list_celltypes(organism = 'h_sapiens', organ = 'Lung')
+```
+
+***
+**NOTE:** Although cell atlases aim to cover *all* cell types from a tissue, rare types might be missing because of limited sampling or inaccurate annotation. If you think a cell type is missing from a tissue, please contact fabio DOT zanini AT unsw DOT edu DOT au.
+
+***
+
+## Gene expression
+If you have some genes you are interested in, you can query their expression across cell types in the organ of choice:
+
+```{r}
+expression <- average_by_celltype(organism = 'h_sapiens', organ = 'Lung')
+```
+
+You can also request not only the average *level* of expression, but the *fraction* of cells within each type that express the gene:
+
+```{r}
+fraction_expressing <- fraction_by_celltype(organism = 'h_sapiens', organ = 'Lung')
+```
+
+To get a list of all available features (e.g. genes) for an organism, you can use:
+
+```{r}
+genes <- list_features(organism = 'h_sapiens')
+```
+
+## Markers
+Each cell type expressed specific genes that contribute to its unique biological function, called markers. To request a list of markers for your cell type of choice:
+
+```{r}
+markers <- markers(organism = 'h_sapiens', organ = 'Lung', celltype = 'fibroblast')
+```
+
+***
+**NOTE**: There are multiple methods to compute marker genes. The current version of the API uses one specific method, but future versions aim to give the user choice as of which method they prefer.
+
+***
+
+
+## Data sources
+`atlasapprox` relies upon available cell atlases kindly released for public use:
+
+- [Tabula Sapiens](https://www.science.org/doi/10.1126/science.abl4896)
+- [Tabula Muris Senis](https://www.nature.com/articles/s41586-020-2496-1)
+- [Tabula Microcebus](https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
+- [C elegans]((https://www.science.org/doi/10.1126/science.aam8940): Cao et al. 2017
+- [Zebrafish embryo (24 hours post fertilisation)](https://www.science.org/doi/10.1126/science.aar4362): Wagner et al. 2018
+
+We are grateful to all authors above for their help and committment to open science.
+
+***
+**NOTE:** Although the original cell type annotations of these data sets are mostly preserved, a quality check is performed before computing approximations. During this step, some cell types might be filtered out, renamed, or split into multiple subannotations. If you found a problem in the data that indicates misannotations, please reach out to fabio DOT zanini AT unsw DOT edu DOT au and we will endeavour to fix it.
+
+***

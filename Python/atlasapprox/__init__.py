@@ -21,6 +21,27 @@ baseurl = os.getenv(
     f"http://api.atlasapprox.org/{api_version}/",
 )
 
+show_credit = os.getenv("ATLASAPPROX_HIDECREDITS") is None
+credit = """Data sources for the approximations:
+
+Human: Tabula Sapiens (https://www.science.org/doi/10.1126/science.abl4896)
+Mouse: Tabula Muris Senis (https://www.nature.com/articles/s41586-020-2496-1)
+Lemur: Tabula Microcebus (https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
+C elegans: Cao et al. 2017 (https://www.science.org/doi/10.1126/science.aam8940)
+Zebrafish: Wagner et al. 2018 (https://www.science.org/doi/10.1126/science.aar4362)
+
+To hide this message, set the environment variable ATLASAPPROX_HIDECREDITS to any
+nonzero value, e.g.:
+
+import os
+os.environ["ATLASAPPROX_HIDECREDITS"] = "yes"
+import atlasapprox
+
+To propose a new atlas be added to the list of approximations, please contact
+Fabio Zanini (fabio DOT zanini AT unsw DOT edu DOT au)."""
+if show_credit:
+    print(credit)
+
 
 class BadRequestError(ValueError):
     """The API request was not formulated correctly."""
@@ -99,8 +120,7 @@ class API:
                 columns=celltypes,
             )
             return matrix
-        else:
-            raise BadRequestError(response.json()["message"])
+        raise BadRequestError(response.json()["message"])
 
     def fraction_detected(
         self,
@@ -139,8 +159,7 @@ class API:
                 columns=celltypes,
             )
             return matrix
-        else:
-            raise BadRequestError(response.json()["message"])
+        raise BadRequestError(response.json()["message"])
 
     def markers(
         self,
@@ -172,10 +191,15 @@ class API:
             },
         )
         if response.ok:
-            markers = response.json()["markers"]
-            return markers
-        else:
-            raise BadRequestError(response.json()["message"])
+            return response.json()["markers"]
+        raise BadRequestError(response.json()["message"])
+
+    def data_sources(self):
+        """List the cell atlases used as data sources."""
+        response = requests.get(baseurl + "data_sources")
+        if response.ok:
+            return response.json()
+        raise BadRequestError(response.json()["message"])
 
     def _fetch_organisms(self):
         """Fetch organisms data"""
