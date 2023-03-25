@@ -7,7 +7,8 @@ Cell atlases such as Tabula Muris and Tabula Sapiens are multi-organ single cell
 
 This project enables biologists, doctors, and data scientist to quickly find answers for questions such as:
 
-- *What is the expression of a specific gene in human lung?*
+- *What types of cells populate the human heart?*
+- *What is the expression of a specific gene across cell types in C elegans?*
 - *What are the marker genes of a specific cell type in mouse pancreas*?
 - *What fraction of cells (of a specific type) express a gene of interest?*
 
