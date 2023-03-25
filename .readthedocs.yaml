@@ -12,7 +12,6 @@ build:
     - r-base
     - r-cran-devtools
     - r-cran-httr
-    - r-cran-pkgdown
 
   tools:
     python: "3.9"
@@ -25,6 +24,8 @@ build:
     pre_build:
       - python -m pip install -q --force-reinstall Python/
     post_build:
+      # Install pkgdown this way since it's only in 22.10
+      - Rscript R/atlasapprox/readthedocs_install.R
       - Rscript R/atlasapprox/build_docs.R
 
 
