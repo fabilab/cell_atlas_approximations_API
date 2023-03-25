@@ -1,0 +1,11 @@
+Package: atlasapprox
+Title: R Interface for Cell Atlas Approximations
+Version: 0.1.0
+Authors@R: 
+    person("Fabio", "Zanini", , "fabio.zanini@unsw.edu.au", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-7097-8539"))
+Description: This package provides an interface in R to cell atlas approximations.
+License: MIT
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
