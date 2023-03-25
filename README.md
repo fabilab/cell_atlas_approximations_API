@@ -26,17 +26,19 @@ Tutorial and reference documentation is available at [https://atlasapprox.readth
 
 Usage (REST)
 ------------
-The RESTful API can be queried using any HTTP request handler, e.g. Python's `requests`:
+The REST interface is language-agnostic and can be queried using any HTTP request handler, e.g. in JavaScript:
 
-```python
-import requests
-
-# Get a list of human organs covered by the API
-requests.get(
-    'http://api.atlasapprox.org/v1/organs',
-    organism='h_sapiens',
-)
+```javascript
+var xmlHttp = new XMLHttpRequest();
+xmlHttp.onreadystatechange = function() { 
+    if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+        console.log(xmlHttp.responseText);
+}
+xmlHttp.open("GET", 'http://api.atlasapprox.org/v1/organs', true);
+xmlHttp.send(null);
 ```
+
+Similar results can be obtained via Python's `requests`, R's `httr`, etc. If you are using Python or R, however, please consider using the dedicated interfaces below, as they are more efficient and easier on our servers thanks to caching.
 
 Usage (Python)
 --------------
