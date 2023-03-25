@@ -12,6 +12,7 @@ build:
     - r-base
     - r-cran-devtools
     - r-cran-httr
+    - r-cran-pkgdown
 
   tools:
     python: "3.9"
