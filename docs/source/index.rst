@@ -29,7 +29,8 @@ There are three ways to access the data programmatically: Python, R, or REST (la
 
    rest/index
    python/index
+   R/index
 
-.. note::
-   The **R** API is described in the ``atlasapprox`` package vignette (TBA).
-
+Authors
+-------
+ - [Fabio Zanini @ fabilab](https://fabilab.org)

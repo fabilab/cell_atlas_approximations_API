@@ -1,7 +1,21 @@
-url: ~
+destination: ../../docs/build/html/R/
+url: https://atlasapprox.readthedocs.io/R
+title: Cell Atlas Approximations (R interface)
+description: This package provides an interface in R to cell atlas approximations.
+  Other interfaces at https://atlasapprox.readthedocs.io.
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Cell Atlas Approximations (R interface)}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 
 template:
   bootstrap: 5
+  #bootswatch: materia
+  bslib:
+    primary: "#0054AD"
+    border-radius: 0.5rem
+    btn-border-radius: 0.25rem
 
 
 navbar:
@@ -12,9 +26,7 @@ navbar:
     right: github
   components:
     intro:
-      text: Get started
-      menu:
-      - text: Intro
-        href: articles/atlasapprox.html
+      text: Intro
+      href: articles/atlasapprox.html
 
 

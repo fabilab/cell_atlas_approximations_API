@@ -19,6 +19,8 @@ build:
   jobs:
     pre_build:
       - python -m pip install -q --force-reinstall Python/
+    post_build:
+      - Rscript R/atlasapprox/build_docs.R
 
 
 # Build documentation in the docs/ directory with Sphinx

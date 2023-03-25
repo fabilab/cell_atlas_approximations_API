@@ -46,21 +46,21 @@ Now you have all `atlasapprox` functions available.
 The easiest way to explore atlas approximations is to query a list of available organisms:
 
 ```{r}
-organisms <- list_organisms()
+organisms <- GetOrganisms()
 ```
 
 ## Organs in a single organism
 Once you know what species you are interested in, you can explore the list of organs from that species for which an atlas approximation is available:
 
 ```{r}
-human_organs <- list_organs(organism = 'h_sapiens')
+human_organs <- GetOrgans(organism = 'h_sapiens')
 ```
 
 ## Cell types within an organ
 The next level of zoom is to query the list of cell types that make up an organ of choice, e.g.:
 
 ```{r}
-cell_types <- list_celltypes(organism = 'h_sapiens', organ = 'Lung')
+cell_types <- GetCelltypes(organism = 'h_sapiens', organ = 'Lung')
 ```
 
 ***
@@ -72,26 +72,26 @@ cell_types <- list_celltypes(organism = 'h_sapiens', organ = 'Lung')
 If you have some genes you are interested in, you can query their expression across cell types in the organ of choice:
 
 ```{r}
-expression <- average_by_celltype(organism = 'h_sapiens', organ = 'Lung')
+expression <- GetAverage(organism = 'h_sapiens', organ = 'Lung', features = c('PTPRC', 'COL1A1'))
 ```
 
 You can also request not only the average *level* of expression, but the *fraction* of cells within each type that express the gene:
 
 ```{r}
-fraction_expressing <- fraction_by_celltype(organism = 'h_sapiens', organ = 'Lung')
+fraction_expressing <- GetFractionDetected(organism = 'h_sapiens', organ = 'Lung', features = c('PTPRC', 'COL1A1'))
 ```
 
 To get a list of all available features (e.g. genes) for an organism, you can use:
 
 ```{r}
-genes <- list_features(organism = 'h_sapiens')
+genes <- GetFeatures(organism = 'h_sapiens')
 ```
 
 ## Markers
 Each cell type expressed specific genes that contribute to its unique biological function, called markers. To request a list of markers for your cell type of choice:
 
 ```{r}
-markers <- markers(organism = 'h_sapiens', organ = 'Lung', celltype = 'fibroblast')
+markers <- GetMarkers(organism = 'h_sapiens', organ = 'Lung', cell_type = 'fibroblast', number = 5)
 ```
 
 ***
@@ -110,6 +110,11 @@ markers <- markers(organism = 'h_sapiens', organ = 'Lung', celltype = 'fibroblas
 - [Zebrafish embryo (24 hours post fertilisation)](https://www.science.org/doi/10.1126/science.aar4362): Wagner et al. 2018
 
 We are grateful to all authors above for their help and committment to open science.
+
+To get the data sources in the package, call:
+```{r eval = FALSE}
+markers <- GetDataSources()
+```
 
 ***
 **NOTE:** Although the original cell type annotations of these data sets are mostly preserved, a quality check is performed before computing approximations. During this step, some cell types might be filtered out, renamed, or split into multiple subannotations. If you found a problem in the data that indicates misannotations, please reach out to fabio DOT zanini AT unsw DOT edu DOT au and we will endeavour to fix it.

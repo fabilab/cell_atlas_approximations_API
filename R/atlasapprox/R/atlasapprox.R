@@ -1,3 +1,4 @@
+#' api_version
 api_version <- 'v1'
 
 baseurl <- Sys.getenv("ATLASAPPROX_BASEURL")
@@ -96,6 +97,33 @@ GetOrgans <- function(organism) {
             stop(paste("Bad request: server returned", response))
         }
         result <- array(unlist(httr::content(response)$organs))
+	.SetCache(cacheKey, result)
+    } else {
+        result <- .GetCache(cacheKey)
+    }
+    return(result)
+}
+
+
+#' GetFeatures
+#'
+#' @param organism The organism you would like to query
+#'
+#' @return An array of available features (genes) from that organism
+#' @export
+#'
+#' @examples GetFeatures("h_sapiens") 
+GetFeatures <- function(organism) {
+    cacheKey <- paste('features', organism, sep = ":")
+    if (!.HasCache(cacheKey)) {
+        params <- list(organism = organism)
+        root_uri <- paste(baseurl, 'features', sep="")
+        uri <- .GetParams(root_uri, params)
+        response <- httr::GET(uri)
+        if (response$status != 200) {
+            stop(paste("Bad request: server returned", response))
+        }
+        result <- array(unlist(httr::content(response)$features))
 	.SetCache(cacheKey, result)
     } else {
         result <- .GetCache(cacheKey)
