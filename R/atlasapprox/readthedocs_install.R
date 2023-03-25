@@ -1,1 +1,1 @@
-install.packages("pkgdown", repos = "https://cloud.r-project.org")
+install.packages("pkgdown", lib = ".", repos = "https://cloud.r-project.org")
