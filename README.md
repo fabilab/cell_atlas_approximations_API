@@ -1,5 +1,6 @@
 [![Documentation Status](https://readthedocs.org/projects/atlasapprox/badge/?version=latest)](https://apidocs.atlasapprox.org/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/atlasapprox.svg)](https://badge.fury.io/py/atlasapprox)
+![CRAN Downloads](https://cranlogs.r-pkg.org/badges/atlasapprox)
 
 Cell Atlas Approximations - API
 ===============================
@@ -21,13 +22,13 @@ We support several organs and organisms: human, mouse, lemur (a type of monkey),
 
 Documentation
 -------------
-Documentation for the API is available at: https://atlasapprox.readthedocs.io
+Tutorial and reference documentation is available at [https://atlasapprox.readthedocs.io](https://atlasapprox.readthedocs.io).
 
 Usage (REST)
 ------------
 The RESTful API can be queried using any HTTP request handler, e.g. Python's `requests`:
-```python
 
+```python
 import requests
 
 # Get a list of human organs covered by the API
@@ -39,7 +40,7 @@ requests.get(
 
 Usage (Python)
 --------------
-The Python API is currently undocumented. If you are impatient:
+The Python interface uses a central `API` class. Its methods implement the REST endpoints:
 
 ```python
 import atlasapprox
@@ -49,16 +50,16 @@ print(api.organisms())
 print(api.celltypes(organism="c_elegans", organ="whole"))
 ```
 
-
 Usage (R)
 --------------
-The R API is currently in pre-alpha and undocumented.
+The R interface includes a number of `GetXXX` functions connected to the REST endpoints:
 
+```R
+library("atlasapprox")
 
-Documentation
--------------
-Documentation of the RESTful API and its Python interface is available at https://apidocs.atlasapprox.org.
-
+organisms <- GetOrganisms()
+print(organisms)
+```
 
 Repo contents
 -------------
