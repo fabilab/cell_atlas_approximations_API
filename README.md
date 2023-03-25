@@ -65,3 +65,6 @@ print(organisms)
 - `Python`: package code providing a Python interface for the RESTful API
 - `R`: package code providing an R interface for the RESTful API
 - `docs`: user documentation for the API
+
+## Authors
+- [Fabio Zanini @ fabilab](https://fabilab.org)
