@@ -20,9 +20,10 @@ configlines <- readLines(pkgdown_cfg_fn)
 configlines[1] = paste("destination: ", Sys.getenv("READTHEDOCS_OUTPUT"), "/html/R/", sep = "")
 writeLines(configlines, pkgdown_cfg_fn)
 
-write('-- Install packages in current folder and adapt libPaths --------------------', stderr())
+write('-- Install packages in current folder and adapt .libPaths ------------------', stderr())
 .libPaths(c(".", .libPaths()))
 install.packages("htmltools", repos = "https://cloud.r-project.org")
+install.packages('rmarkdown', repos = "https://cloud.r-project.org")
 install.packages("pkgdown", repos = "https://cloud.r-project.org")
 
 write('-- Build API .R -> .rd -----------------------------------------------------', stderr())
