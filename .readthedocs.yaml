@@ -10,7 +10,6 @@ build:
   os: ubuntu-22.04
   apt_packages:
     - r-base
-    - r-cran-devtools
 
   tools:
     python: "3.9"
