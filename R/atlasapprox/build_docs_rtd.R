@@ -24,9 +24,9 @@ writeLines(configlines, pkgdown_cfg_fn)
 write('-- Build API .R -> .rd -----------------------------------------------------', stderr())
 devtools::document(pkg = pkg)
 
-write('-- Install pkgdown ---------------------------------------------------------', stderr())
+write('-- Install pkgdown in current folder and adapt libPaths --------------------', stderr())
 install.packages("pkgdown", lib = ".", repos = "https://cloud.r-project.org")
-library("pkgdown", lib.loc = ".")
+.libPaths(c(.libPaths(), "."))
 
 write('-- Build site using pkgdown ------------------------------------------------', stderr())
-build_site(pkg = pkg)
+pkgdown::build_site(pkg = pkg)
