@@ -1,11 +1,5 @@
-library("stringr")
-
-# Install pkgdown
-install.packages("pkgdown", lib = ".", repos = "https://cloud.r-project.org")
-library("pkgdown", lib.loc = ".")
-
 # Find R package path
-path <- str_split(commandArgs(trailingOnly = FALSE)[4], "=")[[1]][2]
+path <- strsplit(commandArgs(trailingOnly = FALSE)[4], "=")[[1]][2]
 if (!startsWith(path, "/")) {
     cwd = getwd()
     path <- paste(cwd, path, sep="/")
@@ -19,7 +13,7 @@ if (file.exists(fake_idx_path)) {
     tmp <- file.remove(fake_idx_path)
 }
 
-# override the destination in _pkgdown
+# Override destination in _pkgdown.yml to work on RTD
 pkgdown_cfg_fn <- paste(pkg, "_pkgdown.yml", sep = "/")
 configlines <- readLines(pkgdown_cfg_fn)
 configlines[1] = paste("destination: ", Sys.getenv("READTHEDOCS_OUTPUT"), "/html/R/", sep = "")
@@ -29,5 +23,9 @@ writeLines(configlines, pkgdown_cfg_fn)
 # Build API docs .R -> .rd
 devtools::document(pkg = pkg)
 
+# Install pkgdown locally and load it
+install.packages("pkgdown", lib = ".", repos = "https://cloud.r-project.org")
+library("pkgdown", lib.loc = ".")
+
 # Build R docs
-pkgdown::build_site(pkg = pkg)
+build_site(pkg = pkg)
