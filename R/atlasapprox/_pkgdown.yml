@@ -29,4 +29,9 @@ navbar:
       text: Intro
       href: articles/atlasapprox.html
 
-
+repo:
+  url:
+    home: https://github.com/fabilab/cell_atlas_approximations_API/R/atlasapprox/
+    source: https://github.com/fabilab/cell_atlas_approximations_API/blob/HEAD/R/atlasapprox/
+    issue: https://github.com/fabilab/cell_atlas_approximations_API/issues/
+    user: https://github.com/
