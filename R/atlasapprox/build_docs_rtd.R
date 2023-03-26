@@ -21,9 +21,9 @@ configlines[1] = paste("destination: ", Sys.getenv("READTHEDOCS_OUTPUT"), "/html
 writeLines(configlines, pkgdown_cfg_fn)
 
 write('-- Install packages in current folder and adapt libPaths --------------------', stderr())
-install.packages("htmltools", lib = ".", repos = "https://cloud.r-project.org")
-install.packages("pkgdown", lib = ".", repos = "https://cloud.r-project.org")
-.libPaths(".", c(.libPaths()))
+.libPaths(c(".", .libPaths()))
+install.packages("htmltools", repos = "https://cloud.r-project.org")
+install.packages("pkgdown", repos = "https://cloud.r-project.org")
 
 write('-- Build API .R -> .rd -----------------------------------------------------', stderr())
 devtools::document(pkg = pkg)
