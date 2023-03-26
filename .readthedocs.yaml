@@ -12,6 +12,7 @@ build:
     - r-base
     - r-cran-devtools
     - r-cran-httr
+    - r-cran-stringr
 
   tools:
     python: "3.9"
@@ -24,9 +25,8 @@ build:
     pre_build:
       - python -m pip install -q --force-reinstall Python/
     post_build:
-      # Install pkgdown this way since it's only in 22.10
-      - Rscript R/atlasapprox/readthedocs_install.R
-      - Rscript R/atlasapprox/build_docs.R
+      # Install pkgdown here since it's only in 22.10
+      - Rscript R/atlasapprox/build_docs_rtd.R
 
 
 # Build documentation in the docs/ directory with Sphinx
