@@ -11,7 +11,6 @@ build:
   apt_packages:
     - r-base
     - r-cran-devtools
-    - r-cran-httr
 
   tools:
     python: "3.9"

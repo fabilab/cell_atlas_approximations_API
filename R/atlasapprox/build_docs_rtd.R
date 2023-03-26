@@ -20,13 +20,14 @@ configlines <- readLines(pkgdown_cfg_fn)
 configlines[1] = paste("destination: ", Sys.getenv("READTHEDOCS_OUTPUT"), "/html/R/", sep = "")
 writeLines(configlines, pkgdown_cfg_fn)
 
+write('-- Install packages in current folder and adapt libPaths --------------------', stderr())
+install.packages("devtools", lib = ".", repos = "https://cloud.r-project.org")
+install.packages("httr", lib = ".", repos = "https://cloud.r-project.org")
+install.packages("pkgdown", lib = ".", repos = "https://cloud.r-project.org")
+.libPaths(c(.libPaths(), "."))
 
 write('-- Build API .R -> .rd -----------------------------------------------------', stderr())
 devtools::document(pkg = pkg)
-
-write('-- Install pkgdown in current folder and adapt libPaths --------------------', stderr())
-install.packages("pkgdown", lib = ".", repos = "https://cloud.r-project.org")
-.libPaths(c(.libPaths(), "."))
 
 write('-- Build site using pkgdown ------------------------------------------------', stderr())
 pkgdown::build_site(pkg = pkg)
