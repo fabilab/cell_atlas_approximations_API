@@ -21,8 +21,6 @@ configlines[1] = paste("destination: ", Sys.getenv("READTHEDOCS_OUTPUT"), "/html
 writeLines(configlines, pkgdown_cfg_fn)
 
 write('-- Install packages in current folder and adapt libPaths --------------------', stderr())
-install.packages("devtools", lib = ".", repos = "https://cloud.r-project.org")
-install.packages("httr", lib = ".", repos = "https://cloud.r-project.org")
 install.packages("htmltools", lib = ".", repos = "https://cloud.r-project.org")
 install.packages("pkgdown", lib = ".", repos = "https://cloud.r-project.org")
 .libPaths(".", c(.libPaths()))
