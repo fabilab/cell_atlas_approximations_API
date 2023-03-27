@@ -24,7 +24,7 @@ API interfaces
 There are three ways to access the data programmatically: Python, R, or REST (language-agnostic).
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Contents:
 
    rest/index
@@ -33,4 +33,8 @@ There are three ways to access the data programmatically: Python, R, or REST (la
 
 Authors
 -------
- - [Fabio Zanini @ fabilab](https://fabilab.org)
+**Fabio Zanini** @ [fabilab](https://fabilab.org)
+
+Citation
+--------
+Ying Xu and Fabio Zanini. Lightweight and scalable approximations democratise access to single cell atlases. In preparation (2023).

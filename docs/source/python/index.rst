@@ -2,6 +2,13 @@ Python
 ======
 The Python interface can be used to access the atlas approximation API from Python. It uses caching to speed up multiple requests so it is generally as fast or faster than using the REST API directly.
 
+Quick start
+-----------
+.. code-block:: Python
+
+   api = atlasapprox.API()
+   human_organs = api.organs(organism="h_sapiens")
+
 Requirements
 ------------
 You need the following Python packages:
@@ -31,7 +38,13 @@ Use whichever method you wish, e.g.:
    human_organs = api.organs(organism="h_sapiens")
    print(human_organs)
 
-Each method is described in detail below.
+If you are exploring the API from scratch, you would usually:
+
+  1. Ask about available `organisms`.
+  2. Ask about available `organs` within your organism of interest.
+  3. Ask about `average` gene expression in that organ.
+
+Each API method is described in detail below.
 
 Reference API
 -------------

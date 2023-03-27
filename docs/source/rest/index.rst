@@ -39,8 +39,8 @@ Quick start
         xmlHttp.open("GET", 'http://api.atlasapprox.org/v1/organs', true);
         xmlHttp.send(null);
 
-General rules
--------------
+Getting started
+---------------
 - The API generally accepts **GET** requests only.
 - For data involving gene expression, only 50 features at a time are supported to reduce egress throughput.
 - No aliases for names (e.g. organisms, genes) are supported yet: please double check your spelling.
@@ -50,8 +50,6 @@ General rules
    Mouse genes are generally spelled with only the first letter capitalised, while human genes
    are spelled ALL CAPS.
 
-Entry points
-------------
 If you are starting to explore the API from scratch, you can start by asking:
 
 1. What organisms are available.
@@ -59,7 +57,6 @@ If you are starting to explore the API from scratch, you can start by asking:
 3. What cell types are found in your organism and organ of interest.
 
 After that you can query gene expression in specific cell types, organs, and organisms.
-
 
 Reference API
 -------------
