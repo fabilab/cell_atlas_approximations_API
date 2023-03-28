@@ -5,6 +5,7 @@ from flask_restful import Resource, abort
 # Helper functions
 from models import (
     get_fraction_detected,
+    get_celltypes,
     OrganismNotFoundError,
     OrganNotFoundError,
     FeatureNotFoundError,
@@ -27,6 +28,7 @@ class FractionDetected(Resource):
         features = args.get("features", None)
         if features is None:
             abort(400, message='The "features" parameter is required.')
+        unit = "fraction"
 
         features = features.split(",")
         try:
@@ -47,9 +49,17 @@ class FractionDetected(Resource):
                 message=f"Maximal number of features is 50. Requested: {len(features)}.",
             )
 
+        # This cannot fail since the exceptions above were survived already
+        cell_types = get_celltypes(
+            organism=organism,
+            organ=organ,
+        )
+
         return {
             "organism": organism,
             "organ": organ,
             "features": features,
             "fraction_detected": avgs.tolist(),
+            "celltypes": cell_types,
+            "unit": unit,
         }

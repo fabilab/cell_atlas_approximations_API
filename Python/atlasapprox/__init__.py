@@ -88,7 +88,12 @@ class API:
             self._fetch_celltypes(organism, organ)
         return self.cache["celltypes"][(organism, organ)]
 
-    def average(self, organism: str, organ: str, features: Sequence[str]):
+    def average(
+        self,
+        organism: str,
+        organ: str,
+        features: Sequence[str],
+    ):
         """Get average gene expression for specific features.
 
         Args:
@@ -97,7 +102,8 @@ class API:
             features: The features (e.g. genes) to query.
 
         Return: A pandas.DataFrame with the gene expression. Each column is
-            a cell type, each row a feature.
+            a cell type, each row a feature. The unit of measurement, or
+            normalisation, is counts per ten thousand (cptt).
         """
         response = requests.get(
             baseurl + "average",
@@ -109,10 +115,7 @@ class API:
         )
         if response.ok:
             resjson = response.json()
-            celltypes = self.celltypes(
-                organism,
-                organ,
-            )
+            celltypes = resjson["celltypes"]
             features = resjson["features"]
             matrix = pd.DataFrame(
                 resjson["average"],
@@ -148,10 +151,7 @@ class API:
         )
         if response.ok:
             resjson = response.json()
-            celltypes = self.celltypes(
-                organism,
-                organ,
-            )
+            celltypes = resjson["celltypes"]
             features = resjson["features"]
             matrix = pd.DataFrame(
                 resjson["fraction_detected"],

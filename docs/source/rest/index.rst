@@ -114,9 +114,8 @@ average
   - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
   - ``organ``: The organ of interest. Must be among the available ones for the chosen organism.
   - ``features``: A list of features (e.g. genes) for which the average measurement in the atlas is requested.
-  - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
 
-**Returns**: A dict containing organism, organ, features found, and averages. The latter is a list of lists, with the outer dimension determined by the cell types and the inner dimension determined by the features. To get a list of cell types from the same organism and organ, in the same order, make a request to the ``celltypes`` endpoint.
+**Returns**: A dict containing organism, organ, features found, units of measurement, cell types, and averages. The latter is a list of lists, with the outer dimension determined by the cell types and the inner dimension determined by the features.
 
 
 fraction_detected
@@ -127,9 +126,8 @@ fraction_detected
   - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
   - ``organ``: The organ of interest. Must be among the available ones for the chosen organism.
   - ``features``: A list of features (e.g. genes) for which the average measurement in the atlas is requested.
-  - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
 
-**Returns**: A dict containing organism, organ, features found, and fractions. The latter is a list of lists, with the outer dimension determined by the cell types and the inner dimension determined by the features. To get a list of cell types from the same organism and organ, in the same order, make a request to the ``celltypes`` endpoint.
+**Returns**: A dict containing organism, organ, features found, units of measurement, cell types, and fractions. The latter is a list of lists, with the outer dimension determined by the cell types and the inner dimension determined by the features.
 
 
 markers

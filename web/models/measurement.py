@@ -68,16 +68,22 @@ def get_measurement(
             raise MeasurementTypeNotFoundError(f"Organ not found: {organ}")
 
         # Get index for each feature, then sort for speed, then reorder
-        avgs = _get_sorted_feature_index(
+        result = _get_sorted_feature_index(
             db[measurement_type]["by_tissue"][organ]["celltype"][measurement_subtype],
             organism,
             features,
             measurement_type,
         )
-    return avgs
+
+    return result
 
 
-def get_averages(organism, organ, features, measurement_type="gene_expression"):
+def get_averages(
+    organism,
+    organ,
+    features,
+    measurement_type="gene_expression",
+):
     """Get average measurements by cell type
 
     Returns:
@@ -92,7 +98,12 @@ def get_averages(organism, organ, features, measurement_type="gene_expression"):
     )
 
 
-def get_fraction_detected(organism, organ, features, measurement_type="gene_expression"):
+def get_fraction_detected(
+    organism,
+    organ,
+    features,
+    measurement_type="gene_expression",
+):
     """Get fraction of detected measurements by cell type
 
     Returns:
