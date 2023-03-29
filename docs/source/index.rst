@@ -38,3 +38,13 @@ Authors
 Citation
 --------
 Ying Xu and Fabio Zanini. Lightweight and scalable approximations democratise access to single cell atlases. In preparation (2023).
+
+Data Sources
+------------
+- *Homo sapiens*: [Tabula Sapiens](https://www.science.org/doi/10.1126/science.abl4896)
+- *Mus musculus*: [Tabula Muris Senis](https://www.nature.com/articles/s41586-020-2496-)
+- *Mus myoxinus*: [Tabula Microcebus](https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
+- *Caenorhabditis elegans*: [Cao et al. 2017](https://www.science.org/doi/10.1126/science.aam8940)
+- *Danio rerio*: [Wagner et al. 2018](https://www.science.org/doi/10.1126/science.aar4362)
+- *Spongilla lacustris*: [Musser et al. 2021](https://www.science.org/doi/10.1126/science.abj2949)
+- *Amphimedon queenslandica*, *Mnemiopsis leidyi*, and *Trichoplax adhaerens*: [Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)
