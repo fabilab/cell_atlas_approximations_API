@@ -14,7 +14,7 @@ Quick start
       
         import requests
         response = requests.get(
-            'http://api.atlaxapprox.org/v1/organs',
+            'http://api.atlasapprox.org/v1/organs',
             params=dict(organism='h_sapiens'),
         )
         print(response.json())

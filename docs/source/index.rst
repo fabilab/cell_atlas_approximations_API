@@ -42,7 +42,7 @@ Ying Xu and Fabio Zanini. Lightweight and scalable approximations democratise ac
 Data Sources
 ------------
 - *Homo sapiens*: [Tabula Sapiens](https://www.science.org/doi/10.1126/science.abl4896)
-- *Mus musculus*: [Tabula Muris Senis](https://www.nature.com/articles/s41586-020-2496-)
+- *Mus musculus*: [Tabula Muris Senis](https://www.nature.com/articles/s41586-020-2496-1)
 - *Mus myoxinus*: [Tabula Microcebus](https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
 - *Caenorhabditis elegans*: [Cao et al. 2017](https://www.science.org/doi/10.1126/science.aam8940)
 - *Danio rerio*: [Wagner et al. 2018](https://www.science.org/doi/10.1126/science.aar4362)
