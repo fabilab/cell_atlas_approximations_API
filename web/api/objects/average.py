@@ -51,10 +51,10 @@ class Average(Resource):
             )
 
         # This cannot fail since the exceptions above were survived already
-        cell_types = get_celltypes(
+        cell_types = list(get_celltypes(
             organism=organism,
             organ=organ,
-        )
+        ))
 
         return {
             "organism": organism,

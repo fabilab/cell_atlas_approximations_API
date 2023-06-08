@@ -18,8 +18,10 @@ api_version = "v1"
 
 baseurl = os.getenv(
     "ATLASAPPROX_BASEURL",
-    f"http://api.atlasapprox.org/{api_version}/",
+    "http://api.atlasapprox.org",
 )
+baseurl = baseurl.rstrip("/") + "/"
+baseurl += f"{api_version}/"
 
 show_credit = os.getenv("ATLASAPPROX_HIDECREDITS") is None
 credit = """Data sources for the approximations:
@@ -45,6 +47,7 @@ if show_credit:
 
 class BadRequestError(ValueError):
     """The API request was not formulated correctly."""
+
     pass
 
 

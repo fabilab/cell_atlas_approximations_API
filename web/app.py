@@ -5,6 +5,7 @@ from flask import (
     Flask,
 )
 from flask_restful import Api
+from flask_cors import CORS
 from config import configuration as config
 from api import (
     get_api_endpoint,
@@ -23,6 +24,15 @@ with open('secret_key.txt') as f:
 # Connect to endpoints
 for api_name, api_object in api_dict.items():
     app_api.add_resource(api_object, get_api_endpoint(api_name))
+
+
+# Deal with cross-origin requests
+# Currently only authorize CORS for the latest API version
+api_authorized_versions = [config['api_version']]
+authorized_resources = {}
+for api_version in api_authorized_versions:
+    authorized_resources[f"/{api_version}/*"] = {"origins": "*"}
+CORS(app, resources=authorized_resources)
 
 
 # Main loop
