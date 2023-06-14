@@ -2,6 +2,8 @@
 [![PyPI version](https://badge.fury.io/py/atlasapprox.svg)](https://badge.fury.io/py/atlasapprox)
 ![CRAN Downloads](https://cranlogs.r-pkg.org/badges/atlasapprox)
 
+<img src="https://raw.githubusercontent.com/fabilab/cell_atlas_approximations/main/figures/figure_API.png" width="150" height="150">
+
 # Cell Atlas Approximations - API
 Cell atlases such as Tabula Muris and Tabula Sapiens are multi-organ single cell omics data sets describing entire organisms. A cell atlas approximation is a lossy and lightweight compression of a cell atlas that can be streamed via the internet.
 
