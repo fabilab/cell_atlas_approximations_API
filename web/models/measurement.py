@@ -116,3 +116,55 @@ def get_fraction_detected(
         measurement_type,
         "fraction",
     )
+
+
+def get_highest_measurement(
+    organism,
+    feature,
+    measurement_type="gene_expression",
+    number=10,
+):
+    """Get highest measurement cell types and averages.
+
+    Returns:
+        dictionary with the following key-value pairs:
+           "celltypes": list of the highest measuring cell types,
+           "organs": list of the corresponding organs,
+           "average": numpy 1D array with the average expression
+    """
+    from models import get_organs, get_celltypes
+
+    organs = get_organs(
+        organism,
+        measurement_type=measurement_type,
+    )
+    result = {
+        "celltypes": [],
+        "organs": [],
+        "average": [],
+    }
+    for organ in organs:
+        celltypes = get_celltypes(
+            organism,
+            organ,
+            measurement_type=measurement_type,
+        )
+        avg_organ = get_averages(
+            organism,
+            organ,
+            feature,
+            measurement_type=measurement_type,
+        )[0]
+        result['celltypes'].extend(celltypes)
+        result['organs'].extend([organ for ct in celltypes])
+        result['average'].append(avg_organ)
+
+    result['average'] = np.concatenate(result['average'])
+
+    # Find top expressors
+    idx_top = result['average'].argsort()[::-1][:number]
+    result['celltypes'] = [result['celltypes'][i] for i in idx_top]
+    result['organs'] = [result['organs'][i] for i in idx_top]
+    result['average'] = result[idx_top]
+
+    return result

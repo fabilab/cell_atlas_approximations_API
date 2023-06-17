@@ -19,6 +19,7 @@ from models.features import (
 from models.measurement import (
     get_averages,
     get_fraction_detected,
+    get_highest_measurement,
 )
 
 
