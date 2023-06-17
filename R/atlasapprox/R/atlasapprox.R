@@ -251,6 +251,39 @@ GetMarkers <- function(organism, organ, cell_type, number) {
 }
 
 
+#' GetHighestMeasurement
+#'
+#' @param organism The organism you would like to query
+#' @param feature The feature to check (e.g. gene)
+#' @param number The number of cell types to find
+#'
+#' @return An array of cell types, organs, and averages for the
+#'         cell types with the highest measurement for that feature
+#' @export
+#'
+#' @examples GetHighestMeasurement("h_sapiens", "PTPRC", 5) 
+GetHighestMeasurement <- function(organism, feature, number) {
+    params <- list(organism = organism,
+   		feature = feature,
+   		number = number)
+    root_uri <- paste(baseurl, 'highest_measurement', sep="")
+    uri <- .GetParams(root_uri, params)
+    response <- httr::GET(uri)
+    if (response$status != 200) {
+        stop(paste("Bad request: server returned", response))
+    }
+    cell_types <- array(unlist(httr::content(response)$celltypes))
+    organs <- array(unlist(httr::content(response)$organs))
+    average <- array(unlist(httr::content(response)$average))
+
+    # Make data frame with all three arrays
+    df <- data.frame(t([cell_types, organs, average]))
+    colnames(df) <- c("Cell type", "Organ", "Average")
+
+    return(df)
+}
+
+
 #' GetDataSources
 #'
 #' @return The cell atlases used as data sources for the approximations

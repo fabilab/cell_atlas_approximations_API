@@ -1,43 +1,68 @@
-REST
-====
-Cell atlas approximations are designed to be readable by machines independent of programming language. For this purpose, a RESTful API is provided.
+Embedding atlas approximations in a web page
+============================================
+Atlas approximations are very lightweight and therefore suitable for embedding in web pages (e.g. to augment functionality of a dashboard). This page explains how to do that.
 
-The current version of the RESTful API is **v1**.
+Context: Web browsers
+---------------------
+Web pages are parsed and rendered by a browser onto your screen. Browsers currently understand two programming languages:
+
+ - `JavaScript <https://en.wikipedia.org/wiki/ECMAScript>`_
+ - `WebAssembly <https://webassembly.org/>`_
+
+While WebAssembly is useful for specific, performance-sensitive applications, 99% of the web is built on top of JavaScript. That's why the REST API for atlas approximations includes an example in JavaScript as well.
 
 Quick start
 -----------
+
 .. tabs::
 
-   .. tab:: **Python**
+  .. tab:: **Pure JavaScript**
 
-      .. code-block:: python
-      
-        import requests
-        response = requests.get(
-            'http://api.atlasapprox.org/v1/organs',
-            params=dict(organism='h_sapiens'),
-        )
-        print(response.json())
+    .. code-block:: html
 
+      <html>
+        <head></head>
+        <body>
+          <div>Hello world!</div>
+          <script>
+            var xmlHttp = new XMLHttpRequest();
+            xmlHttp.onreadystatechange = function() { 
+                if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+                    console.log(xmlHttp.responseText);
+            }
+            xmlHttp.open("GET", 'http://api.atlasapprox.org/v1/organisms', true);
+            xmlHttp.send(null);
+          </script>
+        </body>
+      </html>
 
-   .. tab:: **R**
+  .. tab:: **jQuery**
 
-      .. code-block:: R
-      
-        response <- httr::GET('http://api.atlasapprox.org/v1/organs')
-        print(reponse)
+    .. code-block:: html
 
-   .. tab:: **JavaScript**
+      <html>
+        <head>
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+		integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g="
+		crossorigin="anonymous">
+        </script>
+        </head>
+        <body>
+          <div>Hello world!</div>
+          <script>
+            $.ajax({
+                url: 'https://api.atlasapprox.org/v1/organisms',
+                success: function (result) {
+                    console.log(result);
+                },
+            })
+          </script>
+        </body>
+      </html>
 
-      .. code-block:: javascript
+  .. tab:: **React**
 
-        var xmlHttp = new XMLHttpRequest();
-        xmlHttp.onreadystatechange = function() { 
-            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-                console.log(xmlHttp.responseText);
-        }
-        xmlHttp.open("GET", 'http://api.atlasapprox.org/v1/organisms', true);
-        xmlHttp.send(null);
+    .. code-block:: 
 
 Getting started
 ---------------
@@ -145,21 +170,6 @@ markers
 
 .. note::
    There are multiple methods to determine marker features (e.g. genes). Future versions of the API might allow the user to choose between methods. For the time being, the method is fixed.
-
-highest_measurement
-+++++++++++++++++++
-**Endpoint**: ``/highest_measurement``
-
-**Parameters**:
-  - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
-  - ``feature``: The feature to look for.
-  - ``number``: The number of cell types to return.
-
-**Returns**: A dict with the following key-value pairs:
-  - ``organism``
-  - ``celltypes``: a list of cell types with the highest measurement (e.g. expression) for that feature
-  - ``organs``: a list of corresponding organs
-  - ``average``: average measurement (e.g. expression) in those cell types and organs.
 
 data_sources
 ++++++++++++

@@ -30,6 +30,7 @@ There are three ways to access the data programmatically: Python, R, or REST (la
    rest/index
    python/index
    R/index
+   rest/embed
 
 Authors
 -------

@@ -10,6 +10,7 @@ from api.objects import (
     Organisms,
     Organs,
     DataSources,
+    HighestMeasurement,
 )
 
 __all__ = (
@@ -26,4 +27,5 @@ api_dict = {
     "fraction_detected": FractionDetected,
     "markers": Markers,
     "data_sources": DataSources,
+    "highest_measurement": HighestMeasurement,
 }

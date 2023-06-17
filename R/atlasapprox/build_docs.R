@@ -1,6 +1,7 @@
 library("stringr")
 
 # Find R package path
+write('-- Find package location ---------------------------------------------------', stderr())
 path <- str_split(commandArgs(trailingOnly = FALSE)[4], "=")[[1]][2]
 if (!startsWith(path, "/")) {
     cwd = getwd()
@@ -15,8 +16,8 @@ if (file.exists(fake_idx_path)) {
     tmp <- file.remove(fake_idx_path)
 }
 
-# Build API docs .R -> .rd
+write('-- Build API .R -> .rd -----------------------------------------------------', stderr())
 devtools::document(pkg = pkg)
 
-# Build R docs
+write('-- Build site using pkgdown ------------------------------------------------', stderr())
 pkgdown::build_site(pkg = pkg)

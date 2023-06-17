@@ -7,6 +7,7 @@ from config import configuration as config
 from models.exceptions import (
     OrganismNotFoundError,
     MeasurementTypeNotFoundError,
+    FeatureNotFoundError,
     TooManyFeaturesError,
 )
 from models.features import (
@@ -143,28 +144,35 @@ def get_highest_measurement(
         "organs": [],
         "average": [],
     }
+    found_once = False
     for organ in organs:
         celltypes = get_celltypes(
             organism,
             organ,
             measurement_type=measurement_type,
         )
-        avg_organ = get_averages(
-            organism,
-            organ,
-            feature,
-            measurement_type=measurement_type,
-        )[0]
-        result['celltypes'].extend(celltypes)
-        result['organs'].extend([organ for ct in celltypes])
-        result['average'].append(avg_organ)
+        try:
+            avg_organ = get_averages(
+                organism,
+                organ,
+                [feature],
+                measurement_type=measurement_type,
+            )[0]
+            found_once = True
+        except FeatureNotFoundError:
+            avg_organ = np.zeros(len(celltypes), np.float32)
+        result["celltypes"].extend(celltypes)
+        result["organs"].extend([organ for ct in celltypes])
+        result["average"].append(avg_organ)
+    result["average"] = np.concatenate(result["average"])
 
-    result['average'] = np.concatenate(result['average'])
+    if not found_once:
+        raise FeatureNotFoundError(f"Feature not found: {feature}.")
 
     # Find top expressors
-    idx_top = result['average'].argsort()[::-1][:number]
-    result['celltypes'] = [result['celltypes'][i] for i in idx_top]
-    result['organs'] = [result['organs'][i] for i in idx_top]
-    result['average'] = result[idx_top]
+    idx_top = result["average"].argsort()[::-1][:number]
+    result["celltypes"] = [result["celltypes"][i] for i in idx_top]
+    result["organs"] = [result["organs"][i] for i in idx_top]
+    result["average"] = result["average"][idx_top]
 
     return result

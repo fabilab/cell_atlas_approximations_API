@@ -197,6 +197,45 @@ class API:
             return response.json()["markers"]
         raise BadRequestError(response.json()["message"])
 
+    def highest_measurement(
+        self,
+        organism: str,
+        feature: str,
+        number: int,
+    ):
+        """Get the highest measurements by cell type across an organism.
+
+        Args:
+            organism: The organism to query.
+            number: The number of cell types to list. The actual number might
+            be lower if not enough cell types were found.
+
+        Returns: A pandas.Series with a multi-index containing cell type and
+            organ and values corresponding to the average measurement (e.g.
+            gene expression) for that feature in that cell type and organ.
+        """
+        response = requests.get(
+            baseurl + "highest_measurement",
+            params={
+                "organism": organism,
+                "feature": feature,
+                "number": number,
+            },
+        )
+        if not response.ok:
+            raise BadRequestError(response.json()["message"])
+
+        resp_result = response.json()
+        result = pd.DataFrame(
+            {
+                "celltype": resp_result["celltypes"],
+                "organ": resp_result["organs"],
+                "average": resp_result["average"],
+            }
+        )
+        result.set_index(["celltype", "organ"], inplace=True)
+        return result["average"]
+
     def data_sources(self):
         """List the cell atlases used as data sources."""
         response = requests.get(baseurl + "data_sources")

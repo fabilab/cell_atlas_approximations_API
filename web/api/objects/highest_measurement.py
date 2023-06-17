@@ -23,7 +23,7 @@ class HighestMeasurement(Resource):
         feature = args.get("feature", None)
         if feature is None:
             abort(400, message='The "feature" parameter is required.')
-        unit = config['units']['gene_expression']
+        unit = config["units"]["gene_expression"]
         number = args.get("number", None)
         if number is None:
             abort(400, message='The "number" parameter is required.')
@@ -50,8 +50,8 @@ class HighestMeasurement(Resource):
         return {
             "organism": organism,
             "feature": feature,
-            "organs": result['organs'],
-            "celltypes": result['cell_types'],
-            "average": result['average'].tolist(),
+            "organs": result["organs"],
+            "celltypes": result["celltypes"],
+            "average": result["average"].tolist(),
             "unit": unit,
         }

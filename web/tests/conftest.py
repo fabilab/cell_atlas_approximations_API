@@ -3,7 +3,7 @@ import pytest
 import pathlib
 import subprocess as sp
 
-server_prefix = "http://127.0.0.1:5000/api/"
+server_prefix = "http://127.0.0.1:5000/"
 api_version = "v1"
 
 

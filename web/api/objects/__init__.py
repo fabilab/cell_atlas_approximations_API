@@ -6,6 +6,7 @@ from api.objects.average import Average
 from api.objects.fraction_detected import FractionDetected
 from api.objects.markers import Markers
 from api.objects.data_sources import DataSources
+from api.objects.highest_measurement import HighestMeasurement
 
 
 __all__ = (
@@ -14,6 +15,7 @@ __all__ = (
     "DataSources",
     "Features",
     "FractionDetected",
+    "HighestMeasurement",
     "Markers",
     "Organisms",
     "Organs",
