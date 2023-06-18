@@ -38,6 +38,11 @@ class SimilarFeatures(Resource):
             abort(400, message='The "number" parameter should be an integer.')
         if number <= 0:
             abort(400, message='The "number" parameter should be positive.')
+        elif number > 50:
+            abort(
+                400,
+                message=f"Max number of similar features is 50, requested: {number}.",
+            )
 
         try:
             result = get_similar_features(
