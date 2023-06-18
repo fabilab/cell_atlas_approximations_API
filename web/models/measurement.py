@@ -22,6 +22,9 @@ def _get_sorted_feature_index(
     measurement_type,
 ):
     """Get auxiliary data structures for sorted dict of features"""
+    if features is None:
+        return db_dataset[:, :]
+
     idx_series = {}
     for fea in features:
         idx = get_feature_index(organism, fea, measurement_type)
@@ -46,15 +49,17 @@ def get_measurement(
     features,
     measurement_type,
     measurement_subtype,
+    nmax=50,
 ):
     """Get measurements by cell type
 
     Returns:
         numpy 2D array where each row is a **feature**
     """
-    nfeas = len(features)
-    if nfeas > 50:
-        raise TooManyFeaturesError(f"Number of requested features exceeds 50: {nfeas}")
+    if (features is not None) and (len(features) > nmax):
+        nfeas = len(features)
+        raise TooManyFeaturesError(
+                f"Number of requested features exceeds 50: {nfeas}")
 
     h5_path = config["paths"]["compressed_atlas"].get(organism, None)
     if h5_path is None:
@@ -69,8 +74,9 @@ def get_measurement(
             raise MeasurementTypeNotFoundError(f"Organ not found: {organ}")
 
         # Get index for each feature, then sort for speed, then reorder
+        db_dataset = db[measurement_type]["by_tissue"][organ]["celltype"][measurement_subtype]
         result = _get_sorted_feature_index(
-            db[measurement_type]["by_tissue"][organ]["celltype"][measurement_subtype],
+            db_dataset,
             organism,
             features,
             measurement_type,

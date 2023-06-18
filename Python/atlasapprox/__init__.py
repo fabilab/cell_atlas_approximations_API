@@ -164,6 +164,56 @@ class API:
             return matrix
         raise BadRequestError(response.json()["message"])
 
+    def similar_features(
+        self,
+        organism: str,
+        organ: str,
+        feature: str,
+        number: int,
+        method: str,
+    ):
+        """Get features most similar to a focal one.
+
+        Args:
+            organism: The organism to query.
+            organ: The organ to query.
+            feature: The feature (e.g. gene) to look for similar featues to.
+            number: The number of similar features to return.
+            method: The method used to compute similarity between features. The
+                following methods are available:
+                - correlation (default): Pearson correlation of the fraction_detected
+                - cosine: Cosine similarity/distance of the fraction_detected
+                - euclidean: Euclidean distance of average measurement (e.g. expression)
+                - manhattan: Taxicab/Manhattan/L1 distance of average measurement
+                - log-euclidean: Log the average measurement with a pseudocount
+                  of 0.001, then compute euclidean distance. This tends to
+                  highlight sparsely measured features
+
+        Return: A pandas.Series with the similar features and their distance
+            from the focal feature according to the chosen method.
+        """
+        response = requests.get(
+            baseurl + "similar_features",
+            params={
+                "organism": organism,
+                "organ": organ,
+                "feature": feature,
+                "number": number,
+                "method": method,
+            },
+        )
+        if not response.ok:
+            raise BadRequestError(response.json()["message"])
+
+        resjson = response.json()
+        similar_features = resjson["similar_features"]
+        distances = resjson["distances"]
+        result = pd.Series(
+            distances,
+            index=similar_features,
+        )
+        return result
+
     def markers(
         self,
         organism: str,

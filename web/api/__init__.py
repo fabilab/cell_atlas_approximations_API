@@ -11,6 +11,7 @@ from api.objects import (
     Organs,
     DataSources,
     HighestMeasurement,
+    SimilarFeatures,
 )
 
 __all__ = (
@@ -28,4 +29,5 @@ api_dict = {
     "markers": Markers,
     "data_sources": DataSources,
     "highest_measurement": HighestMeasurement,
+    "similar_features": SimilarFeatures,
 }

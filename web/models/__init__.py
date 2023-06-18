@@ -12,9 +12,11 @@ from models.exceptions import (
     TooManyFeaturesError,
     FeatureNotFoundError,
     CellTypeNotFoundError,
+    SimilarityMethodError,
 )
 from models.features import (
     get_features,
+    get_similar_features,
 )
 from models.measurement import (
     get_averages,

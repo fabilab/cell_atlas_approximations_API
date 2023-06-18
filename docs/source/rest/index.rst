@@ -161,6 +161,30 @@ highest_measurement
   - ``organs``: a list of corresponding organs
   - ``average``: average measurement (e.g. expression) in those cell types and organs.
 
+similar_features
+++++++++++++++++
+**Endpoint**: ``/similar_features``
+
+**Parameters**:
+  - ``organism``: The organism of interest.
+  - ``organ``: The organ of interest.
+  - ``feature``: The original feature to look for similar features of.
+  - ``number``: How many similar features to return.
+  - ``method``: Method to use to compute distance between features. Available methods are:
+    - ``correlation`` (default): Pearson correlation of the ``fraction_detected``.
+    - ``cosine``: Cosine similarity/distance of the ``fraction_detected``.
+    - ``euclidean``: Euclidean distance of average measurement (e.g. expression).
+    - ``manhattan``: Taxicab/Manhattan/L1 distance of average measurement.
+    - ``log-euclidean``: Log the average measurement with a pseudocount of 0.001, then compute euclidean distance. This tends to highlight sparsely measured features.
+
+**Returns**: A dict with the following key-value pairs:
+  - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
+  - ``organ``: The organ of interest. Must be among the available ones for the chosen organism.
+  - ``method``: The method used.
+  - ``feature``: The requested feature.
+  - ``similar_features``: A list of similar features (e.g. genes) to the one requested.
+  - ``distances``: Distances of the listed feature in the method chosen. For correlation/cosine methods, the distance is 1 - correlation.
+
 data_sources
 ++++++++++++
 **Endpoint**: ``/data_sources``

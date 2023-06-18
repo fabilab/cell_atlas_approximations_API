@@ -7,6 +7,7 @@ from api.objects.fraction_detected import FractionDetected
 from api.objects.markers import Markers
 from api.objects.data_sources import DataSources
 from api.objects.highest_measurement import HighestMeasurement
+from api.objects.similar_features import SimilarFeatures
 
 
 __all__ = (
@@ -19,4 +20,5 @@ __all__ = (
     "Markers",
     "Organisms",
     "Organs",
+    "SimilarFeatures",
 )

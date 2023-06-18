@@ -20,3 +20,7 @@ class TooManyFeaturesError(ValueError):
 
 class CellTypeNotFoundError(KeyError):
     pass
+
+
+class SimilarityMethodError(NotImplementedError):
+    pass

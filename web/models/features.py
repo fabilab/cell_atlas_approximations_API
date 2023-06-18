@@ -11,6 +11,7 @@ from models.exceptions import (
     FeatureNotFoundError,
     OrganismNotFoundError,
     MeasurementTypeNotFoundError,
+    SimilarityMethodError,
 )
 
 # This dict has (organism, measurement_type) as keys and pandas series as
@@ -59,3 +60,77 @@ def get_feature_index(
         raise FeatureNotFoundError(f"Feature not found: {feature_name}") from exc
 
     return idx
+
+
+def get_similar_features(
+    organism,
+    organ,
+    feature_name,
+    number=10,
+    method="correlation",
+    measurement_type="gene_expression",
+    similar_type="gene_expression",
+):
+    """Get features similar to the focal one."""
+    from models.measurement import get_measurement
+
+    features_all = get_features(
+        organism,
+        measurement_type=similar_type,
+    )
+    idx = (features_all == feature_name).nonzero()[0][0]
+
+    if method in ("correlation", "cosine"):
+        fracs = get_measurement(
+            organism,
+            organ,
+            features=None,
+            measurement_type=similar_type,
+            measurement_subtype="fraction",
+        )
+        frac = fracs[:, idx]
+
+        if method == "correlation":
+            # Center around 0
+            dm = fracs - fracs.mean(axis=0)
+            db = frac - frac.mean()
+        else:
+            dm = fracs
+            db = frac
+
+        # Compute covariance and then correlation
+        num = dm.T @ db
+        den = np.sqrt((dm**2).sum(axis=0) * (db @ db))
+        corr = num / (den + 1e-9)
+        delta = 1 - corr
+
+    elif method in ("euclidean", "manhattan", "log-euclidean"):
+        avgs = get_measurement(
+            organism,
+            organ,
+            features=None,
+            measurement_type=similar_type,
+            measurement_subtype="fraction",
+        )
+        if method == "log-euclidean":
+            avgs = np.log(avgs + 1e-3)
+
+        avg = avgs[:, idx]
+
+        if method == "euclidean":
+            delta = np.sqrt(((avgs.T - avg)**2).mean(axis=1))
+        else:
+            delta = (np.abs((avgs.T - avg))).mean(axis=1)
+
+    else:
+        raise SimilarityMethodError
+
+    # Take closest features
+    idx_max = delta.argsort()[1:number+1]
+    similar = features_all[idx_max]
+    delta_similar = delta[idx_max]
+
+    return {
+        'features': similar,
+        'distances': delta_similar,
+    }
