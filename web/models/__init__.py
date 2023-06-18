@@ -16,12 +16,15 @@ from models.exceptions import (
 )
 from models.features import (
     get_features,
-    get_similar_features,
 )
 from models.measurement import (
     get_averages,
     get_fraction_detected,
     get_highest_measurement,
+)
+from models.similar import (
+    get_similar_features,
+    get_similar_celltypes,
 )
 
 
