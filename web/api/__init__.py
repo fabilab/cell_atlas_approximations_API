@@ -28,8 +28,8 @@ api_dict = {
     "average": Average,
     "fraction_detected": FractionDetected,
     "markers": Markers,
-    "data_sources": DataSources,
     "highest_measurement": HighestMeasurement,
     "similar_features": SimilarFeatures,
     "similar_celltypes": SimilarCelltypes,
+    "data_sources": DataSources,
 }

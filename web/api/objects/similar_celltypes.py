@@ -12,6 +12,8 @@ from models import (
     SimilarityMethodError,
     CellTypeNotFoundError,
 )
+from api.exceptions import FeatureStringFormatError
+from api.utils import clean_feature_string
 
 
 class SimilarCelltypes(Resource):
@@ -32,19 +34,21 @@ class SimilarCelltypes(Resource):
         features = args.get("features", None)
         if features is None:
             abort(400, message='The "features" parameter is required.')
+        try:
+            features = clean_feature_string(features)
+        except FeatureStringFormatError:
+            abort(400, message=f"Feature string not recognised: {features}.")
+
         number = args.get("number", None)
         if number is None:
             abort(400, message='The "number" parameter is required.')
         method = args.get("method", "correlation")
-
         try:
             number = int(number)
         except (TypeError, ValueError):
             abort(400, message='The "number" parameter should be an integer.')
         if number <= 0:
             abort(400, message='The "number" parameter should be positive.')
-
-        features = features.split(",")
 
         try:
             result = get_similar_celltypes(

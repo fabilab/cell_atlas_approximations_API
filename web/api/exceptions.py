@@ -1,0 +1,2 @@
+class FeatureStringFormatError(Exception):
+    pass

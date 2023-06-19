@@ -11,6 +11,8 @@ from models import (
     FeatureNotFoundError,
     TooManyFeaturesError,
 )
+from api.exceptions import FeatureStringFormatError
+from api.utils import clean_feature_string
 
 
 class FractionDetected(Resource):
@@ -28,9 +30,12 @@ class FractionDetected(Resource):
         features = args.get("features", None)
         if features is None:
             abort(400, message='The "features" parameter is required.')
+        try:
+            features = clean_feature_string(features)
+        except FeatureStringFormatError:
+            abort(400, message=f"Feature string not recognised: {features}.")
         unit = "fraction"
 
-        features = features.split(",")
         try:
             avgs = get_fraction_detected(
                 organism=organism,
