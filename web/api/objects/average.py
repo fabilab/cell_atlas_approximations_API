@@ -32,7 +32,7 @@ class Average(Resource):
         if features is None:
             abort(400, message='The "features" parameter is required.')
         try:
-            features = clean_feature_string(features)
+            features = clean_feature_string(features, organism)
         except FeatureStringFormatError:
             abort(400, message=f"Feature string not recognised: {features}.")
         unit = config['units']['gene_expression']
