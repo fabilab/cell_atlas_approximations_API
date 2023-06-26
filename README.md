@@ -29,10 +29,13 @@ Tutorial and reference documentation is available at [https://atlasapprox.readth
 The REST interface is language-agnostic and can be queried using any HTTP request handler, e.g. in JavaScript:
 
 ```javascript
-let response = await fetch("http://api.atlasapprox.org/v1/organisms");
-if (!response.ok) 
-    throw new Error(`HTTP error: ${response.status}`);
-let data = await response.json();
+(async () => {
+  let response = await fetch("http://api.atlasapprox.org/v1/organisms");
+  if (response.ok) {
+    let data = await response.json();
+    console.log(data);
+  }  
+})();
 ```
 
 Similar results can be obtained via Python's `requests`, R's `httr`, etc. If you are using Python or R, however, please consider using the dedicated interfaces below, as they are more efficient and easier on our servers thanks to caching.
