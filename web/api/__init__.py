@@ -13,6 +13,7 @@ from api.objects import (
     HighestMeasurement,
     SimilarFeatures,
     SimilarCelltypes,
+    CelltypeXOrgan,
 )
 
 __all__ = (
@@ -32,4 +33,5 @@ api_dict = {
     "similar_features": SimilarFeatures,
     "similar_celltypes": SimilarCelltypes,
     "data_sources": DataSources,
+    "celltypexorgan": CelltypeXOrgan,
 }

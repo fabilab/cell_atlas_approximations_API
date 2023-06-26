@@ -1,7 +1,9 @@
 """
 Data models and functions for the API
 """
+from collections import Counter
 import numpy as np
+import pandas as pd
 import h5py
 
 from config import configuration as config
@@ -72,6 +74,41 @@ def get_celltypes(organism, organ, measurement_type="gene_expression"):
             "index"
         ].asstr()[:]
     return celltypes
+
+
+def get_celltypexorgan(organism, organs=None, measurement_type="gene_expression"):
+    """Get a presence/absence matrix for cell types in organs"""
+    # Get organs
+    if organs is None:
+        organs = list(get_organs(organism=organism))
+
+    # Get celltypes
+    celltypexorgan_dict = {}
+    celltype_counts = Counter()
+    for organ in organs:
+        celltypes_organ = get_celltypes(
+            organism=organism, organ=organ, measurement_type=measurement_type,
+        )
+        celltypexorgan_dict[organ] = celltypes_organ
+        for celltype in celltypes_organ:
+            celltype_counts[celltype] += 1
+    celltypes = list(celltype_counts.keys())
+
+    # Get celltype x organ binary presence/absence table
+    data = pd.DataFrame(
+        np.zeros((len(celltypes), len(organs)), bool),
+        index=celltypes,
+        columns=organs,
+    )
+    for organ, celltypes_organ in celltypexorgan_dict.items():
+        data.loc[celltypes_organ, organ] = True
+
+    # Sort from the cell types with the highest abundance
+    # NOTE: a double sort by this and secondarily by organ name might be
+    # even better perhaps
+    data = data.loc[data.sum(axis=1).sort_values(ascending=False).index]
+
+    return data
 
 
 def get_markers(

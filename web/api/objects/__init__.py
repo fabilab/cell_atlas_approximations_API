@@ -9,6 +9,7 @@ from api.objects.data_sources import DataSources
 from api.objects.highest_measurement import HighestMeasurement
 from api.objects.similar_features import SimilarFeatures
 from api.objects.similar_celltypes import SimilarCelltypes
+from api.objects.celltypexorgan import CelltypeXOrgan
 
 
 __all__ = (
@@ -23,4 +24,5 @@ __all__ = (
     "Organs",
     "SimilarCelltypes",
     "SimilarFeatures",
+    "CelltypeXOrgan",
 )
