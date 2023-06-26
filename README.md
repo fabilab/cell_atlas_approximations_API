@@ -14,7 +14,7 @@ This project enables biologists, doctors, and data scientist to quickly find ans
 - *What are the marker genes of a specific cell type in mouse pancreas*?
 - *What fraction of cells (of a specific type) express a gene of interest?*
 
-These questions can be asked in Python or R using the provided packages (see below), or in a language agnostic manner using the REST API. We even made a shell script for Linux and Mac that calls the API from your terminal! - check the `shell` folder.
+These questions can be asked in Python or R using the provided packages (see below), or in a language agnostic manner using the REST API. We even made a shell script for Linux and Mac that calls the API from your terminal! - check out [shell/atlasapprox](https://github.com/fabilab/cell_atlas_approximations_API/blob/main/shell/atlasapprox)!
 
 ## Version
 The latest API version is `v1`.
