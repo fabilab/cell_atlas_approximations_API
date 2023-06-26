@@ -1,0 +1,105 @@
+#!/bin/sh
+# Author: Fabio Zanini (https://fabilab.org)
+# Date: June 27, 2023.
+# License: MIT. Please also cite our paper when publishing using any insight gained here.
+# Web: atlasapprox.org
+#
+# NOTE for Windows: This script is not expected to work on Windows. Open an issue on GitHub if you need that.
+#
+# Requirements: curl.
+# 
+# Installation:
+# 1. Install curl
+# - Linux: Use your package manager. Then download this file, 
+# - Mac: Use homebrew or similar.
+#
+# 2. Download this file into a folder of choice.
+# 3. Make it executable. From a terminal in the same folder, that'd be: chmod u+x atlasapprox
+# 4. Call it via ./atlasapprox [options] <endpoint> [--parameters]
+# 5 (optional). If you put the file into a folder within your $PATH, or add its folder to your
+#   $PATH (e.g. in .bashrc and similar places), you will be able to call just atlasapprox ...
+#   (without the initial "./").
+#
+# For any issues, please open a GitHub issue at:
+#   https://github.com/fabilab/cell_atlas_approximations_API/issues
+#
+# Have fun!
+VERBOSE=0
+HELP=0
+HAS_ENDPOINT=0
+
+print_help () {
+  echo "Bash interface to Atlas Approxmations API."
+  echo ""
+  echo "Cell atlas approximations aim to provide a simplified but"
+  echo "faithful representation of single cell data sets covering"
+  echo "entire organisms (e.g. Tabula Sapiens)."
+  echo ""
+  echo "Usage:"
+  echo "  atlasapprox [(-v | --verbose)] <endpoint> [--<key1>=<value1>] [--<key2>=<value2>]"
+  echo "  atlasapprox (-h | --help)"
+  echo ""
+  echo "  -v, --verbose		Increase curl verbosity."
+  echo "  -h, --help		Print this help message."
+  echo ""
+  echo "Endpoints:"
+  echo "  organisms: A list of available organisms."
+  echo "  organs: A list of sampled organs from one organism."
+  echo "  celltypes: A list of cell types from one organ and organism."
+  echo "  celltypexorgan: A presence matrix (boolean) in a selected organism for each cell type in each organ, starting from the most common cell types."
+  echo "  average: Average measurement (e.g. gene expression) for an organ, organism, and list of features (genes)."
+  echo "  fraction_detected: Fraction of cells with a detected measurement (e.g. gene expression) for an organ, organism, and list of features (genes). Together with \`average\` it can be used to build dot plots."
+  echo "  markers: Marker genes for a cell type in an organ and organism."
+  echo "  highest_measurement: A list of cell types across a whole organism with the highest measurement (e.g. expression) of one feature (gene)."
+  echo "  similar_features: A list of features similar to the specified one in an organism and organ."
+  echo "  similar_celltypes: A list of cell types similar to the specified one across an entire organism."
+  echo ""
+  echo "Examples:"
+  echo "  atlasapprox organisms"
+  echo "  atlasapprox organs --organism=m_musculus"
+  echo "  atlasapprox average --organism=m_musculus --organ=Lung --features=Col1a1,Ptprc"
+  echo "  atlasapprox celltypexorgan --organism=h_sapiens"
+}
+
+if [ $# -eq 0 ]; then
+  echo "At least one argument (endpoint) required." > /dev/stderr
+  print_help
+  exit 1;
+fi
+
+
+optstring="";
+for i in "$@"; do
+  case $i in
+    -h|--help)
+      HELP=1;
+      print_help;
+      ;;
+    -v|--verbose)
+      VERBOSE=1;
+      ;;
+    --*=*)
+      optstring="${optstring} --data-urlencode ${i:2}"
+      ;;
+    *)
+      if [ $HAS_ENDPOINT == "0" ]; then
+        endpoint=$i;
+	HAS_ENDPOINT=1;
+      else
+        echo "Arguments not formatted properly. Each argument must be in the form --<key>=<value>" > /dev/stderr
+        exit 2;
+      fi	
+      ;;
+  esac
+done
+
+if [ $HELP == "1" ]; then
+  exit 0;
+fi
+
+if [ $VERBOSE == "1" ]; then
+  cmd="curl --get -H \"Accept: application/json\" ${optstring} https://api.atlasapprox.org/v1/${endpoint}"
+  echo ${cmd}
+fi
+
+curl --get -H "Accept: application/json" ${optstring} https://api.atlasapprox.org/v1/${endpoint}

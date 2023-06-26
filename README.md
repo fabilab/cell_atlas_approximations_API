@@ -14,7 +14,7 @@ This project enables biologists, doctors, and data scientist to quickly find ans
 - *What are the marker genes of a specific cell type in mouse pancreas*?
 - *What fraction of cells (of a specific type) express a gene of interest?*
 
-These questions can be asked in Python or R using the provided packages (see below), or in a language agnostic manner using the REST API.
+These questions can be asked in Python or R using the provided packages (see below), or in a language agnostic manner using the REST API. We even made a shell script for Linux and Mac that calls the API from your terminal! - check the `shell` folder.
 
 ## Version
 The latest API version is `v1`.
@@ -57,6 +57,15 @@ library("atlasapprox")
 organisms <- GetOrganisms()
 print(organisms)
 ```
+
+### Shell (bash, zsh, et similia)
+A single script is provided in this repo under `shell/atlasapprox`. Usage instructions are included, but as a quick example:
+
+```bash
+atlasapprox average --organism=m_musculus --organ=Lung --features=Col1a1,Ptprc
+```
+
+Note that the output is a serialized JSON string: you'll probably need some kind of parser to interpret the results.
 
 ## Repo contents
 - `data`: files required for the compression of current cell atlases
