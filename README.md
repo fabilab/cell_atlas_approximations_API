@@ -25,6 +25,10 @@ We support several organs and organisms: human, mouse, lemur (a type of monkey),
 Tutorial and reference documentation is available at [https://atlasapprox.readthedocs.io](https://atlasapprox.readthedocs.io).
 
 ## Usage
+<details> 
+
+<summary> REST </summary>
+
 ### REST
 The REST interface is language-agnostic and can be queried using any HTTP request handler, e.g. in JavaScript:
 
@@ -39,6 +43,10 @@ The REST interface is language-agnostic and can be queried using any HTTP reques
 ```
 
 Similar results can be obtained via Python's `requests`, R's `httr`, etc. If you are using Python or R, however, please consider using the dedicated interfaces below, as they are more efficient and easier on our servers thanks to caching.
+</details>
+
+<details>
+  <summary>Python</summary>
 
 ### Python
 The Python interface uses a central `API` class. Its methods implement the REST endpoints:
@@ -50,6 +58,10 @@ api = atlasapprox.API()
 print(api.organisms())
 print(api.celltypes(organism="c_elegans", organ="whole"))
 ```
+</details>
+
+<details>
+  <summary>R</summary>
 
 ### R
 The R interface includes a number of `GetXXX` functions connected to the REST endpoints:
@@ -60,6 +72,10 @@ library("atlasapprox")
 organisms <- GetOrganisms()
 print(organisms)
 ```
+</details>
+
+<details>
+  <summary>Shell</summary>
 
 ### Shell (bash, zsh, et similia)
 A single script is provided in this repo under `shell/atlasapprox`. Usage instructions are included, but as a quick example:
@@ -69,6 +85,8 @@ atlasapprox average --organism=m_musculus --organ=Lung --features=Col1a1,Ptprc
 ```
 
 Note that the output is a serialized JSON string: you'll probably need some kind of parser to interpret the results.
+
+</details>
 
 ## Repo contents
 - `data`: files required for the compression of current cell atlases
