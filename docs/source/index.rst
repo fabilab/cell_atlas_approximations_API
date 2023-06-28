@@ -21,7 +21,7 @@ The most recent version of the API is **v1**.
 
 API interfaces
 --------------
-There are three ways to access the data programmatically: Python, R, or REST (language-agnostic).
+There are five ways to access the data programmatically: Python, R, JavaScript, shell (e.g. Bash, Zsh), or REST (language-agnostic).
 
 .. toctree::
    :maxdepth: 1
@@ -30,6 +30,8 @@ There are three ways to access the data programmatically: Python, R, or REST (la
    rest/index
    python/index
    R/index
+   js/index
+   sh/index
    rest/embed
 
 Authors
