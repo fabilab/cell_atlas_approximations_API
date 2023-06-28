@@ -21,6 +21,8 @@ class CelltypeXOrgan(Resource):
         if organism is None:
             abort(400, message='The "organism" parameter is required.')
         organs = args.get("organs", None)
+        if organs is not None:
+            organs = organs.split(",")
         measurement_type = args.get(
             "measurement_type", "gene_expression")
 
