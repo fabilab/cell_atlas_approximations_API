@@ -73,7 +73,7 @@ React example below). Needless to say, the API is also compatible with other fra
         // E.g. use a stateful variable for the result
         const [myData, setMyData] = useState({});
 
-        useEffect(() {
+        useEffect(() => {
           (async () => {
              ...
              let data = await atlasapprox.organisms();

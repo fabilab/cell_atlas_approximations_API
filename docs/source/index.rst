@@ -32,6 +32,13 @@ There are five ways to access the data programmatically: Python, R, JavaScript, 
    R/index
    js/index
    sh/index
+
+Moreover, it is relatively easy to embed API calls to cell atlas approximations in a web page through JavaScript:
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Contents:
+
    rest/embed
 
 Authors
