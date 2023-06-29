@@ -15,39 +15,45 @@ This project enables biologists, doctors, and data scientist to quickly find ans
 
 These questions can be asked in Python or R using the provided packages (see below), or in a language agnostic manner using the REST API.
 
+.. note::
+
+   To access cell atlas approximations using a Human Interface (HI) instead, check out our friendly chat bot @ https://atlasapprox.org. Please be nice to the bot 😊 - it's not very smart yet.
+
 Version
 -------
 The most recent version of the API is **v1**.
 
 API interfaces
 --------------
-There are five ways to access the data programmatically: Python, R, JavaScript, shell (e.g. Bash, Zsh), or REST (language-agnostic).
+There are five ways to access the data programmatically:
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
 
-   rest/index
-   python/index
-   R/index
-   js/index
-   sh/index
+   REST (language-agnostic) <rest/index>
+   Python <python/index>
+   R <R/index>
+   JavaScript <js/index>
+   UNIX shell (bash, zsh, etc.) <sh/index>
 
-Moreover, it is relatively easy to embed API calls to cell atlas approximations in a web page through JavaScript:
+These APIs can be used to query the approximations or to build a secondary analysis tool (e.g. a Python package that visualizes approximations).
+
+Embedding atlas approximation data in a web page
+------------------------------------------------
+It is relatively easy to embed API calls to cell atlas approximations in a web page through JavaScript:
 
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
 
    rest/embed
 
 Authors
 -------
-**Fabio Zanini** @ [fabilab](https://fabilab.org)
+**Fabio Zanini** @ `fabilab <https://fabilab.org>`_.
 
 Citation
 --------
-Ying Xu and Fabio Zanini. Lightweight and scalable approximations democratise access to single cell atlases. In preparation (2023).
+**Ying Xu and Fabio Zanini**. Lightweight and scalable approximations democratise access to single cell atlases. In preparation (2023).
 
 Data Sources
 ------------
