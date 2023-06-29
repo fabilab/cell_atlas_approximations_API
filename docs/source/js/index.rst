@@ -51,4 +51,4 @@ Each API method is described in detail below.
 
 Reference API
 -------------
-For now, you can look at the [test script](https://github.com/fabilab/cell_atlas_approximations_API/blob/main/js/test/script.js) for usage examples.
+For now, you can look at the `test script <https://github.com/fabilab/cell_atlas_approximations_API/blob/main/js/test/script.js>`_ for usage examples.
