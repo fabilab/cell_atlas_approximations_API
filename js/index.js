@@ -45,7 +45,8 @@ async function celltypes(organism, organ) {
 
 // AVERAGE GENE EXPRESSION
 async function average(organism, organ, features) {
-  features = features.join(",");
+  if (!isString(features))
+    features = features.join(",");
   let params = { organism, organ, features };
   return await _callEndpoint("average", params=params);
 }
