@@ -276,8 +276,12 @@ GetHighestMeasurement <- function(organism, feature, number) {
     organs <- array(unlist(httr::content(response)$organs))
     average <- array(unlist(httr::content(response)$average))
 
+    print(cell_types)
+    print(organs)
+    print(average)
+
     # Make data frame with all three arrays
-    df <- data.frame(t([cell_types, organs, average]))
+    df <- data.frame(cell_types, organs, average)
     colnames(df) <- c("Cell type", "Organ", "Average")
 
     return(df)
@@ -315,7 +319,7 @@ GetHighestMeasurement <- function(organism, organ, feature, number, method) {
     distances <- array(unlist(httr::content(response)$distances))
 
     # Make data frame
-    df <- data.frame(t([similar_features, distances]))
+    df <- data.frame(similar_features, distances)
     colnames(df) <- c("Features", "distances")
 
     return(df)
