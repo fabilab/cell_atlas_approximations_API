@@ -75,6 +75,23 @@ print(organisms)
 </details>
 
 <details>
+  <summary>JavaScript</summary>
+
+### JavaScript/nodejs
+An object containing one function for each API endpoint is exported by the `atlasapprox` npm package:
+
+```javascript
+let atlasapprox = require('atlasapprox');
+(async () => {
+  let data = await atlasapprox.organisms();
+  console.log(data);
+  }  
+})();
+
+```
+</details>
+
+<details>
   <summary>Shell</summary>
 
 ### Shell (bash, zsh, et similia)
