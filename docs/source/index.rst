@@ -17,6 +17,12 @@ Because of their small size, atlas approximations are well suited for acess over
 
    To access cell atlas approximations using a Human Interface (HI) instead, check out our friendly chat bot @ https://atlasapprox.org. Please be nice to the bot 😊 - it's not very smart yet.
 
+**Examples of API usage**:
+  - Ask the average expression of a set of genes in a cell type, organ, and organism.
+  - List the cell types across an entire organism that have the highest expression of a certain gene.
+  - Find marker genes for a specific cell type.
+  - Show a table of which cell types are found in multiple tissues (e.g. various kinds immune cells).
+
 Version
 -------
 The most recent version of the API is **v1**.
@@ -38,8 +44,8 @@ There are multiple ways to access atlas approximations programmatically:
 
    All interfaces use the REST API internally and provide a convenience layer for users of specific languages.
 
-Embedding atlas approximation data in a web page
-------------------------------------------------
+Embedding in a web page
+-----------------------
 It is relatively easy to embed API calls to cell atlas approximations in a web page through the JavaScript and REST interfaces:
 
 .. toctree::
