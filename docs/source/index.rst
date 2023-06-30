@@ -5,15 +5,13 @@
 
 API for cell atlas approximations
 =================================
-Cell atlases such as Tabula Muris and Tabula Sapiens are multi-organ single cell omics data sets describing entire organisms. A cell atlas approximation is a lossy and lightweight compression of a cell atlas that can be streamed over a RESTful API.
+Cell atlases are single cell omics data sets describing multiple organs and ideally entire organisms. A `cell atlas approximation <https://chanzuckerberg.com/science/programs-resources/single-cell-biology/data-insights/light-and-scalable-statistical-approximations-of-cell-atlases/>`_ is a lightweight, lossy compression of a cell atlas that retains key informtation while reducing data size and complexity.
 
-This project enables biologists, doctors, and data scientist to quickly find answers for questions such as:
+.. note::
 
-- *What is the expression of a specific gene in human lung?*
-- *What are the marker genes of a specific cell type in mouse pancreas*?
-- *What fraction of cells (of a specific type) express a gene of interest?*
+   While approximations are currently limited to single cell transcriptomic data, future support for chromatin accessibility and other single-cell assays is planned, with much of the code infrastructure already set up.
 
-These questions can be asked in Python or R using the provided packages (see below), or in a language agnostic manner using the REST API.
+Because of their small size, atlas approximations are well suited for acess over a RESTful API, which is described in this page.
 
 .. note::
 
@@ -23,24 +21,26 @@ Version
 -------
 The most recent version of the API is **v1**.
 
-API interfaces
---------------
-There are five ways to access the data programmatically:
+Interfaces
+----------
+There are multiple ways to access atlas approximations programmatically:
 
 .. toctree::
    :maxdepth: 1
 
-   REST (language-agnostic) <rest/index>
    Python <python/index>
    R <R/index>
    JavaScript <js/index>
    UNIX shell (bash, zsh, etc.) <sh/index>
+   REST (language-agnostic) <rest/index>
 
-These APIs can be used to query the approximations or to build a secondary analysis tool (e.g. a Python package that visualizes approximations).
+.. note::
+
+   All interfaces use the REST API internally and provide a convenience layer for users of specific languages.
 
 Embedding atlas approximation data in a web page
 ------------------------------------------------
-It is relatively easy to embed API calls to cell atlas approximations in a web page through JavaScript:
+It is relatively easy to embed API calls to cell atlas approximations in a web page through the JavaScript and REST interfaces:
 
 .. toctree::
    :maxdepth: 1
