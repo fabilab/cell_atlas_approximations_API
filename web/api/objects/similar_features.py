@@ -9,6 +9,7 @@ from models import (
     OrganNotFoundError,
     FeatureNotFoundError,
     SimilarityMethodError,
+    MeasurementTypeNotFoundError,
 )
 
 
@@ -18,6 +19,7 @@ class SimilarFeatures(Resource):
     def get(self):
         """Get list of features similar to the focal one"""
         args = request.args
+        measurement_type = args.get("measurement_type", "gene_expression")
         organism = args.get("organism", None)
         if organism is None:
             abort(400, message='The "organism" parameter is required.')
@@ -51,6 +53,7 @@ class SimilarFeatures(Resource):
                 feature_name=feature,
                 number=number,
                 method=method,
+                measurement_type=measurement_type,
             )
         except OrganismNotFoundError:
             abort(400, message=f"Organism not found: {organism}.")
@@ -60,8 +63,14 @@ class SimilarFeatures(Resource):
             abort(400, message=f"Feature not found: {feature}.")
         except SimilarityMethodError:
             abort(400, message=f"Similarity method not supported: {method}.")
+        except MeasurementTypeNotFoundError:
+            abort(
+                400,
+                message=f"Measurement type not found: {measurement_type}.",
+            )
 
         return {
+            "measurement_type": measurement_type,
             "organism": organism,
             "organ": organ,
             "method": method,

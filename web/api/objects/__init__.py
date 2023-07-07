@@ -1,3 +1,4 @@
+from api.objects.measurement_types import MeasurementTypes
 from api.objects.organisms import Organisms
 from api.objects.organs import Organs
 from api.objects.features import Features
@@ -13,16 +14,17 @@ from api.objects.celltypexorgan import CelltypeXOrgan
 
 
 __all__ = (
-    "Average",
+    "MeasurementTypes",
+    "Organisms",
+    "Organs",
     "Celltypes",
-    "DataSources",
     "Features",
+    "Average",
     "FractionDetected",
     "HighestMeasurement",
     "Markers",
-    "Organisms",
-    "Organs",
     "SimilarCelltypes",
     "SimilarFeatures",
     "CelltypeXOrgan",
+    "DataSources",
 )

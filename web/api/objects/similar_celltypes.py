@@ -11,6 +11,7 @@ from models import (
     TooManyFeaturesError,
     SimilarityMethodError,
     CellTypeNotFoundError,
+    MeasurementTypeNotFoundError,
 )
 from api.exceptions import FeatureStringFormatError
 from api.utils import clean_feature_string
@@ -22,6 +23,7 @@ class SimilarCelltypes(Resource):
     def get(self):
         """Get list of features similar to the focal one"""
         args = request.args
+        measurement_type = args.get("measurement_type", "gene_expression")
         organism = args.get("organism", None)
         if organism is None:
             abort(400, message='The "organism" parameter is required.')
@@ -58,6 +60,7 @@ class SimilarCelltypes(Resource):
                 features=features,
                 number=number,
                 method=method,
+                measurement_type=measurement_type,
             )
         except OrganismNotFoundError:
             abort(400, message=f"Organism not found: {organism}.")
@@ -74,8 +77,14 @@ class SimilarCelltypes(Resource):
             )
         except SimilarityMethodError:
             abort(400, message=f"Similarity method not supported: {method}.")
+        except MeasurementTypeNotFoundError:
+            abort(
+                400,
+                message=f"Measurement type not found: {measurement_type}.",
+            )
 
         return {
+            "measurement_type": measurement_type,
             "organism": organism,
             "organ": organ,
             "celltype": celltype,

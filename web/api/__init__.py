@@ -2,13 +2,14 @@
 
 from api.endpoints import get_api_endpoint
 from api.objects import (
-    Average,
-    Celltypes,
-    Features,
-    FractionDetected,
-    Markers,
+    MeasurementTypes,
     Organisms,
     Organs,
+    Celltypes,
+    Features,
+    Average,
+    FractionDetected,
+    Markers,
     DataSources,
     HighestMeasurement,
     SimilarFeatures,
@@ -22,6 +23,7 @@ __all__ = (
 )
 
 api_dict = {
+    "measurement_types": MeasurementTypes,
     "organisms": Organisms,
     "organs": Organs,
     "features": Features,

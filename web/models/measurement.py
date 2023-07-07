@@ -116,6 +116,15 @@ def get_fraction_detected(
     Returns:
         numpy 2D array where each row is a **feature**
     """
+    # For ATAC-Seq, fraction detected is the same as average
+    if measurement_type in ('chromatin_accessibility',):
+        return get_averages(
+            organism,
+            organ,
+            features,
+            measurement_type,
+        )
+
     return get_measurement(
         organism,
         organ,

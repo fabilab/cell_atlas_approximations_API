@@ -8,6 +8,7 @@ from models import (
     OrganismNotFoundError,
     OrganNotFoundError,
     CellTypeNotFoundError,
+    MeasurementTypeNotFoundError,
 )
 
 
@@ -17,6 +18,7 @@ class Markers(Resource):
     def get(self):
         """Get list of cell types for an organ and organism"""
         args = request.args
+        measurement_type = args.get("measurement_type", "gene_expression")
         organism = args.get("organism", None)
         if organism is None:
             abort(400, message='The "organism" parameter is required.')
@@ -44,6 +46,7 @@ class Markers(Resource):
                 organ=organ,
                 cell_type=cell_type,
                 number=number,
+                measurement_type=measurement_type,
             )
         except OrganismNotFoundError:
             abort(400, message=f"Organism not found: {organism}.")
@@ -51,10 +54,16 @@ class Markers(Resource):
             abort(400, message=f"Organ not found: {organ}.")
         except CellTypeNotFoundError:
             abort(400, message=f"Cell type not found: {cell_type}.")
+        except MeasurementTypeNotFoundError:
+            abort(
+                400,
+                message=f"Measurement type not found: {measurement_type}.",
+            )
 
         return {
             "organism": organism,
             "organ": organ,
+            "measurement_type": measurement_type,
             "celltype": cell_type,
             "markers": list(markers),
         }

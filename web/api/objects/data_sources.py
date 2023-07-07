@@ -8,7 +8,7 @@ class DataSources(Resource):
     def get(self):
         """Get list of organisms"""
         return {
-            "h_sapiens": "Tabula Sapiens (https://www.science.org/doi/10.1126/science.abl4896)",
+                "h_sapiens": "RNA: Tabula Sapiens (https://www.science.org/doi/10.1126/science.abl4896), ATAC: Zhang et al. Ren. A single-cell atlas of chromatin accessibility in the human genome (https://doi.org/10.1016/j.cell.2021.10.024).",
             "m_musculus": "Tabula Muris Senis (https://www.nature.com/articles/s41586-020-2496-1)",
             "m_myoxinus": "Tabula Microcebus (https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)",
             "c_elegans": "Cao et al. 2017 (https://www.science.org/doi/10.1126/science.aam8940)",

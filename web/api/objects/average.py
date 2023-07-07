@@ -11,6 +11,7 @@ from models import (
     OrganNotFoundError,
     FeatureNotFoundError,
     TooManyFeaturesError,
+    MeasurementTypeNotFoundError,
 )
 from api.exceptions import FeatureStringFormatError
 from api.utils import clean_feature_string
@@ -22,6 +23,7 @@ class Average(Resource):
     def get(self):
         """Get list of cell types for an organ and organism"""
         args = request.args
+        measurement_type = args.get("measurement_type", "gene_expression")
         organism = args.get("organism", None)
         if organism is None:
             abort(400, message='The "organism" parameter is required.')
@@ -32,16 +34,17 @@ class Average(Resource):
         if features is None:
             abort(400, message='The "features" parameter is required.')
         try:
-            features = clean_feature_string(features, organism)
+            features = clean_feature_string(features, organism, measurement_type)
         except FeatureStringFormatError:
             abort(400, message=f"Feature string not recognised: {features}.")
-        unit = config['units']['gene_expression']
+        unit = config['units'][measurement_type]
 
         try:
             avgs = get_averages(
                 organism=organism,
                 organ=organ,
                 features=features,
+                measurement_type=measurement_type,
             )
         except OrganismNotFoundError:
             abort(400, message=f"Organism not found: {organism}.")
@@ -54,16 +57,23 @@ class Average(Resource):
                 400,
                 message=f"Maximal number of features is 50. Requested: {len(features)}.",
             )
+        except MeasurementTypeNotFoundError:
+            abort(
+                400,
+                message=f"Measurement type not found: {measurement_type}.",
+            )
 
         # This cannot fail since the exceptions above were survived already
         cell_types = list(get_celltypes(
             organism=organism,
             organ=organ,
+            measurement_type=measurement_type,
         ))
 
         return {
             "organism": organism,
             "organ": organ,
+            "measurement_type": measurement_type,
             "features": features,
             "average": avgs.tolist(),
             "celltypes": cell_types,

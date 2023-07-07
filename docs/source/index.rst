@@ -63,7 +63,9 @@ Citation
 
 Data Sources
 ------------
-- *Homo sapiens*: [Tabula Sapiens](https://www.science.org/doi/10.1126/science.abl4896)
+- *Homo sapiens*: 
+  - RNA: [Tabula Sapiens](https://www.science.org/doi/10.1126/science.abl4896)
+  - ATAC: [Zhang et al. 2021](https://doi.org/10.1016/j.cell.2021.10.024)
 - *Mus musculus*: [Tabula Muris Senis](https://www.nature.com/articles/s41586-020-2496-1)
 - *Mus myoxinus*: [Tabula Microcebus](https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
 - *Caenorhabditis elegans*: [Cao et al. 2017](https://www.science.org/doi/10.1126/science.aam8940)

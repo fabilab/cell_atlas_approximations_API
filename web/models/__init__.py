@@ -30,9 +30,15 @@ from models.similar import (
 )
 
 
-def get_organisms():
-    """Get a list of organisms supported"""
-    organisms = list(config["paths"]["compressed_atlas"].keys())
+def get_organisms(
+    measurement_type="gene_expression",
+):
+    """Get a list of organisms supported, for a particular measurement type."""
+    organisms = []
+    for organism, h5_path in config["paths"]["compressed_atlas"].items():
+        with h5py.File(h5_path) as db:
+            if measurement_type in db:
+                organisms.append(organism)
     organisms.sort()
     return organisms
 
@@ -56,7 +62,11 @@ def get_organs(
     return organs
 
 
-def get_celltypes(organism, organ, measurement_type="gene_expression"):
+def get_celltypes(
+    organism,
+    organ,
+    measurement_type="gene_expression",
+):
     """Get list of celltypes within an organ"""
     h5_path = config["paths"]["compressed_atlas"].get(organism, None)
     if h5_path is None:
@@ -80,7 +90,9 @@ def get_celltypexorgan(organism, organs=None, measurement_type="gene_expression"
     """Get a presence/absence matrix for cell types in organs"""
     # Get organs
     if organs is None:
-        organs = list(get_organs(organism=organism))
+        organs = list(get_organs(
+            organism=organism, measurement_type=measurement_type,
+        ))
 
     # Get celltypes
     celltypexorgan_dict = {}
@@ -120,7 +132,11 @@ def get_markers(
 ):
     """Get marker features for a specific cell type in an organ."""
     # In theory, one could use various methods to find markers
-    method = "fraction"
+    if measurement_type == "gene_expression":
+        method = "fraction"
+    # For ATAC-Seq, average and fraction are the same thing
+    else:
+        method = "average"
 
     h5_path = config["paths"]["compressed_atlas"].get(organism, None)
     if h5_path is None:

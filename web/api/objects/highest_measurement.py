@@ -8,6 +8,7 @@ from models import (
     get_highest_measurement,
     OrganismNotFoundError,
     FeatureNotFoundError,
+    MeasurementTypeNotFoundError,
 )
 
 
@@ -17,13 +18,14 @@ class HighestMeasurement(Resource):
     def get(self):
         """Get expression in highest cell types, in one organism"""
         args = request.args
+        measurement_type = args.get("measurement_type", "gene_expression")
         organism = args.get("organism", None)
         if organism is None:
             abort(400, message='The "organism" parameter is required.')
         feature = args.get("feature", None)
         if feature is None:
             abort(400, message='The "feature" parameter is required.')
-        unit = config["units"]["gene_expression"]
+        unit = config["units"][measurement_type]
         number = args.get("number", None)
         if number is None:
             abort(400, message='The "number" parameter is required.')
@@ -41,13 +43,20 @@ class HighestMeasurement(Resource):
                 organism=organism,
                 feature=feature,
                 number=number,
+                measurement_type=measurement_type,
             )
         except OrganismNotFoundError:
             abort(400, message=f"Organism not found: {organism}.")
         except FeatureNotFoundError:
             abort(400, message="Some features could not be found.")
+        except MeasurementTypeNotFoundError:
+            abort(
+                400,
+                message=f"Measurement type not found: {measurement_type}.",
+            )
 
         return {
+            "measurement_type": measurement_type,
             "organism": organism,
             "feature": feature,
             "organs": result["organs"],
