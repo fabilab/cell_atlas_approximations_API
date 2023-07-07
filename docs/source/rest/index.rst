@@ -137,13 +137,15 @@ Table of cell types x organ
   - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
   - ``organs`` (optional): A list of organs of interest. If not specified, all organs from the chosen organism will be used. If specified, must be a subset of the available ones for the chosen organism. A special value, ``whole``, returns the union of all cell types across all organs.
   - ``measurement_type`` (optional, default ``gene_expresion``): What kind of measurement to query about.
+  - ``boolean`` (optional, default ``false``): Whether to return a boolean presence/absence matrix
+        (if ``true``) or the number of cells/nuclei sampled for each type and organ (if ``false``).
 
 **Returns**: An object/dict with the following keys:
   - ``measurement_type``: The measurement type selected.
   - ``organism``: The organism chosen (this confirms it exists in the database).
   - ``organs``: A list of organs chosen.
   - ``celltypes``: A list containing all celltypes from any of the chosen organs or, if no organs were specified, from the whole organism. They are ordered from celltypes detected in most organs to the ones found in only one organ.
-  - ``detected``: A table (list of lists) of binary values, where ``1`` or ``true`` means that cell type was detected in that organ. Order of rows and columns as in the ``organs`` and ``celltypes`` part of the returned object.
+  - ``detected``: A table (list of lists) of numeric values. If ``boolean`` was set to ``true``, ``1`` or ``true`` means that cell type was detected in that organ. Otherwise, this is the number of samples cells/nuclei from that cell type and organ, without any normalisation. Order of rows and columns as in the ``organs`` and ``celltypes`` part of the returned object.
 
 Averages
 ++++++++

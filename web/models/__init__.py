@@ -86,7 +86,39 @@ def get_celltypes(
     return celltypes
 
 
-def get_celltypexorgan(organism, organs=None, measurement_type="gene_expression"):
+def get_celltype_abundance(
+    organism,
+    organ,
+    measurement_type="gene_expression",
+):
+    """Get number of cells for each type within an organ"""
+    h5_path = config["paths"]["compressed_atlas"].get(organism, None)
+    if h5_path is None:
+        raise OrganismNotFoundError(f"Organism not found: {organism}")
+
+    with h5py.File(h5_path) as db:
+        if measurement_type not in db:
+            raise MeasurementTypeNotFoundError(
+                f"Measurement type not found: {measurement_type}"
+            )
+        if organ not in db[measurement_type]["by_tissue"]:
+            raise OrganNotFoundError(f"Organ not found: {organ}")
+
+        celltypes = db[measurement_type]["by_tissue"][organ]["celltype"][
+            "index"
+        ].asstr()[:]
+        cell_numbers = db[measurement_type]["by_tissue"][organ]["celltype"][
+            "cell_count"
+        ][:]
+    return pd.Series(cell_numbers, index=celltypes)
+
+
+def get_celltypexorgan(
+    organism,
+    organs=None,
+    measurement_type="gene_expression",
+    boolean=False,
+):
     """Get a presence/absence matrix for cell types in organs"""
     # Get organs
     if organs is None:
@@ -95,30 +127,21 @@ def get_celltypexorgan(organism, organs=None, measurement_type="gene_expression"
         ))
 
     # Get celltypes
-    celltypexorgan_dict = {}
-    celltype_counts = Counter()
+    organs_celltypes = Counter()
     for organ in organs:
-        celltypes_organ = get_celltypes(
+        celltypes_organ = get_celltype_abundance(
             organism=organism, organ=organ, measurement_type=measurement_type,
         )
-        celltypexorgan_dict[organ] = celltypes_organ
-        for celltype in celltypes_organ:
-            celltype_counts[celltype] += 1
-    celltypes = list(celltype_counts.keys())
+        for celltype, abundance in celltypes_organ.items():
+            organs_celltypes[(organ, celltype)] = abundance
 
-    # Get celltype x organ binary presence/absence table
-    data = pd.DataFrame(
-        np.zeros((len(celltypes), len(organs)), bool),
-        index=celltypes,
-        columns=organs,
-    )
-    for organ, celltypes_organ in celltypexorgan_dict.items():
-        data.loc[celltypes_organ, organ] = True
+    dtype = bool if boolean else int
+    data = pd.Series(organs_celltypes).unstack(0, fill_value=0).astype(dtype)
 
     # Sort from the cell types with the highest abundance
     # NOTE: a double sort by this and secondarily by organ name might be
     # even better perhaps
-    data = data.loc[data.sum(axis=1).sort_values(ascending=False).index]
+    data = data.loc[(data != 0).sum(axis=1).sort_values(ascending=False).index]
 
     return data
 

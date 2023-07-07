@@ -25,12 +25,16 @@ class CelltypeXOrgan(Resource):
             organs = organs.split(",")
         measurement_type = args.get(
             "measurement_type", "gene_expression")
+        boolean = args.get("boolean", False)
+        if isinstance(boolean, str):
+            boolean = boolean.lower() not in ('false', '0', 'no')
 
         try:
             celltypexorgan = get_celltypexorgan(
                 organism=organism,
                 organs=organs,
                 measurement_type=measurement_type,
+                boolean=boolean,
             )
         except OrganismNotFoundError:
             abort(400, message=f"Organism not found: {organism}.")

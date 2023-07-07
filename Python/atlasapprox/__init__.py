@@ -358,7 +358,8 @@ class API:
         Args:
             organism: The organism to query.
             number: The number of cell types to list. The actual number might
-            be lower if not enough cell types were found.
+                be lower if not enough cell types were found.
+            measurement_type: The measurement type to query.
 
         Returns: A pandas.Series with a multi-index containing cell type and
             organ and values corresponding to the average measurement (e.g.
@@ -392,11 +393,27 @@ class API:
         organism: str,
         organs: Union[None, str] = None,
         measurement_type: str = "gene_expression",
+        boolean=False,
     ):
+        """Get the table of cell types x organ across a whole organism.
+
+        Args:
+            organism: The organism to query.
+            organs (optional): If None, cover all organs from the chosen organism. If a list
+                of organs, limit the table to those organs.
+            measurement_type: The measurement type to query.
+            boolean: If True, return a presence/absence matrix for each cell type in each
+                organ. If False (default), return the number of sampled cells/nuclei for
+                each cell type in each organ.
+
+        Returns: A pandas.DataFrame with the presence/absence or number of sampled cells/nuclei
+            for each cell type (index) in each organ (columns).
+        """
 
         params = {
             "organism": organism,
             "measurement_type": measurement_type,
+            "boolean": bool(boolean),
         }
         if organs is not None:
             params["organs"] = organs
@@ -408,9 +425,10 @@ class API:
         if not response.ok:
             raise BadRequestError(response.json()["message"])
 
+        dtype = bool if boolean else int
         resp_result = response.json()
         result = pd.DataFrame(
-            np.array(resp_result["detected"]).astype(bool),
+            np.array(resp_result["detected"]).astype(dtype),
             columns=pd.Index(resp_result["organs"], name="organs"),
             index=pd.Index(resp_result["celltypes"], name="cell types"),
         )
