@@ -1,9 +1,9 @@
 """Module for access to average and fraction_detected"""
 import numpy as np
 import pandas as pd
-import h5py
 
 from config import configuration as config
+from models.utils import ApproximationFile
 from models.exceptions import (
     OrganismNotFoundError,
     MeasurementTypeNotFoundError,
@@ -61,11 +61,11 @@ def get_measurement(
         raise TooManyFeaturesError(
                 f"Number of requested features exceeds 50: {nfeas}")
 
-    h5_path = config["paths"]["compressed_atlas"].get(organism, None)
-    if h5_path is None:
+    approx_path = config["paths"]["compressed_atlas"].get(organism, None)
+    if approx_path is None:
         raise OrganismNotFoundError(f"Organism not found: {organism}")
 
-    with h5py.File(h5_path) as db:
+    with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}"

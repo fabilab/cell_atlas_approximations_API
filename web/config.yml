@@ -5,9 +5,9 @@ feature_types: ['gene_expression', 'chromatin_accessibility']
 
 paths:
   compressed_atlas:
-    "m_musculus": "./static/atlas_data/tabula_muris_senis.h5"
+    "m_musculus": "./static/atlas_data/m_musculus.h5"
     "h_sapiens": "./static/atlas_data/h_sapiens.h5"
-    "m_myoxinus": "./static/atlas_data/tabula_microcebus.h5"
+    "m_myoxinus": "./static/atlas_data/m_myoxinus.h5"
     "c_elegans": "./static/atlas_data/c_elegans.h5"
     "d_rerio": "./static/atlas_data/d_rerio.h5"
     "s_lacustris": "./static/atlas_data/s_lacustris.h5"

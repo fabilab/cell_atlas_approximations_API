@@ -4,9 +4,9 @@ Data models and functions for the API
 from collections import Counter
 import numpy as np
 import pandas as pd
-import h5py
 
 from config import configuration as config
+from models.utils import ApproximationFile
 from models.exceptions import (
     OrganismNotFoundError,
     OrganNotFoundError,
@@ -35,8 +35,8 @@ def get_organisms(
 ):
     """Get a list of organisms supported, for a particular measurement type."""
     organisms = []
-    for organism, h5_path in config["paths"]["compressed_atlas"].items():
-        with h5py.File(h5_path) as db:
+    for organism, approx_path in config["paths"]["compressed_atlas"].items():
+        with ApproximationFile(approx_path) as db:
             if measurement_type in db:
                 organisms.append(organism)
     organisms.sort()
@@ -48,11 +48,11 @@ def get_organs(
     measurement_type="gene_expression",
 ):
     """Get a list of organs from one organism"""
-    h5_path = config["paths"]["compressed_atlas"].get(organism, None)
-    if h5_path is None:
+    approx_path = config["paths"]["compressed_atlas"].get(organism, None)
+    if approx_path is None:
         raise OrganismNotFoundError(f"Organism not found: {organism}")
 
-    with h5py.File(h5_path) as db:
+    with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}"
@@ -68,11 +68,11 @@ def get_celltypes(
     measurement_type="gene_expression",
 ):
     """Get list of celltypes within an organ"""
-    h5_path = config["paths"]["compressed_atlas"].get(organism, None)
-    if h5_path is None:
+    approx_path = config["paths"]["compressed_atlas"].get(organism, None)
+    if approx_path is None:
         raise OrganismNotFoundError(f"Organism not found: {organism}")
 
-    with h5py.File(h5_path) as db:
+    with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}"
@@ -92,11 +92,11 @@ def get_celltype_abundance(
     measurement_type="gene_expression",
 ):
     """Get number of cells for each type within an organ"""
-    h5_path = config["paths"]["compressed_atlas"].get(organism, None)
-    if h5_path is None:
+    approx_path = config["paths"]["compressed_atlas"].get(organism, None)
+    if approx_path is None:
         raise OrganismNotFoundError(f"Organism not found: {organism}")
 
-    with h5py.File(h5_path) as db:
+    with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}"
@@ -161,11 +161,11 @@ def get_markers(
     else:
         method = "average"
 
-    h5_path = config["paths"]["compressed_atlas"].get(organism, None)
-    if h5_path is None:
+    approx_path = config["paths"]["compressed_atlas"].get(organism, None)
+    if approx_path is None:
         raise OrganismNotFoundError(f"Organism not found: {organism}")
 
-    with h5py.File(h5_path) as db:
+    with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}"
