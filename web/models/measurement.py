@@ -15,6 +15,36 @@ from models.features import (
 )
 
 
+quantisations = {}
+
+
+def _get_quantisation(organism, measurement_type):
+    """Lazy cacher of data quantisations.
+
+    NOTE: Data quantisation is sometimes needed to reduce file size. Even a simple 8-bit
+    logarithmic quantisation of e.g. chromatin accessibility saves ~70% of space compared
+    to 32-bit floats. The runtime overhead to undo the quantisation is minimal, even less
+    if the quantisation vector (i.e. 256 float32 numbers) is lazily loaded into RAM via
+    this function.
+    """
+    if (organism, measurement_type) not in quantisations:
+        approx_path = config["paths"]["compressed_atlas"].get(organism, None)
+        if approx_path is None:
+            raise OrganismNotFoundError(f"Organism not found: {organism}")
+
+        with ApproximationFile(approx_path) as db:
+            if measurement_type not in db:
+                raise MeasurementTypeNotFoundError(
+                    f"Measurement type not found: {measurement_type}"
+                )
+            if "quantisation" not in db[measurement_type]:
+                raise KeyError(
+                    f"No 'quantisation' key found for {organism}, {measurement_type}."
+                )
+            quantisations[(organism, measurement_type)] = db[measurement_type]['quantisation'][:]
+    return quantisations[(organism, measurement_type)]
+
+
 def _get_sorted_feature_index(
     db_dataset,
     organism,
@@ -33,6 +63,8 @@ def _get_sorted_feature_index(
 
     # Sort for the h5 file
     idx_sorted = idx_series.sort_values()
+
+    # Extract data from the file
     data = db_dataset[:, idx_sorted.values]
 
     # Resort in the original order
@@ -81,6 +113,15 @@ def get_measurement(
             features,
             measurement_type,
         )
+
+        # If the data is quantised, undo the quantisation to get real values
+        dequantise = 'quantisation' in db[measurement_type]
+
+    # This needs to happen outside the "with" statement since retrieving the quantisation
+    # might involve opening the same file again
+    if dequantise:
+        quantisation = _get_quantisation(organism, measurement_type)
+        result = quantisation[result]
 
     return result
 
