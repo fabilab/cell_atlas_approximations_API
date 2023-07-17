@@ -11,6 +11,7 @@ from api.v1.objects.highest_measurement import HighestMeasurement
 from api.v1.objects.similar_features import SimilarFeatures
 from api.v1.objects.similar_celltypes import SimilarCelltypes
 from api.v1.objects.celltypexorgan import CelltypeXOrgan
+from api.v1.objects.celltype_location import CelltypeLocation
 
 
 __all__ = (
@@ -27,4 +28,5 @@ __all__ = (
     "SimilarFeatures",
     "CelltypeXOrgan",
     "DataSources",
+    "CelltypeLocation",
 )

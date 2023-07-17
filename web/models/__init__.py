@@ -86,6 +86,23 @@ def get_celltypes(
     return celltypes
 
 
+def get_celltype_location(
+    organism,
+    cell_type,
+    measurement_type="gene_expression",
+):
+    """Get a list of organs where this cell type is found."""
+    organs = get_organs(organism, measurement_type=measurement_type)
+    organs_found = []
+    for organ in organs:
+        cell_types_organ = get_celltypes(
+            organism, organ, measurement_type=measurement_type,
+        )
+        if cell_type in cell_types_organ:
+            organs_found.append(organ)
+    return np.array(organs_found)
+
+
 def get_celltype_abundance(
     organism,
     organ,

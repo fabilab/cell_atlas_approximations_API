@@ -129,6 +129,21 @@ Cell types
   - ``organ``: The organ chosen (same comment).
   - ``celltypes``: The list of cell types for that organism and organ.
 
+Cell type location
+++++++++++++++++++
+**Endpoint**: ``/celltype_location``
+
+**Parameters**:
+  - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
+  - ``celltype``: The cell type to find organs/locations for.
+  - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
+
+**Returns**: An object/dict with the following keys:
+  - ``measurement_type``: The measurement type selected.
+  - ``organism``: The organism chosen (this confirms it exists in the database).
+  - ``celltype``: The cell type chosen.
+  - ``organs``: A list of organs in which that cell type was detected.
+
 Table of cell types x organ
 +++++++++++++++++++++++++++
 **Endpoint**: ``/celltypexorgan``

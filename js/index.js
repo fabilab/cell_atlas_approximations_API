@@ -99,6 +99,12 @@ async function celltypexorgan(organism, organs=undefined) {
   return await _callEndpoint("celltypexorgan", params=params);
 }
 
+// CELLTYPE LOCATION
+async function celltype_location(organism, celltype) {
+  let params = { organism, celltype };
+  return await _callEndpoint("celltype_location", params=params);
+
+
 // DATA SOURCES
 async function data_sources() {
   return await _callEndpoint("data_sources");

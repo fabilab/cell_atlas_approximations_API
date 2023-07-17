@@ -251,6 +251,29 @@ GetMarkers <- function(organism, organ, cell_type, number) {
 }
 
 
+#' GetCelltypeLocation
+#'
+#' @param organism The organism you would like to query
+#' @param cell_type The cell type to find markers for
+#'
+#' @return An array of organs in which that cell type is found.
+#' @export
+#'
+#' @examples GetCelltypeLocation("h_sapiens", "fibroblast")
+GetCelltypeLocation <- function(organism, cell_type) {
+    params <- list(organism = organism,
+                   celltype = cell_type)
+    root_uri <- paste(baseurl, 'celltype_location', sep="")
+    uri <- .GetParams(root_uri, params)
+    response <- httr::GET(uri)
+    if (response$status != 200) {
+        stop(paste("Bad request: server returned", response))
+    }
+    result <- array(unlist(httr::content(response)$organs))
+    return(result)
+}
+
+
 #' GetHighestMeasurement
 #'
 #' @param organism The organism you would like to query

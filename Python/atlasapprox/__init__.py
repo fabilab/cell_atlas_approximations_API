@@ -388,6 +388,33 @@ class API:
         result.set_index(["celltype", "organ"], inplace=True)
         return result["average"]
 
+    def celltype_location(
+        self,
+        organism: str,
+        cell_type: str,
+        measurement_type: str = "gene_expression",
+    ):
+        """Get the organs/locations where a cell type is found.
+
+        Args:
+            organism: The organism to query.
+            cell_type: The cell type to get markers for.
+            measurement_type: The measurement type to query.
+
+        Returns: A list of organs where that cell type is found.
+        """
+        response = requests.get(
+            baseurl + "celltype_location",
+            params={
+                "organism": organism,
+                "celltype": cell_type,
+                "measurement_type": measurement_type,
+            },
+        )
+        if not response.ok:
+            raise BadRequestError(response.json()["message"])
+        return response.json()["organs"]
+
     def celltypexorgan(
         self,
         organism: str,
