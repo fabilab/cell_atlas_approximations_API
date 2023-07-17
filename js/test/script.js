@@ -1,10 +1,16 @@
-const atlasapprox = require('..')
+const atlasapprox = require('..');
 
 let result;
 (async () => {
 
+    // test measurement_types
+    result = await atlasapprox.measurement_types();
+
     // test organisms
     result = await atlasapprox.organisms();
+    console.log(result);
+
+    result = await atlasapprox.organisms(measurement_type = "chromatin_accessibility");
     console.log(result);
 
     // test organs
@@ -45,6 +51,10 @@ let result;
     
     // cell type x organ table
     result = await atlasapprox.celltypexorgan(organism = "m_musculus");
+    console.log(result);
+
+    // cell type location
+    result = await atlasapprox.celltype_location(organism = "m_musculus", celltype = "fibroblast");
     console.log(result);
     
     // data sources

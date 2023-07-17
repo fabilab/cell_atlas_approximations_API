@@ -24,3 +24,8 @@ class CellTypeNotFoundError(KeyError):
 
 class SimilarityMethodError(NotImplementedError):
     pass
+
+
+class OrganCellTypeError(KeyError):
+    pass
+

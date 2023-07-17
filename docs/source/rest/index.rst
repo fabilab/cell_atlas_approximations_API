@@ -168,18 +168,25 @@ Averages
 
 **Parameters**:
   - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
-  - ``organ``: The organ of interest. Must be among the available ones for the chosen organism.
+  - ``organ``: The organ of interest. Must be among the available ones for the chosen organism. Either this or the ``celltype`` parameter are required and you cannot specify both.
+  - ``celltype``: The cell type of interest. Must be present in at least one organ. Either this or the ``organ`` parameter are required and you cannot specify both.
   - ``features``: A list of features (e.g. genes) for which the average measurement in the atlas is requested.
   - ``measurement_type`` (optional, default ``gene_expresion``): What kind of measurement to query about.
 
 **Returns**: A dict with the following key-value pairs:
   - ``measurement_type``: The measurement type selected.
   - ``organism``: The organism chosen (this confirms it exists in the database).
-  - ``organ``: The organ chosen.
   - ``features``: The features requested. Any spelling correction is included here.
-  - ``celltypes``: A list containing all celltypes from any of the chosen organ.
   - ``average``: The average measurement (e.g. gene expression) for each cell type and feature.
   - ``unit``: The unit of measurement for this measurement type.
+
+If the ``organ`` parameter was specified, the dict also has the following key-value pairs:
+  - ``organ``: The organ chosen.
+  - ``celltypes``: A list containing all celltypes from any of the chosen organ.
+
+If the ``celltype`` parameter was specified instead, the dict also has the following key-value pairs:
+  - ``celltype``: The cell type chosen.
+  - ``organs``: The organs containing the chosen cell type.
 
 Fraction of cells with signal
 +++++++++++++++++++++++++++++
@@ -187,17 +194,24 @@ Fraction of cells with signal
 
 **Parameters**:
   - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
-  - ``organ``: The organ of interest. Must be among the available ones for the chosen organism.
+  - ``organ``: The organ of interest. Must be among the available ones for the chosen organism. Either this or the ``celltype`` parameter are required and you cannot specify both.
+  - ``celltype``: The cell type of interest. Must be present in at least one organ. Either this or the ``organ`` parameter are required and you cannot specify both.
   - ``features``: A list of features (e.g. genes) for which the average measurement in the atlas is requested.
   - ``measurement_type`` (optional, default ``gene_expresion``): What kind of measurement to query about. 
 
 **Returns**: A dict with the following key-value pairs:
   - ``measurement_type``: The measurement type selected.
   - ``organism``: The organism chosen (this confirms it exists in the database).
-  - ``organ``: The organ chosen.
   - ``features``: The features requested. Any spelling correction is included here.
-  - ``celltypes``: A list containing all celltypes from any of the chosen organ.
   - ``fraction_detected``: The fraction of cells with detected signal (e.g. gene expression) for each cell type and feature.
+
+If the ``organ`` parameter was specified, the dict also has the following key-value pairs:
+  - ``organ``: The organ chosen.
+  - ``celltypes``: A list containing all celltypes from any of the chosen organ.
+
+If the ``celltype`` parameter was specified instead, the dict also has the following key-value pairs:
+  - ``celltype``: The cell type chosen.
+  - ``organs``: The organs containing the chosen cell type.
 
 .. note::
    For some measurement types (e.g. chromatin accessibility), fraction of cells with signal is currently defined as exactly equal the average measurement, so the two API calls are equivalent except for the keys of the output dictionary.

@@ -7,8 +7,10 @@ from config import configuration as config
 from models import (
     get_averages,
     get_celltypes,
+    get_celltype_location,
     OrganismNotFoundError,
     OrganNotFoundError,
+    CellTypeNotFoundError,
     FeatureNotFoundError,
     TooManyFeaturesError,
     MeasurementTypeNotFoundError,
@@ -27,9 +29,6 @@ class Average(Resource):
         organism = args.get("organism", None)
         if organism is None:
             abort(400, message='The "organism" parameter is required.')
-        organ = args.get("organ", None)
-        if organ is None:
-            abort(400, message='The "organ" parameter is required.')
         features = args.get("features", None)
         if features is None:
             abort(400, message='The "features" parameter is required.')
@@ -39,17 +38,44 @@ class Average(Resource):
             abort(400, message=f"Feature string not recognised: {features}.")
         unit = config['units'][measurement_type]
 
+        organ = args.get("organ", None)
+        cell_type = args.get("celltype", None)
+        if (organ is None) and (cell_type is None):
+            abort(400, message='Either "organ" or "celltype" parameter is required.')
+        if (organ is not None) and (cell_Type is not None):
+            abort(400, message='Only one of "organ" or "celltype" parameter can be set.')
+
         try:
-            avgs = get_averages(
-                organism=organism,
-                organ=organ,
-                features=features,
-                measurement_type=measurement_type,
-            )
+            if organ is not None:
+                avgs = get_averages(
+                    organism=organism,
+                    organ=organ,
+                    features=features,
+                    measurement_type=measurement_type,
+                )
+                cell_types = list(get_celltypes(
+                    organism=organism,
+                    organ=organ,
+                    measurement_type=measurement_type,
+                ))
+            else:
+                avgs = get_averages(
+                    organism=organism,
+                    cell_type=cell_type,
+                    features=features,
+                    measurement_type=measurement_type,
+                )
+                organs = list(get_celltype_location(
+                    organism=organism,
+                    cell_type=cell_type,
+                    measurement_type=measurement_type,
+                ))
         except OrganismNotFoundError:
             abort(400, message=f"Organism not found: {organism}.")
         except OrganNotFoundError:
             abort(400, message=f"Organ not found: {organ}.")
+        except CellTypeNotFoundError:
+            abort(400, message=f"Cell type not found: {cell_type}.")
         except FeatureNotFoundError:
             abort(400, message="Some features could not be found.")
         except TooManyFeaturesError:
@@ -63,19 +89,22 @@ class Average(Resource):
                 message=f"Measurement type not found: {measurement_type}.",
             )
 
-        # This cannot fail since the exceptions above were survived already
-        cell_types = list(get_celltypes(
-            organism=organism,
-            organ=organ,
-            measurement_type=measurement_type,
-        ))
-
-        return {
+        result = {
             "organism": organism,
-            "organ": organ,
             "measurement_type": measurement_type,
             "features": features,
             "average": avgs.tolist(),
-            "celltypes": cell_types,
             "unit": unit,
         }
+        if organ is not None:
+            result.update({
+                "organ": organ,
+                "celltypes": cell_types,
+            })
+        else:
+            result.update({
+                "organs": organs,
+                "celltype": cell_type,
+            })
+        return result
+
