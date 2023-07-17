@@ -15,6 +15,10 @@ let result;
     result = await atlasapprox.celltypes(organism = "m_musculus", organ = "Lung");
     console.log(result);
 
+    // features
+    result = await atlasapprox.features(organism = "m_musculus", organ = "Lung");
+    console.log(result);
+
     // average
     result = await atlasapprox.average(organism = "m_musculus", organ = "Lung", features=["Col1a1", "Ptprc"]);
     console.log(result);

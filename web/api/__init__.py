@@ -1,7 +1,7 @@
 """Main module for API objects and endpoints"""
 
-from api.endpoints import get_api_endpoint
-from api.objects import (
+from api.v1.endpoints import get_api_endpoint
+from api.v1.objects import (
     MeasurementTypes,
     Organisms,
     Organs,
@@ -19,21 +19,25 @@ from api.objects import (
 
 __all__ = (
     "api_dict",
-    "get_api_endpoint",
 )
 
 api_dict = {
-    "measurement_types": MeasurementTypes,
-    "organisms": Organisms,
-    "organs": Organs,
-    "features": Features,
-    "celltypes": Celltypes,
-    "average": Average,
-    "fraction_detected": FractionDetected,
-    "markers": Markers,
-    "highest_measurement": HighestMeasurement,
-    "similar_features": SimilarFeatures,
-    "similar_celltypes": SimilarCelltypes,
-    "celltypexorgan": CelltypeXOrgan,
-    "data_sources": DataSources,
+    "v1": {
+        "endpoint_handler": get_api_endpoint,
+        "objects": {
+            "measurement_types": MeasurementTypes,
+            "organisms": Organisms,
+            "organs": Organs,
+            "features": Features,
+            "celltypes": Celltypes,
+            "average": Average,
+            "fraction_detected": FractionDetected,
+            "markers": Markers,
+            "highest_measurement": HighestMeasurement,
+            "similar_features": SimilarFeatures,
+            "similar_celltypes": SimilarCelltypes,
+            "celltypexorgan": CelltypeXOrgan,
+            "data_sources": DataSources,
+        }
+    }
 }

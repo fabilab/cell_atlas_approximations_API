@@ -1,4 +1,5 @@
 import h5py
+import hdf5plugin  # needed for compressed chunked data
 
 
 class ApproximationFile():
@@ -14,9 +15,9 @@ class ApproximationFile():
 
         NOTE: Compressing the h5 file (e.g. gz, zip) slows down access too much. Data sparsity
         is around 1/3 nonzeros for both gene expression and chromatin accessibility, but the
-        latter has a lot more features (~50k GE vs ~1M CA), ballooning the file size. It would
-        be great to think of a file compression approach that does not compromise on speed too
-        much or, alternatively, to a lossy feature selection approach to achieve the same.
+        latter has a lot more features (~50k GE vs ~1M CA), ballooning the file size. Fortunately,
+        data compression can be achieved at the Dataset level in HDF5 files, so we do that
+        using Facebook's zstd algorithm, which is why we need to import hdf5plugin.
         """
         self.file_name = file_name
         self.mode = mode

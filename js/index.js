@@ -43,6 +43,12 @@ async function celltypes(organism, organ) {
   return await _callEndpoint("celltypes", params=params);
 }
 
+// FEATURES
+async function features(organism, organ) {
+  let params = { organism, organ };
+  return await _callEndpoint("features", params=params);
+}
+
 // AVERAGE GENE EXPRESSION
 async function average(organism, organ, features) {
   if (!isString(features))
@@ -107,6 +113,7 @@ const atlasapprox = {
     organisms,
     organs,
     celltypes,
+    features,
     average,
     fraction_detected,
     markers,

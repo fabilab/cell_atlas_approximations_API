@@ -12,8 +12,8 @@ from models import (
     TooManyFeaturesError,
     MeasurementTypeNotFoundError,
 )
-from api.exceptions import FeatureStringFormatError
-from api.utils import clean_feature_string
+from api.v1.exceptions import FeatureStringFormatError
+from api.v1.utils import clean_feature_string
 
 
 class FractionDetected(Resource):

@@ -1,6 +1,6 @@
 {
   "name": "atlasapprox",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "JavaScript APIs for Cell Atlas Approximations",
   "main": "index.js",
   "scripts": {
