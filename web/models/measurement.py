@@ -165,7 +165,7 @@ def get_measurement(
         if organ is not None:
             # Get index for each feature, then sort for speed, then reorder
             result = _get_sorted_feature_index(
-                db_dataset,
+                db,
                 organism,
                 organ,
                 features,
@@ -280,8 +280,8 @@ def get_highest_measurement(
         try:
             avg_organ = get_averages(
                 organism,
-                organ,
                 [feature],
+                organ=organ,
                 measurement_type=measurement_type,
             )[0]
             found_once = True

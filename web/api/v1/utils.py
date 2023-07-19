@@ -19,5 +19,9 @@ def clean_feature_string(features, organism=None, measurement_type="gene_express
 
 def clean_organ_string(organ):
     """Clean organ string."""
+    organ = organ.lower()
+    if organ == 'whole':
+        return organ
+
     return organ.capitalize()
 
