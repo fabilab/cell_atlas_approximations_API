@@ -103,7 +103,7 @@ async function similar_celltypes(organism, organ, celltype, features, number=10,
   if (!isString(features))
     features = features.join(",");
   let params = { organism, organ, celltype, features, number, method, measurement_type };
-  return await _callEndpoint("similar_features", params=params);
+  return await _callEndpoint("similar_celltypes", params=params);
 }
 
 // CELLTYPEXORGAN TABLE

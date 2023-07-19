@@ -10,6 +10,7 @@ from models import (
     CellTypeNotFoundError,
     MeasurementTypeNotFoundError,
 )
+from api.v1.utils import clean_organ_string
 
 
 class Markers(Resource):
@@ -25,6 +26,7 @@ class Markers(Resource):
         organ = args.get("organ", None)
         if organ is None:
             abort(400, message='The "organ" parameter is required.')
+        organ = clean_organ_string(organ)
         cell_type = args.get("celltype", None)
         if cell_type is None:
             abort(400, message='The "celltype" parameter is required.')

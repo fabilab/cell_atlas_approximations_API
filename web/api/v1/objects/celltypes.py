@@ -10,6 +10,7 @@ from models import (
     OrganNotFoundError,
     MeasurementTypeNotFoundError,
 )
+from api.v1.utils import clean_organ_string
 
 
 class Celltypes(Resource):
@@ -24,6 +25,7 @@ class Celltypes(Resource):
         organ = args.get("organ", None)
         if organ is None:
             abort(400, message='The "organ" parameter is required.')
+        organ = clean_organ_string(organ)
         measurement_type = args.get(
             "measurement_type", "gene_expression")
 

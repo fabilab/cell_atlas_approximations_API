@@ -16,7 +16,10 @@ from models import (
     MeasurementTypeNotFoundError,
 )
 from api.v1.exceptions import FeatureStringFormatError
-from api.v1.utils import clean_feature_string
+from api.v1.utils import (
+    clean_feature_string,
+    clean_organ_string,
+)
 
 
 class Average(Resource):
@@ -47,6 +50,7 @@ class Average(Resource):
 
         try:
             if organ is not None:
+                organ = clean_organ_string(organ)
                 avgs = get_averages(
                     organism=organism,
                     organ=organ,

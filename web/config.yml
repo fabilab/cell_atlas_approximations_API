@@ -14,7 +14,8 @@ paths:
     "a_queenslandica": "./static/atlas_data/a_queenslandica.h5"
     "m_leidyi": "./static/atlas_data/m_leidyi.h5"
     "t_adhaerens": "./static/atlas_data/t_adhaerens.h5"
-
+    "x_laevis": "./static/atlas_data/x_laevis.h5"
+    "s_mediterranea": "./static/atlas_data/s_mediterranea.h5"
 
 units:
   gene_expression: "counts per ten thousand"
@@ -35,6 +36,8 @@ order:
     "a_queenslandica": ["adult"]
     "m_leidyi": ["adult"]
     "t_adhaerens": ["adult"]
+    "x_laevis": ["adult"]
+    "s_mediterranea": ["adult"]
 
   dataset:
     "m_musculus": ['TMS']
@@ -46,3 +49,5 @@ order:
     "a_queenslandica": ["SebePedro"]
     "m_leidyi": ["SebePedro"]
     "t_adhaerens": ["SebePedro"]
+    "x_laevis": ["Liao"]
+    "s_mediterranea": ["Plass"]

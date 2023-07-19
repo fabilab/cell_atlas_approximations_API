@@ -15,3 +15,9 @@ def clean_feature_string(features, organism=None, measurement_type="gene_express
         features = [fea.lower() for fea in features]
 
     return features
+
+
+def clean_organ_string(organ):
+    """Clean organ string."""
+    return organ.capitalize()
+

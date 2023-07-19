@@ -72,3 +72,5 @@ Data Sources
 - *Danio rerio*: [Wagner et al. 2018](https://www.science.org/doi/10.1126/science.aar4362)
 - *Spongilla lacustris*: [Musser et al. 2021](https://www.science.org/doi/10.1126/science.abj2949)
 - *Amphimedon queenslandica*, *Mnemiopsis leidyi*, and *Trichoplax adhaerens*: [Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)
+- *Xenopus laevis*: [Liao et al 2022](https://www.nature.com/articles/s41467-022-31949-2#ref-CR14)
+- *Schmidtea mediterranea*: [Plass et al 2018](https://www.science.org/doi/10.1126/science.aaq1723#sec-10)
