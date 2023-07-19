@@ -17,4 +17,6 @@ class DataSources(Resource):
             "a_queenslandica": "Sebé-Pedrós et al 2018 (https://www.nature.com/articles/s41559-018-0575-6)",
             "m_leidyi": "Sebé-Pedrós et al 2018 (https://www.nature.com/articles/s41559-018-0575-6)",
             "t_adhaerens": "Sebé-Pedrós et al 2018 (https://www.nature.com/articles/s41559-018-0575-6)",
+            "x_laevis": "Liao et al. 2022 (https://www.nature.com/articles/s41467-022-31949-2)",
+            "s_mediterranea": "Plass et al. 2018 (https://doi.org/10.1126/science.aaq1723)",
         }
