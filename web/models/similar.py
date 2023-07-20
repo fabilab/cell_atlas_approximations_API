@@ -28,8 +28,8 @@ def get_similar_features(
     if method in ("correlation", "cosine"):
         fracs = get_measurement(
             organism,
-            organ,
             features=None,
+            organ=organ,
             measurement_type=similar_type,
             measurement_subtype="fraction",
         )
@@ -52,8 +52,8 @@ def get_similar_features(
     elif method in ("euclidean", "manhattan", "log-euclidean"):
         avgs = get_measurement(
             organism,
-            organ,
             features=None,
+            organ=organ,
             measurement_type=similar_type,
             measurement_subtype="average",
         )
@@ -107,8 +107,8 @@ def get_similar_celltypes(
             ))
             fracs_i = get_measurement(
                 organism,
-                organ_i,
                 features=features,
+                organ=organ_i,
                 measurement_type=measurement_type,
                 measurement_subtype="fraction",
             )
@@ -147,8 +147,8 @@ def get_similar_celltypes(
             ))
             avgs_i = get_measurement(
                 organism,
-                organ_i,
                 features=features,
+                organ=organ_i,
                 measurement_type=measurement_type,
                 measurement_subtype="average",
             )
