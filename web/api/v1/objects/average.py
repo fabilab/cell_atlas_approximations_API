@@ -45,7 +45,7 @@ class Average(Resource):
         cell_type = args.get("celltype", None)
         if (organ is None) and (cell_type is None):
             abort(400, message='Either "organ" or "celltype" parameter is required.')
-        if (organ is not None) and (cell_Type is not None):
+        if (organ is not None) and (cell_type is not None):
             abort(400, message='Only one of "organ" or "celltype" parameter can be set.')
 
         try:
