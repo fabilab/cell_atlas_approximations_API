@@ -1,10 +1,11 @@
 {
-  "name": "atlasapprox",
-  "version": "0.1.8",
+  "name": "@fabilab/atlasapprox",
+  "version": "0.1.9",
   "description": "JavaScript APIs for Cell Atlas Approximations",
   "main": "index.js",
   "scripts": {
-    "test": "node test/script.js"
+    "test": "node test/script.js",
+    "deploy": "npm publish --access public"
   },
   "repository": {
     "type": "git",

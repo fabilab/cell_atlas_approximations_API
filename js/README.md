@@ -1,6 +1,6 @@
 [![Documentation Status](https://readthedocs.org/projects/atlasapprox/badge/?version=latest)](https://apidocs.atlasapprox.org/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/atlasapprox.svg)](https://badge.fury.io/py/atlasapprox)
-[![npm version](https://badge.fury.io/js/atlasapprox.svg)](https://badge.fury.io/js/atlasapprox)
+[![npm version](https://badge.fury.io/js/@fabilab%2Fatlasapprox.svg)](https://badge.fury.io/js/@fabilab%2Fatlasapprox)
 ![CRAN Downloads](https://cranlogs.r-pkg.org/badges/atlasapprox)
 
 <img src="https://raw.githubusercontent.com/fabilab/cell_atlas_approximations/main/figures/figure_API.png" width="150" height="150">
@@ -29,7 +29,11 @@ Tutorial and reference documentation is available at [https://atlasapprox.readth
 An object containing one function for each API endpoint is exported by the `atlasapprox` npm package:
 
 ```javascript
-let atlasapprox = require('atlasapprox');
+// EC6 imports
+import atlasapprox from 'atlasapprox';
+// CommonJS variant
+//let atlasapprox = require('atlasapprox');
+
 (async () => {
   let data = await atlasapprox.organisms();
   console.log(data);
