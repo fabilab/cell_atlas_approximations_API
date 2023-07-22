@@ -26,13 +26,13 @@ We support several organs and organisms: human, mouse, lemur (a type of monkey),
 Tutorial and reference documentation is available at [https://atlasapprox.readthedocs.io](https://atlasapprox.readthedocs.io).
 
 ## Usage
-An object containing one function for each API endpoint is exported by the `atlasapprox` npm package:
+An object containing one function for each API endpoint is exported by the `@fabilab/atlasapprox` npm package:
 
 ```javascript
 // EC6 imports
-import atlasapprox from 'atlasapprox';
+import atlasapprox from '@fabilab/atlasapprox';
 // CommonJS variant
-//let atlasapprox = require('atlasapprox');
+//let atlasapprox = require('@fabilab/atlasapprox');
 
 (async () => {
   let data = await atlasapprox.organisms();
