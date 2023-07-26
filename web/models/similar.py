@@ -90,11 +90,19 @@ def get_similar_celltypes(
     method="correlation",
     measurement_type="gene_expression",
 ):
-    """Get similar (cell type, organ) pairs similar to the focal one."""
+    """Get similar (cell type, organ) pairs similar to the focal one.
+
+    If methods "correlation" or "cosine" are chosen with only a single feature,
+    "euclidean" will be used instead because those metrics are not defined if there
+    is only one sample (i.e. feature).
+    """
     from models import (
         get_organs,
         get_celltypes,
     )
+
+    if (len(features) == 1) and (method in ("correlation", "cosine")):
+        method = "eucliean"
 
     celltypes = []
     organs = []
@@ -132,11 +140,21 @@ def get_similar_celltypes(
             dm = fracs
             db = frac
 
+        # FIXME FIXME
         # Compute covariance and then correlation
         num = dm.T @ db
         den = np.sqrt((dm**2).sum(axis=0) * (db @ db))
         corr = num / (den + 1e-9)
         delta = 1 - corr
+
+        tmp = fracs[0].argsort()[::-1]
+        print(np.array(celltypes)[tmp])
+        print(fracs[0, tmp])
+        print(num.shape)
+        print(den.shape)
+        print(len(celltypes))
+
+
 
     elif method in ("euclidean", "manhattan", "log-euclidean"):
         avgs = []
