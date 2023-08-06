@@ -19,6 +19,7 @@ from api.v1.exceptions import FeatureStringFormatError
 from api.v1.utils import (
     clean_feature_string,
     clean_organ_string,
+    clean_celltype_string,
 )
 
 
@@ -63,6 +64,7 @@ class Average(Resource):
                     measurement_type=measurement_type,
                 ))
             else:
+                cell_type = clean_celltype_string(cell_type)
                 avgs = get_averages(
                     organism=organism,
                     cell_type=cell_type,

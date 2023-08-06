@@ -20,8 +20,25 @@ def clean_feature_string(features, organism=None, measurement_type="gene_express
 def clean_organ_string(organ):
     """Clean organ string."""
     organ = organ.lower()
+
+    # NLP has issues with spaces, so accept underscores as well
+    # FIXME: first fix all approximations to use proper organs with no underscores
+    #organ = organ.replace("_", " ")
+
     if organ == 'whole':
         return organ
 
-    return organ.capitalize()
+    # FIXME: better would be to use all lowercase
+    organ = organ.capitalize()
+
+    return organ
+
+
+def clean_celltype_string(cell_type):
+    """Clean cell type string."""
+    cell_type = cell_type.lower()
+
+    # NLP has issues with spaces, so accept underscores as well
+    cell_type = cell_type.replace("_", " ")
+    return cell_type
 

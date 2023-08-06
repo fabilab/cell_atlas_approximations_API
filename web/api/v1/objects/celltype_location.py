@@ -9,6 +9,9 @@ from models import (
     CellTypeNotFoundError,
     MeasurementTypeNotFoundError,
 )
+from api.v1.utils import (
+    clean_celltype_string,
+)
 
 
 class CelltypeLocation(Resource):
@@ -23,6 +26,7 @@ class CelltypeLocation(Resource):
         cell_type = args.get("celltype", None)
         if cell_type is None:
             abort(400, message='The "celltype" parameter is required.')
+        cell_type = clean_celltype_string(cell_type)
         measurement_type = args.get(
             "measurement_type", "gene_expression")
 

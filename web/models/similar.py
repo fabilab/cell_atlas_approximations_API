@@ -102,7 +102,7 @@ def get_similar_celltypes(
     )
 
     if (len(features) == 1) and (method in ("correlation", "cosine")):
-        method = "eucliean"
+        method = "euclidean"
 
     celltypes = []
     organs = []
@@ -203,4 +203,5 @@ def get_similar_celltypes(
         'celltypes': celltypes_similar,
         'organs': organs_similar,
         'distances': delta_similar,
+        'method': method,
     }

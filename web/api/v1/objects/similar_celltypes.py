@@ -17,6 +17,7 @@ from api.v1.exceptions import FeatureStringFormatError
 from api.v1.utils import (
     clean_feature_string,
     clean_organ_string,
+    clean_celltype_string,
 )
 
 
@@ -34,9 +35,10 @@ class SimilarCelltypes(Resource):
         if organ is None:
             abort(400, message='The "organ" parameter is required.')
         organ = clean_organ_string(organ)
-        celltype = args.get("celltype", None)
-        if celltype is None:
+        cell_type = args.get("celltype", None)
+        if cell_type is None:
             abort(400, message='The "celltype" parameter is required.')
+        cell_type = clean_celltype_string(cell_type)
         features = args.get("features", None)
         if features is None:
             abort(400, message='The "features" parameter is required.')
@@ -57,10 +59,12 @@ class SimilarCelltypes(Resource):
             abort(400, message='The "number" parameter should be positive.')
 
         try:
+            # NOTE: method can change if there is only one feature, because
+            # correlation-like methods are undefined
             result = get_similar_celltypes(
                 organism=organism,
                 organ=organ,
-                celltype=celltype,
+                celltype=cell_type,
                 features=features,
                 number=number,
                 method=method,
@@ -71,7 +75,7 @@ class SimilarCelltypes(Resource):
         except OrganNotFoundError:
             abort(400, message=f"Organ not found: {organ}.")
         except CellTypeNotFoundError:
-            abort(400, message=f"Cell type not found: {celltype}.")
+            abort(400, message=f"Cell type not found: {cell_type}.")
         except FeatureNotFoundError:
             abort(400, message="Some features could not be found.")
         except TooManyFeaturesError:
@@ -91,8 +95,8 @@ class SimilarCelltypes(Resource):
             "measurement_type": measurement_type,
             "organism": organism,
             "organ": organ,
-            "celltype": celltype,
-            "method": method,
+            "celltype": cell_type,
+            "method": result['method'],
             "features": features,
             "similar_celltypes": list(result["celltypes"]),
             "similar_organs": list(result["organs"]),

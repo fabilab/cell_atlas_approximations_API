@@ -25,29 +25,7 @@ pseudocount:
   gene_expression: 0.1
   chromatin_accessibility: 0.0001
 
-order:
-  timepoint:
-    "m_musculus": ['1m', '3m', '10m', '18m', '~19m', '21m', '24m', '30m']
-    "h_sapiens": ['31wk', '3yr', '31yr', '~60yr']
-    "m_myoxinus": ["10", "11"]
-    "c_elegans": ["2L"]
-    "d_rerio": ["24hpf"]
-    "s_lacustris": ["8day"]
-    "a_queenslandica": ["adult"]
-    "m_leidyi": ["adult"]
-    "t_adhaerens": ["adult"]
-    "x_laevis": ["adult"]
-    "s_mediterranea": ["adult"]
-
-  dataset:
-    "m_musculus": ['TMS']
-    "h_sapiens": ['TS']
-    "m_myoxinus": ['TMC']
-    "c_elegans": ['TCE']
-    "d_rerio": ['TDR']
-    "s_lacustris": ["Musser"]
-    "a_queenslandica": ["SebePedro"]
-    "m_leidyi": ["SebePedro"]
-    "t_adhaerens": ["SebePedro"]
-    "x_laevis": ["Liao"]
-    "s_mediterranea": ["Plass"]
+celltype_aliases:
+  [
+    ["macrophage", "phagocyte", "hemocyte"]
+  ]

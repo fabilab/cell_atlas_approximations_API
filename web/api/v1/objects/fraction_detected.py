@@ -16,6 +16,7 @@ from api.v1.exceptions import FeatureStringFormatError
 from api.v1.utils import (
     clean_feature_string,
     clean_organ_string,
+    clean_celltype_string,
 )
 
 
@@ -59,6 +60,7 @@ class FractionDetected(Resource):
                     measurement_type=measurement_type,
                 ))
             else:
+                cell_type = clean_celltype_string(cell_type)
                 avgs = get_fraction_detected(
                     organism=organism,
                     cell_type=cell_type,
