@@ -1,4 +1,4 @@
-"""Module for access to average and fraction_detected"""
+"""Module for access to average and fraction_detected."""
 import numpy as np
 import pandas as pd
 
@@ -14,6 +14,7 @@ from models.exceptions import (
 from models.features import (
     get_feature_index,
 )
+from models.celltypes import get_celltype_index
 
 
 quantisations = {}
@@ -42,6 +43,7 @@ def _get_quantisation(organism, measurement_type):
                 raise KeyError(
                     f"No 'quantisation' key found for {organism}, {measurement_type}."
                 )
+            print(db[measurement_type]['quantisation'])
             quantisations[(organism, measurement_type)] = db[measurement_type]['quantisation'][:]
     return quantisations[(organism, measurement_type)]
 
@@ -110,7 +112,11 @@ def _collate_measurement_across_organs(
             organ,
             measurement_type=measurement_type,
         ))
-        celltype_index = celltypes_organ.index(cell_type)
+
+        celltype_index_dict = get_celltype_index(cell_type, celltypes_organ)
+        cell_type = celltype_index_dict['celltype']
+        celltype_index = celltype_index_dict['index']
+
         avg = _get_sorted_feature_index(
             db,
             organism,

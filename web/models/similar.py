@@ -7,6 +7,7 @@ from models.exceptions import (
 )
 from models.features import get_features
 from models.measurement import get_measurement
+from models.celltypes import get_celltype_index
 
 
 def get_similar_features(
@@ -121,10 +122,11 @@ def get_similar_celltypes(
                 measurement_subtype="fraction",
             )
             if organ_i == organ:
-                try:
-                    idx = celltypes_i.index(celltype)
-                except ValueError:
-                    raise CellTypeNotFoundError
+                celltype_index_dict = get_celltype_index(
+                    celltype, celltypes_i,
+                )
+                celltype = celltype_index_dict['celltype']
+                idx = celltype_index_dict['index']
                 frac = fracs_i[:, idx]
             celltypes.extend(celltypes_i)
             organs.extend([organ_i for ct in celltypes_i])
@@ -140,21 +142,11 @@ def get_similar_celltypes(
             dm = fracs
             db = frac
 
-        # FIXME FIXME
         # Compute covariance and then correlation
         num = dm.T @ db
         den = np.sqrt((dm**2).sum(axis=0) * (db @ db))
         corr = num / (den + 1e-9)
         delta = 1 - corr
-
-        tmp = fracs[0].argsort()[::-1]
-        print(np.array(celltypes)[tmp])
-        print(fracs[0, tmp])
-        print(num.shape)
-        print(den.shape)
-        print(len(celltypes))
-
-
 
     elif method in ("euclidean", "manhattan", "log-euclidean"):
         avgs = []
@@ -171,10 +163,11 @@ def get_similar_celltypes(
                 measurement_subtype="average",
             )
             if organ_i == organ:
-                try:
-                    idx = celltypes_i.index(celltype)
-                except ValueError:
-                    raise CellTypeNotFoundError
+                celltype_index_dict = get_celltype_index(
+                    celltype, celltypes_i,
+                )
+                celltype = celltype_index_dict['celltype']
+                idx = celltype_index_dict['index']
                 avg = avgs_i[:, idx]
             celltypes.extend(celltypes_i)
             organs.extend([organ_i for ct in celltypes_i])

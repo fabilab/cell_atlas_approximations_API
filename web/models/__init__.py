@@ -204,7 +204,10 @@ def get_markers(
         mat = sub_db[method]
 
         # Index cell types
-        idx = list(cell_types).index(cell_type)
+        celltype_index_dict = get_celltype_index(cell_type, cell_types)
+        cell_type = celltype_index_dict['celltype']
+        idx = celltype_index_dict['index']
+
         idx_other = [i for i in range(ncell_types) if i != idx]
         vector = mat[idx]
         mat_other = mat[idx_other]
