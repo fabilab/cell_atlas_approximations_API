@@ -57,6 +57,9 @@ def get_feature_index(
     try:
         idx = feature_series[(organism, measurement_type)].at[feature_name]
     except KeyError as exc:
-        raise FeatureNotFoundError(f"Feature not found: {feature_name}") from exc
+        raise FeatureNotFoundError(
+            f"Feature not found: {feature_name}",
+            feature=feature_name,
+        ) from exc
 
     return idx

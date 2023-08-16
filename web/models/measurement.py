@@ -8,6 +8,7 @@ from models.exceptions import (
     OrganismNotFoundError,
     MeasurementTypeNotFoundError,
     FeatureNotFoundError,
+    SomeFeaturesNotFoundError,
     TooManyFeaturesError,
     OrganCellTypeError,
 )
@@ -43,7 +44,6 @@ def _get_quantisation(organism, measurement_type):
                 raise KeyError(
                     f"No 'quantisation' key found for {organism}, {measurement_type}."
                 )
-            print(db[measurement_type]['quantisation'])
             quantisations[(organism, measurement_type)] = db[measurement_type]['quantisation'][:]
     return quantisations[(organism, measurement_type)]
 
@@ -66,10 +66,22 @@ def _get_sorted_feature_index(
     if features is None:
         return db_dataset[:, :]
 
+    features_not_found = []
     idx_series = {}
     for fea in features:
-        idx = get_feature_index(organism, fea, measurement_type)
+        try:
+            idx = get_feature_index(organism, fea, measurement_type)
+        except FeatureNotFoundError as exc:
+            features_not_found.append(fea)
+            continue
         idx_series[fea] = idx
+
+    if len(features_not_found):
+        raise SomeFeaturesNotFoundError(
+            f"Some features not found: {features}",
+            features=features_not_found,
+        )
+
     idx_series = pd.Series(idx_series)
 
     # Sort for the h5 file
@@ -291,7 +303,7 @@ def get_highest_measurement(
                 measurement_type=measurement_type,
             )[0]
             found_once = True
-        except FeatureNotFoundError:
+        except SomeFeaturesNotFoundError:
             avg_organ = np.zeros(len(celltypes), np.float32)
         result["celltypes"].extend(celltypes)
         result["organs"].extend([organ for ct in celltypes])
@@ -299,7 +311,10 @@ def get_highest_measurement(
     result["average"] = np.concatenate(result["average"])
 
     if not found_once:
-        raise FeatureNotFoundError(f"Feature not found: {feature}.")
+        raise FeatureNotFoundError(
+            f"Feature not found: {feature}.",
+            feature=feature,
+        )
 
     # Find top expressors
     idx_top = result["average"].argsort()[::-1][:number]

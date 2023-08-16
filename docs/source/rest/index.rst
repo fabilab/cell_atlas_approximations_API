@@ -114,6 +114,21 @@ Features
 .. note::
    All organs within one organism use the same features, in the same order.
 
+Check features
+++++++++++++++
+**Endpoint**: ``/has_features``
+
+**Parameters**:
+  - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
+  - ``measurement_type`` (optional, default ``gene_expresion``): What kind of measurement to query about.
+
+**Returns**: A dict with the following key-value pairs:
+  - ``measurement_type``: The type of measurement (e.g. gene expression, chromatin accessibility).
+  - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
+  - ``features``: The features chosen, spell-corrected if necessary.
+  - ``found``: A boolean list of the same length as ``features``, with each element specifying if that feature
+    was found in this organism and measurement type.
+
 Cell types
 ++++++++++
 **Endpoint**: ``/celltypes``

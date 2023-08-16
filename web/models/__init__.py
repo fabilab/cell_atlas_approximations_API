@@ -13,6 +13,7 @@ from models.exceptions import (
     MeasurementTypeNotFoundError,
     TooManyFeaturesError,
     FeatureNotFoundError,
+    SomeFeaturesNotFoundError,
     CellTypeNotFoundError,
     SimilarityMethodError,
 )

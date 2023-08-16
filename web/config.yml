@@ -7,6 +7,7 @@ paths:
   compressed_atlas:
     "a_queenslandica": "./static/atlas_data/a_queenslandica.h5"
     "c_elegans": "./static/atlas_data/c_elegans.h5"
+    "d_melanogaster": "./static/atlas_data/d_melanogaster.h5"
     "d_rerio": "./static/atlas_data/d_rerio.h5"
     "h_miamia": "./static/atlas_data/h_miamia.h5"
     "h_sapiens": "./static/atlas_data/h_sapiens.h5"

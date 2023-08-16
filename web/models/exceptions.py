@@ -11,7 +11,15 @@ class MeasurementTypeNotFoundError(KeyError):
 
 
 class FeatureNotFoundError(KeyError):
-    pass
+    def __init__(self, msg, feature):
+        self.feature = feature
+        super().__init__(self, msg)
+
+
+class SomeFeaturesNotFoundError(KeyError):
+    def __init__(self, msg, features):
+        self.features = features
+        super().__init__(self, msg)
 
 
 class TooManyFeaturesError(ValueError):

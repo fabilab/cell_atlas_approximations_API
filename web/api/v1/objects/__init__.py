@@ -1,6 +1,7 @@
 from api.v1.objects.measurement_types import MeasurementTypes
 from api.v1.objects.organisms import Organisms
 from api.v1.objects.organs import Organs
+from api.v1.objects.check_features import HasFeatures
 from api.v1.objects.features import Features
 from api.v1.objects.celltypes import Celltypes
 from api.v1.objects.average import Average
@@ -19,6 +20,7 @@ __all__ = (
     "Organisms",
     "Organs",
     "Celltypes",
+    "HasFeatures",
     "Features",
     "Average",
     "FractionDetected",

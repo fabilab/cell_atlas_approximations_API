@@ -6,6 +6,7 @@ def clean_feature_string(features, organism=None, measurement_type="gene_express
     """Clean feature string and split into a list."""
     features = features.replace('"', "").replace("'", "").replace(" ", "")
 
+    # Split a single string into a list of features
     features = features.split(",")
 
     # Correct capitalization of gene names based on species

@@ -11,7 +11,7 @@ from models import (
     OrganismNotFoundError,
     OrganNotFoundError,
     CellTypeNotFoundError,
-    FeatureNotFoundError,
+    SomeFeaturesNotFoundError,
     TooManyFeaturesError,
     MeasurementTypeNotFoundError,
 )
@@ -82,8 +82,12 @@ class Average(Resource):
             abort(400, message=f"Organ not found: {organ}.")
         except CellTypeNotFoundError:
             abort(400, message=f"Cell type not found: {cell_type}.")
-        except FeatureNotFoundError:
-            abort(400, message="Some features could not be found.")
+        except SomeFeaturesNotFoundError as exc:
+            abort(
+                400,
+                message="Some features could not be found.",
+                missing=exc.features,
+            )
         except TooManyFeaturesError:
             abort(
                 400,
