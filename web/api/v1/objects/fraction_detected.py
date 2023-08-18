@@ -6,6 +6,8 @@ from flask_restful import Resource, abort
 from models import (
     get_fraction_detected,
     get_celltypes,
+    get_feature_index,
+    get_feature_names,
     OrganismNotFoundError,
     OrganNotFoundError,
     FeatureNotFoundError,
@@ -89,10 +91,19 @@ class FractionDetected(Resource):
                 message=f"Measurement type not found: {measurement_type}.",
             )
 
+        features_corrected = []
+        features_all = get_feature_names(
+            organism=organism,
+            measurement_type=measurement_type,
+        )
+        for fea in features:
+            idx = get_feature_index(organism, fea.lower(), measurement_type=measurement_type)
+            features_corrected.append(features_all[idx])
+
         result = {
             "organism": organism,
             "measurement_type": measurement_type,
-            "features": features,
+            "features": features_corrected,
             "fraction_detected": avgs.tolist(),
         }
         if organ is not None:

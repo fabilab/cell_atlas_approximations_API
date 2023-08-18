@@ -4,7 +4,7 @@ from flask_restful import Resource, abort
 
 # Helper functions
 from models import (
-    get_features,
+    get_feature_names,
     OrganismNotFoundError,
     MeasurementTypeNotFoundError,
 )
@@ -22,7 +22,7 @@ class Features(Resource):
             abort(400, message='The "organism" parameter is required.')
 
         try:
-            features = get_features(
+            features = get_feature_names(
                 organism=organism,
                 measurement_type=measurement_type,
             )

@@ -32,8 +32,12 @@ def load_features(organism, measurement_type="gene_expression"):
                 f"Measurement type not found: {measurement_type}"
             )
         features = db[measurement_type]["features"].asstr()[:]
-    features = pd.Series(np.arange(len(features)), index=features)
-    feature_series[(organism, measurement_type)] = features
+    features_lower = pd.Index(features).str.lower()
+    features_lower = pd.Series(
+            np.arange(len(features)), index=features_lower,
+            ).to_frame(name='index')
+    features_lower['name'] = features
+    feature_series[(organism, measurement_type)] = features_lower
 
 
 def get_features(organism, measurement_type="gene_expression"):
@@ -55,7 +59,7 @@ def get_feature_index(
         load_features(organism, measurement_type)
 
     try:
-        idx = feature_series[(organism, measurement_type)].at[feature_name]
+        idx = feature_series[(organism, measurement_type)].at[feature_name, 'index']
     except KeyError as exc:
         raise FeatureNotFoundError(
             f"Feature not found: {feature_name}",
@@ -63,3 +67,15 @@ def get_feature_index(
         ) from exc
 
     return idx
+
+
+def get_feature_names(
+    organism,
+    measurement_type="gene_expression",
+):
+    """Get the list of all features in an organism, with correct capitalization."""
+    if (organism, measurement_type) not in feature_series:
+        load_features(organism, measurement_type)
+
+    features = feature_series[(organism, measurement_type)]['name'].values
+    return features

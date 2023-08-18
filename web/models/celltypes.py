@@ -8,6 +8,8 @@ from models.exceptions import (
 
 def get_celltype_index(celltype, celltypes, max_distance=3):
     """Get cell type index and correct cell type name if requested."""
+    celltypes = list(celltypes)
+
     if celltype in celltypes:
         result = {
             'index': celltypes.index(celltype),

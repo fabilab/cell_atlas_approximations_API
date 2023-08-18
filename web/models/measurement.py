@@ -70,7 +70,7 @@ def _get_sorted_feature_index(
     idx_series = {}
     for fea in features:
         try:
-            idx = get_feature_index(organism, fea, measurement_type)
+            idx = get_feature_index(organism, fea.lower(), measurement_type)
         except FeatureNotFoundError as exc:
             features_not_found.append(fea)
             continue

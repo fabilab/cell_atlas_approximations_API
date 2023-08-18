@@ -5,6 +5,8 @@ from flask_restful import Resource, abort
 # Helper functions
 from models import (
     get_features,
+    get_feature_index,
+    get_feature_names,
     OrganismNotFoundError,
     MeasurementTypeNotFoundError,
 )
@@ -32,7 +34,7 @@ class HasFeatures(Resource):
             abort(400, message=f"Feature string not recognised: {features}.")
 
         try:
-            features_all = get_features(
+            features_lowercase = get_features(
                 organism=organism,
                 measurement_type=measurement_type,
             )
@@ -44,12 +46,25 @@ class HasFeatures(Resource):
                 message=f"Measurement type not found: {measurement_type}.",
             )
 
-        found_features = [fea in features_all for fea in features]
+        is_found = []
+        features_corrected = []
+        features_all = get_feature_names(
+            organism=organism,
+            measurement_type=measurement_type,
+        )
+        for fea in features:
+            if fea.lower() not in features_lowercase:
+                is_found.append(False)
+                features_corrected.append(fea)
+            else:
+                is_found.append(True)
+                idx = get_feature_index(organism, fea.lower(), measurement_type=measurement_type)
+                features_corrected.append(features_all[idx])
 
         return {
             "measurement_type": measurement_type,
             "organism": organism,
-            "features": features,
-            "found": found_features,
+            "features": features_corrected,
+            "found": is_found,
         }
 

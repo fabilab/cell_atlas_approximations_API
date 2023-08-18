@@ -5,7 +5,10 @@ from models.exceptions import (
     CellTypeNotFoundError,
     SimilarityMethodError,
 )
-from models.features import get_features
+from models.features import (
+    get_features,
+    get_feature_names,
+)
 from models.measurement import get_measurement
 from models.celltypes import get_celltype_index
 
@@ -20,11 +23,11 @@ def get_similar_features(
     similar_type="gene_expression",
 ):
     """Get features similar to the focal one."""
-    features_all = get_features(
+    features_lowercase = get_features(
         organism,
         measurement_type=similar_type,
     )
-    idx = (features_all == feature_name).nonzero()[0][0]
+    idx = (features_lowercase == feature_name.lower()).nonzero()[0][0]
 
     if method in ("correlation", "cosine"):
         fracs = get_measurement(
@@ -72,6 +75,10 @@ def get_similar_features(
         raise SimilarityMethodError
 
     # Take closest features
+    features_all = get_feature_names(
+        organism,
+        measurement_type=measurement_type,
+    )
     idx_max = delta.argsort()[1:number+1]
     similar = features_all[idx_max]
     delta_similar = delta[idx_max]

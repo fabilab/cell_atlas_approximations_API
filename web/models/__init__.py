@@ -19,6 +19,8 @@ from models.exceptions import (
 )
 from models.features import (
     get_features,
+    get_feature_index,
+    get_feature_names,
 )
 from models.measurement import (
     get_averages,
@@ -28,6 +30,9 @@ from models.measurement import (
 from models.similar import (
     get_similar_features,
     get_similar_celltypes,
+)
+from models.celltypes import (
+    get_celltype_index,
 )
 
 
@@ -228,7 +233,7 @@ def get_markers(
     idx_markers = idx_markers[closest_value[idx_markers] > 0]
 
     # Get the feature names
-    features = get_features(
+    features = get_feature_names(
         organism,
         measurement_type,
     )[idx_markers]

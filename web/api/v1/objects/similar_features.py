@@ -4,6 +4,8 @@ from flask_restful import Resource, abort
 
 # Helper functions
 from models import (
+    get_feature_index,
+    get_feature_names,
     get_similar_features,
     OrganismNotFoundError,
     OrganNotFoundError,
@@ -69,12 +71,19 @@ class SimilarFeatures(Resource):
                 message=f"Measurement type not found: {measurement_type}.",
             )
 
+        features_all = get_feature_names(
+            organism=organism,
+            measurement_type=measurement_type,
+        )
+        idx = get_feature_index(organism, feature.lower(), measurement_type=measurement_type)
+        feature_corrected = features_all[idx]
+
         return {
             "measurement_type": measurement_type,
             "organism": organism,
             "organ": organ,
             "method": method,
-            "feature": feature,
+            "feature": feature_corrected,
             "similar_features": list(result["features"]),
             "distances": list(result["distances"].astype(float)),
         }
