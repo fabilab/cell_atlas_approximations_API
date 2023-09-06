@@ -6,6 +6,7 @@ from flask_restful import Resource, abort
 from models import (
     get_fraction_detected,
     get_celltypes,
+    get_celltype_location,
     get_feature_index,
     get_feature_names,
     OrganismNotFoundError,
