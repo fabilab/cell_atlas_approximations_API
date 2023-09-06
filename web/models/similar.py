@@ -116,10 +116,11 @@ def get_similar_celltypes(
     organs = []
     if method in ("correlation", "cosine"):
         fracs = []
-        for organ_i in get_organs(organism):
+        for organ_i in get_organs(organism, measurement_type):
             celltypes_i = list(get_celltypes(
                 organism,
                 organ_i,
+                measurement_type,
             ))
             fracs_i = get_measurement(
                 organism,
@@ -157,10 +158,11 @@ def get_similar_celltypes(
 
     elif method in ("euclidean", "manhattan", "log-euclidean"):
         avgs = []
-        for organ_i in get_organs(organism):
+        for organ_i in get_organs(organism, measurement_type):
             celltypes_i = list(get_celltypes(
                 organism,
                 organ_i,
+                measurement_type,
             ))
             avgs_i = get_measurement(
                 organism,
