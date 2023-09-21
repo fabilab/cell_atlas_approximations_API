@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 
 from config import configuration as config
+from models.paths import get_atlas_path
 from models.utils import ApproximationFile
 from models.exceptions import (
     OrganismNotFoundError,
@@ -31,10 +32,7 @@ def _get_quantisation(organism, measurement_type):
     this function.
     """
     if (organism, measurement_type) not in quantisations:
-        approx_path = config["paths"]["compressed_atlas"].get(organism, None)
-        if approx_path is None:
-            raise OrganismNotFoundError(f"Organism not found: {organism}")
-
+        approx_path = get_atlas_path(organism)
         with ApproximationFile(approx_path) as db:
             if measurement_type not in db:
                 raise MeasurementTypeNotFoundError(
@@ -44,7 +42,9 @@ def _get_quantisation(organism, measurement_type):
                 raise KeyError(
                     f"No 'quantisation' key found for {organism}, {measurement_type}."
                 )
-            quantisations[(organism, measurement_type)] = db[measurement_type]['quantisation'][:]
+            quantisations[(organism, measurement_type)] = db[measurement_type][
+                "quantisation"
+            ][:]
     return quantisations[(organism, measurement_type)]
 
 
@@ -61,7 +61,9 @@ def _get_sorted_feature_index(
     if organ not in db[measurement_type]["by_tissue"]:
         raise MeasurementTypeNotFoundError(f"Organ not found: {organ}")
 
-    db_dataset = db[measurement_type]["by_tissue"][organ]["celltype"][measurement_subtype]
+    db_dataset = db[measurement_type]["by_tissue"][organ]["celltype"][
+        measurement_subtype
+    ]
 
     if features is None:
         return db_dataset[:, :]
@@ -94,7 +96,7 @@ def _get_sorted_feature_index(
         data = db_dataset[celltype_index, idx_sorted.values]
     else:
         data = db_dataset[:, idx_sorted.values].T
-    
+
     data = data[idx_sort_back]
     return data
 
@@ -110,7 +112,9 @@ def _collate_measurement_across_organs(
     from models import get_celltype_location, get_celltypes
 
     organs = get_celltype_location(
-        organism, cell_type, measurement_type=measurement_type,
+        organism,
+        cell_type,
+        measurement_type=measurement_type,
     )
     if len(organs) == 0:
         raise CellTypeNotFoundError(
@@ -119,15 +123,17 @@ def _collate_measurement_across_organs(
 
     avgs = []
     for organ in organs:
-        celltypes_organ = list(get_celltypes(
-            organism,
-            organ,
-            measurement_type=measurement_type,
-        ))
+        celltypes_organ = list(
+            get_celltypes(
+                organism,
+                organ,
+                measurement_type=measurement_type,
+            )
+        )
 
         celltype_index_dict = get_celltype_index(cell_type, celltypes_organ)
-        cell_type = celltype_index_dict['celltype']
-        celltype_index = celltype_index_dict['index']
+        cell_type = celltype_index_dict["celltype"]
+        celltype_index = celltype_index_dict["index"]
 
         avg = _get_sorted_feature_index(
             db,
@@ -159,18 +165,14 @@ def get_measurement(
     """
     if (features is not None) and (len(features) > nmax):
         nfeas = len(features)
-        raise TooManyFeaturesError(
-                f"Number of requested features exceeds 50: {nfeas}")
+        raise TooManyFeaturesError(f"Number of requested features exceeds 50: {nfeas}")
 
     if (organ is None) and (cell_type is None):
         raise OrganCellTypeError("Either organ or cell type must be specified.")
     if (organ is not None) and (cell_type is not None):
         raise OrganCellTypeError("Only one of organ or cell type can be specified.")
 
-    approx_path = config["paths"]["compressed_atlas"].get(organism, None)
-    if approx_path is None:
-        raise OrganismNotFoundError(f"Organism not found: {organism}")
-
+    approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
@@ -178,7 +180,7 @@ def get_measurement(
             )
 
         # If the data is quantised, undo the quantisation to get real values
-        dequantise = 'quantisation' in db[measurement_type]
+        dequantise = "quantisation" in db[measurement_type]
 
         if organ is not None:
             # Get index for each feature, then sort for speed, then reorder
@@ -244,7 +246,7 @@ def get_fraction_detected(
         numpy 2D array where each row is a **feature**
     """
     # For ATAC-Seq, fraction detected is the same as average
-    if measurement_type in ('chromatin_accessibility',):
+    if measurement_type in ("chromatin_accessibility",):
         return get_averages(
             organism,
             features,

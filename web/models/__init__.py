@@ -2,10 +2,13 @@
 Data models and functions for the API
 """
 from collections import Counter
+import os
+import pathlib
 import numpy as np
 import pandas as pd
 
 from config import configuration as config
+from models.paths import get_atlas_path
 from models.utils import ApproximationFile
 from models.exceptions import (
     OrganismNotFoundError,
@@ -40,8 +43,13 @@ def get_organisms(
     measurement_type="gene_expression",
 ):
     """Get a list of organisms supported, for a particular measurement type."""
+    atlas_folder = pathlib.Path(config["paths"]["compressed_atlas"])
     organisms = []
-    for organism, approx_path in config["paths"]["compressed_atlas"].items():
+    for filename in os.listdir(atlas_folder):
+        organism, ending = filename.split(".")[0]
+        if ending != "h5":
+            continue
+        approx_path = atlas_folder / filename
         with ApproximationFile(approx_path) as db:
             if measurement_type in db:
                 organisms.append(organism)
@@ -54,10 +62,7 @@ def get_organs(
     measurement_type="gene_expression",
 ):
     """Get a list of organs from one organism"""
-    approx_path = config["paths"]["compressed_atlas"].get(organism, None)
-    if approx_path is None:
-        raise OrganismNotFoundError(f"Organism not found: {organism}")
-
+    approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
@@ -74,10 +79,7 @@ def get_celltypes(
     measurement_type="gene_expression",
 ):
     """Get list of celltypes within an organ"""
-    approx_path = config["paths"]["compressed_atlas"].get(organism, None)
-    if approx_path is None:
-        raise OrganismNotFoundError(f"Organism not found: {organism}")
-
+    approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
@@ -102,7 +104,9 @@ def get_celltype_location(
     organs_found = []
     for organ in organs:
         cell_types_organ = get_celltypes(
-            organism, organ, measurement_type=measurement_type,
+            organism,
+            organ,
+            measurement_type=measurement_type,
         )
         if cell_type in cell_types_organ:
             organs_found.append(organ)
@@ -115,10 +119,7 @@ def get_celltype_abundance(
     measurement_type="gene_expression",
 ):
     """Get number of cells for each type within an organ"""
-    approx_path = config["paths"]["compressed_atlas"].get(organism, None)
-    if approx_path is None:
-        raise OrganismNotFoundError(f"Organism not found: {organism}")
-
+    approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
@@ -145,15 +146,20 @@ def get_celltypexorgan(
     """Get a presence/absence matrix for cell types in organs"""
     # Get organs
     if organs is None:
-        organs = list(get_organs(
-            organism=organism, measurement_type=measurement_type,
-        ))
+        organs = list(
+            get_organs(
+                organism=organism,
+                measurement_type=measurement_type,
+            )
+        )
 
     # Get celltypes
     organs_celltypes = Counter()
     for organ in organs:
         celltypes_organ = get_celltype_abundance(
-            organism=organism, organ=organ, measurement_type=measurement_type,
+            organism=organism,
+            organ=organ,
+            measurement_type=measurement_type,
         )
         for celltype, abundance in celltypes_organ.items():
             organs_celltypes[(organ, celltype)] = abundance
@@ -184,10 +190,7 @@ def get_markers(
     else:
         method = "average"
 
-    approx_path = config["paths"]["compressed_atlas"].get(organism, None)
-    if approx_path is None:
-        raise OrganismNotFoundError(f"Organism not found: {organism}")
-
+    approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
@@ -211,8 +214,8 @@ def get_markers(
 
         # Index cell types
         celltype_index_dict = get_celltype_index(cell_type, cell_types)
-        cell_type = celltype_index_dict['celltype']
-        idx = celltype_index_dict['index']
+        cell_type = celltype_index_dict["celltype"]
+        idx = celltype_index_dict["index"]
 
         idx_other = [i for i in range(ncell_types) if i != idx]
         vector = mat[idx]

@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 
 from config import configuration as config
+from models.paths import get_atlas_path
 from models.utils import ApproximationFile
 from models.exceptions import (
     FeatureNotFoundError,
@@ -22,10 +23,7 @@ feature_series = {}
 
 def load_features(organism, measurement_type="gene_expression"):
     """Preload list of features for an organism"""
-    approx_path = config["paths"]["compressed_atlas"].get(organism, None)
-    if approx_path is None:
-        raise OrganismNotFoundError(f"Organism not found: {organism}")
-
+    approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
@@ -34,9 +32,10 @@ def load_features(organism, measurement_type="gene_expression"):
         features = db[measurement_type]["features"].asstr()[:]
     features_lower = pd.Index(features).str.lower()
     features_lower = pd.Series(
-            np.arange(len(features)), index=features_lower,
-            ).to_frame(name='index')
-    features_lower['name'] = features
+        np.arange(len(features)),
+        index=features_lower,
+    ).to_frame(name="index")
+    features_lower["name"] = features
     feature_series[(organism, measurement_type)] = features_lower
 
 
@@ -59,7 +58,7 @@ def get_feature_index(
         load_features(organism, measurement_type)
 
     try:
-        idx = feature_series[(organism, measurement_type)].at[feature_name, 'index']
+        idx = feature_series[(organism, measurement_type)].at[feature_name, "index"]
     except KeyError as exc:
         raise FeatureNotFoundError(
             f"Feature not found: {feature_name}",
@@ -77,5 +76,5 @@ def get_feature_names(
     if (organism, measurement_type) not in feature_series:
         load_features(organism, measurement_type)
 
-    features = feature_series[(organism, measurement_type)]['name'].values
+    features = feature_series[(organism, measurement_type)]["name"].values
     return features
