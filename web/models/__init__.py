@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 
 from config import configuration as config
+from models.organisms import get_organisms
 from models.paths import get_atlas_path
 from models.utils import ApproximationFile
 from models.exceptions import (
@@ -37,24 +38,6 @@ from models.similar import (
 from models.celltypes import (
     get_celltype_index,
 )
-
-
-def get_organisms(
-    measurement_type="gene_expression",
-):
-    """Get a list of organisms supported, for a particular measurement type."""
-    atlas_folder = pathlib.Path(config["paths"]["compressed_atlas"])
-    organisms = []
-    for filename in os.listdir(atlas_folder):
-        organism, ending = filename.split(".")[0]
-        if ending != "h5":
-            continue
-        approx_path = atlas_folder / filename
-        with ApproximationFile(approx_path) as db:
-            if measurement_type in db:
-                organisms.append(organism)
-    organisms.sort()
-    return organisms
 
 
 def get_organs(
