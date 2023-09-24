@@ -156,7 +156,7 @@ def get_measurement(
     measurement_subtype,
     organ=None,
     cell_type=None,
-    nmax=50,
+    nmax=500,
 ):
     """Get measurements by cell type
 
@@ -165,7 +165,7 @@ def get_measurement(
     """
     if (features is not None) and (len(features) > nmax):
         nfeas = len(features)
-        raise TooManyFeaturesError(f"Number of requested features exceeds 50: {nfeas}")
+        raise TooManyFeaturesError(f"Number of requested features exceeds {nmax}: {nfeas}")
 
     if (organ is None) and (cell_type is None):
         raise OrganCellTypeError("Either organ or cell type must be specified.")

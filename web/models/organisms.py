@@ -1,6 +1,7 @@
 import os
 import pathlib
 
+from config import configuration as config
 from models.utils import ApproximationFile
 
 
@@ -14,7 +15,8 @@ def load_organisms(
     atlas_folder = pathlib.Path(config["paths"]["compressed_atlas"])
     _organisms = []
     for filename in os.listdir(atlas_folder):
-        organism, ending = filename.split(".")[0]
+        print(filename)
+        organism, ending = filename.split(".")
         if ending != "h5":
             continue
         approx_path = atlas_folder / filename
