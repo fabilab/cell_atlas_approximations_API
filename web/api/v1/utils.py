@@ -23,12 +23,6 @@ def clean_organ_string(organ):
     # FIXME: first fix all approximations to use proper organs with no underscores
     #organ = organ.replace("_", " ")
 
-    if organ == 'whole':
-        return organ
-
-    # FIXME: better would be to use all lowercase
-    organ = organ.capitalize()
-
     return organ
 
 

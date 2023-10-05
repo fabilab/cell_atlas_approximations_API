@@ -18,6 +18,7 @@ from models.exceptions import (
     TooManyFeaturesError,
     FeatureNotFoundError,
     SomeFeaturesNotFoundError,
+    FeatureSequencesNotFoundError,
     CellTypeNotFoundError,
     SimilarityMethodError,
 )
@@ -25,6 +26,9 @@ from models.features import (
     get_features,
     get_feature_index,
     get_feature_names,
+)
+from models.sequences import (
+    get_feature_sequences,
 )
 from models.measurement import (
     get_averages,

@@ -57,6 +57,8 @@ def get_feature_index(
     if (organism, measurement_type) not in feature_series:
         load_features(organism, measurement_type)
 
+    print(feature_series[(organism, measurement_type)])
+
     try:
         idx = feature_series[(organism, measurement_type)].at[feature_name, "index"]
     except KeyError as exc:

@@ -22,6 +22,10 @@ class SomeFeaturesNotFoundError(KeyError):
         super().__init__(self, msg)
 
 
+class FeatureSequencesNotFoundError(KeyError):
+    pass
+
+
 class TooManyFeaturesError(ValueError):
     pass
 

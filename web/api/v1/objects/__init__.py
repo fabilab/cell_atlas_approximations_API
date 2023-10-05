@@ -3,6 +3,7 @@ from api.v1.objects.organisms import Organisms
 from api.v1.objects.organs import Organs
 from api.v1.objects.check_features import HasFeatures
 from api.v1.objects.features import Features
+from api.v1.objects.feature_sequences import FeatureSequences
 from api.v1.objects.celltypes import Celltypes
 from api.v1.objects.average import Average
 from api.v1.objects.fraction_detected import FractionDetected
@@ -22,6 +23,7 @@ __all__ = (
     "Celltypes",
     "HasFeatures",
     "Features",
+    "FeatureSequences",
     "Average",
     "FractionDetected",
     "HighestMeasurement",
