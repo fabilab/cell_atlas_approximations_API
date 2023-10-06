@@ -56,6 +56,14 @@ async function features(organism, organ, measurement_type = "gene_expression") {
   return await _callEndpoint("features", params=params);
 }
 
+// FEATURE SEQUENCES
+async function sequences(organism, features, measurement_type = "gene_expression") {
+  if (!isString(features))
+    features = features.join(",");
+  let params = { organism, features, measurement_type };
+  return await _callEndpoint("sequences", params=params);
+};
+
 // AVERAGE GENE EXPRESSION/CHROMATIN ACCESIBILITY
 async function average(organism, features, organ = null, celltype = null, measurement_type = "gene_expression") {
   if (!isString(features))
