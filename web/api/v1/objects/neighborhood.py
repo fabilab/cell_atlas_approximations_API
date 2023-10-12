@@ -5,9 +5,7 @@ from flask_restful import Resource, abort
 # Helper functions
 from config import configuration as config
 from models import (
-    get_averages,
-    get_celltypes,
-    get_celltype_location,
+    get_neighborhoods,
     get_feature_index,
     get_feature_names,
     OrganismNotFoundError,
@@ -25,7 +23,7 @@ from api.v1.utils import (
 )
 
 
-class Average(Resource):
+class Neighborhood(Resource):
     """Get average measurement by cell type"""
 
     def get(self):
@@ -57,47 +55,17 @@ class Average(Resource):
         unit = config['units'][measurement_type]
 
         organ = args.get("organ", None)
-        cell_type = args.get("celltype", None)
-        if (organ is None) and (cell_type is None):
-            abort(
-                400,
-                message='Either "organ" or "celltype" parameter is required.',
-                exception='missing_parameter=organ^celltype',
-            )
-        if (organ is not None) and (cell_type is not None):
-            abort(
-                400,
-                message='Only one of "organ" or "celltype" parameter can be set.',
-                exception='too_many_parameters=organ^celltype',
-            )
+        if organ is None:
+            abort(400, message='The "organ" parameter is required.')
 
         try:
-            if organ is not None:
-                organ = clean_organ_string(organ)
-                avgs = get_averages(
-                    organism=organism,
-                    organ=organ,
-                    features=features,
-                    measurement_type=measurement_type,
-                )
-                cell_types = list(get_celltypes(
-                    organism=organism,
-                    organ=organ,
-                    measurement_type=measurement_type,
-                ))
-            else:
-                cell_type = clean_celltype_string(cell_type)
-                avgs = get_averages(
-                    organism=organism,
-                    cell_type=cell_type,
-                    features=features,
-                    measurement_type=measurement_type,
-                )
-                organs = list(get_celltype_location(
-                    organism=organism,
-                    cell_type=cell_type,
-                    measurement_type=measurement_type,
-                ))
+            organ = clean_organ_string(organ)
+            neis = get_neighborhoods(
+                organism=organism,
+                organ=organ,
+                features=features,
+                measurement_type=measurement_type,
+            )
         except OrganismNotFoundError:
             abort(
                 400,
@@ -109,12 +77,6 @@ class Average(Resource):
                 400,
                 message=f"Organ not found: {organ}.",
                 exception="invalid_parameter=organ",
-            )
-        except CellTypeNotFoundError:
-            abort(
-                400,
-                message=f"Cell type not found: {cell_type}.",
-                exception="invalid_parameter=celltype",
             )
         except SomeFeaturesNotFoundError as exc:
             abort(
@@ -136,6 +98,12 @@ class Average(Resource):
                 exception="invalid_parameter=measurement_type",
             )
 
+        # Unpack neighborhood data for output
+        avgs = neis['average']
+        cell_types = neis['celltype']
+        coords_centroid = neis['coords_centroid']
+        convex_hulls = [hull.tolist() for hull in neis['convex_hull']]
+
         features_corrected = []
         features_all = get_feature_names(
             organism=organism,
@@ -150,17 +118,14 @@ class Average(Resource):
             "measurement_type": measurement_type,
             "features": features_corrected,
             "average": avgs.tolist(),
+            "celltypes": cell_types.tolist(),
+            "coords_centroid": coords_centroid.tolist(),
+            "convex_hull": convex_hulls,
             "unit": unit,
+            "organ": organ,
         }
-        if organ is not None:
-            result.update({
-                "organ": organ,
-                "celltypes": cell_types,
-            })
-        else:
-            result.update({
-                "organs": organs,
-                "celltype": cell_type,
-            })
+        if 'frac' in neis:
+            result["fraction_detected"] = neis['fraction'].tolist()
+
         return result
 

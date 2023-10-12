@@ -17,6 +17,7 @@ from api.v1.objects import (
     SimilarCelltypes,
     CelltypeXOrgan,
     CelltypeLocation,
+    Neighborhood,
 )
 
 __all__ = (
@@ -35,6 +36,7 @@ api_dict = {
         "celltypes": Celltypes,
         "average": Average,
         "fraction_detected": FractionDetected,
+        "neighborhood": Neighborhood,
         "markers": Markers,
         "highest_measurement": HighestMeasurement,
         "similar_features": SimilarFeatures,

@@ -145,6 +145,7 @@ const atlasapprox = {
     organs,
     celltypes,
     features,
+    sequences,
     average,
     fraction_detected,
     markers,

@@ -34,6 +34,7 @@ from models.measurement import (
     get_averages,
     get_fraction_detected,
     get_highest_measurement,
+    get_neighborhoods,
 )
 from models.similar import (
     get_similar_features,

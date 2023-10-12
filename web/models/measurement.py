@@ -56,14 +56,21 @@ def _get_sorted_feature_index(
     measurement_type,
     measurement_subtype,
     celltype_index=None,
+    use_neighborhood=False,
 ):
-    """Get auxiliary data structures for sorted dict of features"""
+    """Get auxiliary data structures for sorted dict of features.
+
+    Args:
+        measurement_subtype (str): "average" or "fraction".
+        use_neighborhood (bool): Whether to zoom into sub-cell-type detail.
+    """
     if organ not in db[measurement_type]["by_tissue"]:
         raise MeasurementTypeNotFoundError(f"Organ not found: {organ}")
 
-    db_dataset = db[measurement_type]["by_tissue"][organ]["celltype"][
-        measurement_subtype
-    ]
+    db_dataset = db[measurement_type]["by_tissue"][organ]["celltype"]
+    if use_neighborhood:
+        db_dataset = db_dataset["neighborhood"]
+    db_dataset = db_dataset[measurement_subtype]
 
     if features is None:
         return db_dataset[:, :]
@@ -157,6 +164,7 @@ def get_measurement(
     organ=None,
     cell_type=None,
     nmax=500,
+    use_neighborhood=False,
 ):
     """Get measurements by cell type
 
@@ -191,8 +199,9 @@ def get_measurement(
                 features,
                 measurement_type,
                 measurement_subtype,
+                use_neighborhood=use_neighborhood,
             )
-        else:
+        elif not use_neighborhood:
             result = _collate_measurement_across_organs(
                 db,
                 organism,
@@ -201,6 +210,8 @@ def get_measurement(
                 measurement_type,
                 measurement_subtype,
             )
+        else:
+            raise ValueError("Neighborhoods are only defined within an organ")
 
     # This needs to happen outside the "with" statement since retrieving the quantisation
     # might involve opening the same file again
@@ -217,6 +228,7 @@ def get_averages(
     organ=None,
     cell_type=None,
     measurement_type="gene_expression",
+    use_neighborhood=False,
 ):
     """Get average measurements by cell type
 
@@ -230,6 +242,7 @@ def get_averages(
         organ=organ,
         cell_type=cell_type,
         measurement_subtype="average",
+        use_neighborhood=use_neighborhood,
     )
 
 
@@ -239,6 +252,7 @@ def get_fraction_detected(
     organ=None,
     cell_type=None,
     measurement_type="gene_expression",
+    use_neighborhood=False,
 ):
     """Get fraction of detected measurements by cell type
 
@@ -253,6 +267,7 @@ def get_fraction_detected(
             organ=organ,
             cell_type=cell_type,
             measurement_type=measurement_type,
+            use_neighborhood=use_neighborhood,
         )
 
     return get_measurement(
@@ -262,6 +277,7 @@ def get_fraction_detected(
         cell_type=cell_type,
         measurement_type=measurement_type,
         measurement_subtype="fraction",
+        use_neighborhood=use_neighborhood,
     )
 
 
@@ -325,3 +341,49 @@ def get_highest_measurement(
     result["average"] = result["average"][idx_top]
 
     return result
+
+
+def get_neighborhoods(
+    organism,
+    organ,
+    features,
+    measurement_type="gene_expression",
+):
+    """Get data (average, fraction, coordinates) for local neighborhoods in a tissue."""
+
+    averages = get_averages(
+        organism,
+        features,
+        measurement_type,
+        organ=organ,
+        use_neighborhood=True,
+    )
+    fractions = get_fraction_detected(
+        organism,
+        features,
+        measurement_type,
+        organ=organ,
+        use_neighborhood=True, 
+    )
+
+    # Cell types, coords, and hulls
+    approx_path = get_atlas_path(organism)
+    with ApproximationFile(approx_path) as db:
+        if organ not in db[measurement_type]["by_tissue"]:
+            raise MeasurementTypeNotFoundError(f"Organ not found: {organ}")
+
+        db_dataset = db[measurement_type]["by_tissue"][organ]["celltype"]["neighborhood"]
+        cell_types = db_dataset["index"].asstr()[:]
+        coords_centroid = db_dataset["coords_centroid"][:]
+        convex_hulls = []
+        for i in range(len(coords_centroid)):
+            hull = db_dataset['convex_hull'][str(i)][:]
+            convex_hulls.append(hull)
+
+    return {
+            "average": averages,
+            "fraction": fractions,
+            "celltype": cell_types,
+            "coords_centroid": coords_centroids,
+            "convex_hull": convex_hulls,
+    }
