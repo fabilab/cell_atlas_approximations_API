@@ -11,5 +11,8 @@ def get_atlas_path(organism):
     filename = organism + ".h5"
     approx_path = atlas_folder / filename
     if not approx_path.exists():
-        raise OrganismNotFoundError(f"Organism not found: {organism}")
+        raise OrganismNotFoundError(
+            f"Organism not found: {organism}",
+            organism=organism,
+        )
     return approx_path

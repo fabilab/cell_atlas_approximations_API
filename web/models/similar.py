@@ -72,7 +72,10 @@ def get_similar_features(
             delta = (np.abs((avgs.T - avg))).mean(axis=1)
 
     else:
-        raise SimilarityMethodError
+        raise SimilarityMethodError(
+            f"Similarity method invalid: {method}",
+            method=method,
+        )
 
     # Take closest features
     features_all = get_feature_names(
@@ -193,7 +196,10 @@ def get_similar_celltypes(
             delta = (np.abs((avgs.T - avg))).mean(axis=1)
 
     else:
-        raise SimilarityMethodError
+        raise SimilarityMethodError(
+            f"Similarity method invalid: {method}",
+            method=method,
+        )
 
     # Take closest features
     idx_max = delta.argsort()[1:number+1]

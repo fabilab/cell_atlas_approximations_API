@@ -18,7 +18,10 @@ def get_celltype_index(celltype, celltypes, max_distance=3):
         return result
 
     if max_distance < 1:
-        raise CellTypeNotFoundError(f"No cell type called {celltype} found.")
+        raise CellTypeNotFoundError(
+            f"No cell type called {celltype} found.",
+            cell_type=celltype,
+        )
 
     # Autocorrection
     finder = LevenshteinFinder()
@@ -26,7 +29,10 @@ def get_celltype_index(celltype, celltypes, max_distance=3):
     # NOTE: this list is longer then one only for ties, in which case the first should be fine
     celltypes_close = finder.search(celltype, max_distance=max_distance)
     if len(celltypes_close) == 0:
-        raise CellTypeNotFoundError(f"No cell type called {celltype} found.")
+        raise CellTypeNotFoundError(
+            f"No cell type called {celltype} found.",
+            cell_type=celltype,
+        )
 
     result = {
         'index': celltypes_close[0]['idx'],

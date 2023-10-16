@@ -17,9 +17,12 @@ from models import (
     TooManyFeaturesError,
     MeasurementTypeNotFoundError,
 )
-from api.v1.exceptions import FeatureStringFormatError
-from api.v1.utils import (
+from api.v1.exceptions import (
+    FeatureStringFormatError,
     required_parameters,
+    model_exceptions,
+)
+from api.v1.utils import (
     clean_feature_string,
     clean_organ_string,
     clean_celltype_string,
@@ -30,20 +33,14 @@ class Average(Resource):
     """Get average measurement by cell type"""
 
     @required_parameters('organism', 'features')
+    @model_exceptions
     def get(self):
         """Get list of cell types for an organ and organism"""
         args = request.args
         measurement_type = args.get("measurement_type", "gene_expression")
         organism = args.get("organism")
         features = args.get("features")
-        try:
-            features = clean_feature_string(features, organism, measurement_type)
-        except FeatureStringFormatError:
-            abort(
-                400,
-                message=f"Feature string not recognised: {features}.",
-                exception='invalid_parameter=features',
-            )
+        features = clean_feature_string(features, organism, measurement_type)
         unit = config['units'][measurement_type]
 
         organ = args.get("organ", None)
@@ -61,70 +58,32 @@ class Average(Resource):
                 error='too_many_parameters=organ^celltype',
             )
 
-        try:
-            if organ is not None:
-                organ = clean_organ_string(organ)
-                avgs = get_averages(
-                    organism=organism,
-                    organ=organ,
-                    features=features,
-                    measurement_type=measurement_type,
-                )
-                cell_types = list(get_celltypes(
-                    organism=organism,
-                    organ=organ,
-                    measurement_type=measurement_type,
-                ))
-            else:
-                cell_type = clean_celltype_string(cell_type)
-                avgs = get_averages(
-                    organism=organism,
-                    cell_type=cell_type,
-                    features=features,
-                    measurement_type=measurement_type,
-                )
-                organs = list(get_celltype_location(
-                    organism=organism,
-                    cell_type=cell_type,
-                    measurement_type=measurement_type,
-                ))
-        except OrganismNotFoundError:
-            abort(
-                400,
-                message=f"Organism not found: {organism}.",
-                exception="invalid_parameter=organism",
+        if organ is not None:
+            organ = clean_organ_string(organ)
+            avgs = get_averages(
+                organism=organism,
+                organ=organ,
+                features=features,
+                measurement_type=measurement_type,
             )
-        except OrganNotFoundError:
-            abort(
-                400,
-                message=f"Organ not found: {organ}.",
-                exception="invalid_parameter=organ",
+            cell_types = list(get_celltypes(
+                organism=organism,
+                organ=organ,
+                measurement_type=measurement_type,
+            ))
+        else:
+            cell_type = clean_celltype_string(cell_type)
+            avgs = get_averages(
+                organism=organism,
+                cell_type=cell_type,
+                features=features,
+                measurement_type=measurement_type,
             )
-        except CellTypeNotFoundError:
-            abort(
-                400,
-                message=f"Cell type not found: {cell_type}.",
-                exception="invalid_parameter=celltype",
-            )
-        except SomeFeaturesNotFoundError as exc:
-            abort(
-                400,
-                message="Some features could not be found.",
-                exception="invalid_parameter=features",
-                missing=exc.features,
-            )
-        except TooManyFeaturesError:
-            abort(
-                400,
-                message=f"Too many features requested: {len(features)}.",
-                exception="too_large_parameter=features",
-            )
-        except MeasurementTypeNotFoundError:
-            abort(
-                400,
-                message=f"Measurement type not found: {measurement_type}.",
-                exception="invalid_parameter=measurement_type",
-            )
+            organs = list(get_celltype_location(
+                organism=organism,
+                cell_type=cell_type,
+                measurement_type=measurement_type,
+            ))
 
         features_corrected = []
         features_all = get_feature_names(

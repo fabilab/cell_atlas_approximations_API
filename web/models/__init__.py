@@ -54,7 +54,8 @@ def get_organs(
     with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
-                f"Measurement type not found: {measurement_type}"
+                f"Measurement type not found: {measurement_type}",
+                measurement_type=measurement_type,
             )
         organs = list(db[measurement_type]["by_tissue"].keys())
     organs.sort()
@@ -71,10 +72,14 @@ def get_celltypes(
     with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
-                f"Measurement type not found: {measurement_type}"
+                f"Measurement type not found: {measurement_type}",
+                measurement_type=measurement_type,
             )
         if organ not in db[measurement_type]["by_tissue"]:
-            raise OrganNotFoundError(f"Organ not found: {organ}")
+            raise OrganNotFoundError(
+                f"Organ not found: {organ}",
+                organ=organ,
+            )
 
         celltypes = db[measurement_type]["by_tissue"][organ]["celltype"][
             "index"
@@ -111,10 +116,14 @@ def get_celltype_abundance(
     with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
-                f"Measurement type not found: {measurement_type}"
+                f"Measurement type not found: {measurement_type}",
+                measurement_type=measurement_type,
             )
         if organ not in db[measurement_type]["by_tissue"]:
-            raise OrganNotFoundError(f"Organ not found: {organ}")
+            raise OrganNotFoundError(
+                f"Organ not found: {organ}",
+                organ=organ,
+            )
 
         celltypes = db[measurement_type]["by_tissue"][organ]["celltype"][
             "index"
@@ -182,10 +191,14 @@ def get_markers(
     with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
-                f"Measurement type not found: {measurement_type}"
+                f"Measurement type not found: {measurement_type}",
+                measurement_type=measurement_type,
             )
         if organ not in db[measurement_type]["by_tissue"]:
-            raise MeasurementTypeNotFoundError(f"Organ not found: {organ}")
+            raise MeasurementTypeNotFoundError(
+                f"Organ not found: {organ}",
+                organ=organ,
+            )
 
         # H5 group to use
         sub_db = db[measurement_type]["by_tissue"][organ]["celltype"]
@@ -195,7 +208,10 @@ def get_markers(
         ncell_types = len(cell_types)
 
         if cell_type not in cell_types:
-            raise CellTypeNotFoundError(f"Cell type not found: {cell_type}")
+            raise CellTypeNotFoundError(
+                f"Cell type not found: {cell_type}",
+                cell_type=cell_type,
+            )
 
         # Matrix of measurements (rows are cell types)
         mat = sub_db[method]

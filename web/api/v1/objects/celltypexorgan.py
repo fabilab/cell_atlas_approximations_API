@@ -9,8 +9,9 @@ from models import (
     OrganNotFoundError,
     MeasurementTypeNotFoundError,
 )
-from api.v1.utils import (
+from api.v1.exceptions import (
     required_parameters,
+    model_exceptions
 )
 
 
@@ -18,6 +19,7 @@ class CelltypeXOrgan(Resource):
     """Get list of cell types for an organ and organism"""
 
     @required_parameters('organism')
+    @model_exceptions
     def get(self):
         """Get list of cell types for an organ and organism"""
         args = request.args
@@ -31,22 +33,12 @@ class CelltypeXOrgan(Resource):
         if isinstance(boolean, str):
             boolean = boolean.lower() not in ('false', '0', 'no')
 
-        try:
-            celltypexorgan = get_celltypexorgan(
-                organism=organism,
-                organs=organs,
-                measurement_type=measurement_type,
-                boolean=boolean,
-            )
-        except OrganismNotFoundError:
-            abort(400, message=f"Organism not found: {organism}.")
-        except OrganNotFoundError:
-            abort(400, message="Some organs not found.")
-        except MeasurementTypeNotFoundError:
-            abort(
-                400,
-                message=f"Measurement type not found: {measurement_type}.",
-            )
+        celltypexorgan = get_celltypexorgan(
+            organism=organism,
+            organs=organs,
+            measurement_type=measurement_type,
+            boolean=boolean,
+        )
 
         organs = list(celltypexorgan.columns)
         celltypes = list(celltypexorgan.index)

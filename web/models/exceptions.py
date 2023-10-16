@@ -1,13 +1,19 @@
 class OrganismNotFoundError(KeyError):
-    pass
+    def __init__(self, msg, organism):
+        self.organism = organism
+        super().__init__(self, msg)
 
 
 class OrganNotFoundError(KeyError):
-    pass
+    def __init__(self, msg, organ):
+        self.organ = organ
+        super().__init__(self, msg)
 
 
 class MeasurementTypeNotFoundError(KeyError):
-    pass
+    def __init__(self, msg, measurement_type):
+        self.measurement_type = measurement_type
+        super().__init__(self, msg)
 
 
 class FeatureNotFoundError(KeyError):
@@ -31,11 +37,15 @@ class TooManyFeaturesError(ValueError):
 
 
 class CellTypeNotFoundError(KeyError):
-    pass
+    def __init__(self, msg, cell_type):
+        self.cell_type = cell_type
+        super().__init__(self, msg)
 
 
 class SimilarityMethodError(NotImplementedError):
-    pass
+    def __init__(self, msg, method):
+        self.method = method
+        super().__init__(self, msg)
 
 
 class OrganCellTypeError(KeyError):

@@ -7,20 +7,16 @@ from models import (
     get_feature_index,
     get_feature_names,
     get_similar_celltypes,
-    OrganismNotFoundError,
-    OrganNotFoundError,
-    FeatureNotFoundError,
-    TooManyFeaturesError,
-    SimilarityMethodError,
-    CellTypeNotFoundError,
-    MeasurementTypeNotFoundError,
 )
-from api.v1.exceptions import FeatureStringFormatError
+from api.v1.exceptions import (
+    FeatureStringFormatError,
+    required_parameters,
+    model_exceptions,
+)
 from api.v1.utils import (
     clean_feature_string,
     clean_organ_string,
     clean_celltype_string,
-    required_parameters,
 )
 
 
@@ -28,6 +24,7 @@ class SimilarCelltypes(Resource):
     """Get average measurement by cell type"""
 
     @required_parameters('organism', 'organ', 'celltype', 'features', 'number')
+    @model_exceptions
     def get(self):
         """Get list of features similar to the focal one"""
         args = request.args
@@ -38,11 +35,7 @@ class SimilarCelltypes(Resource):
         cell_type = args.get("celltype")
         cell_type = clean_celltype_string(cell_type)
         features = args.get("features")
-
-        try:
-            features = clean_feature_string(features, organism)
-        except FeatureStringFormatError:
-            abort(400, message=f"Feature string not recognised: {features}.")
+        features = clean_feature_string(features, organism)
 
         number = args.get("number")
         method = args.get("method", "correlation")
@@ -53,38 +46,17 @@ class SimilarCelltypes(Resource):
         if number <= 0:
             abort(400, message='The "number" parameter should be positive.')
 
-        try:
-            # NOTE: method can change if there is only one feature, because
-            # correlation-like methods are undefined
-            result = get_similar_celltypes(
-                organism=organism,
-                organ=organ,
-                celltype=cell_type,
-                features=features,
-                number=number,
-                method=method,
-                measurement_type=measurement_type,
-            )
-        except OrganismNotFoundError:
-            abort(400, message=f"Organism not found: {organism}.")
-        except OrganNotFoundError:
-            abort(400, message=f"Organ not found: {organ}.")
-        except CellTypeNotFoundError:
-            abort(400, message=f"Cell type not found: {cell_type}.")
-        except FeatureNotFoundError:
-            abort(400, message="Some features could not be found.")
-        except TooManyFeaturesError:
-            abort(
-                400,
-                message=f"Maximal number of features is 50. Requested: {len(features)}.",
-            )
-        except SimilarityMethodError:
-            abort(400, message=f"Similarity method not supported: {method}.")
-        except MeasurementTypeNotFoundError:
-            abort(
-                400,
-                message=f"Measurement type not found: {measurement_type}.",
-            )
+        # NOTE: method can change if there is only one feature, because
+        # correlation-like methods are undefined
+        result = get_similar_celltypes(
+            organism=organism,
+            organ=organ,
+            celltype=cell_type,
+            features=features,
+            number=number,
+            method=method,
+            measurement_type=measurement_type,
+        )
 
         features_corrected = []
         features_all = get_feature_names(

@@ -7,12 +7,13 @@ from models import (
     get_features,
     get_feature_index,
     get_feature_names,
-    OrganismNotFoundError,
-    MeasurementTypeNotFoundError,
+)
+from api.v1.exceptions import (
+    required_parameters,
+    model_exceptions,
 )
 from api.v1.utils import (
     clean_feature_string,
-    required_parameters,
 )
 
 
@@ -20,30 +21,19 @@ class HasFeatures(Resource):
     """Get list of features for an organism"""
 
     @required_parameters('organism', 'features')
+    @model_exceptions
     def get(self):
         """Get list of features (genes)"""
         args = request.args
         measurement_type = args.get("measurement_type", "gene_expression")
         organism = args.get("organism")
         features = args.get("features")
+        features = clean_feature_string(features, organism, measurement_type)
 
-        try:
-            features = clean_feature_string(features, organism, measurement_type)
-        except FeatureStringFormatError:
-            abort(400, message=f"Feature string not recognised: {features}.")
-
-        try:
-            features_lowercase = get_features(
-                organism=organism,
-                measurement_type=measurement_type,
-            )
-        except OrganismNotFoundError:
-            abort(400, message=f"Organism not found: {organism}.")
-        except MeasurementTypeNotFoundError:
-            abort(
-                400,
-                message=f"Measurement type not found: {measurement_type}.",
-            )
+        features_lowercase = get_features(
+            organism=organism,
+            measurement_type=measurement_type,
+        )
 
         is_found = []
         features_corrected = []

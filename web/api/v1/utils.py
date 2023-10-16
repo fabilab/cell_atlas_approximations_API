@@ -1,7 +1,5 @@
 """Module for utility functions"""
 import re
-from flask import request
-from flask_restful import abort
 
 
 def clean_feature_string(features, organism=None, measurement_type="gene_expression"):
@@ -39,23 +37,3 @@ def clean_celltype_string(cell_type):
     cell_type = cell_type.replace("_", " ")
     return cell_type
 
-
-def required_parameters(*required_args):
-    """Decorator that aborts if mandatory parameters are missing."""
-    def inner(wrapped):
-        """Just an inner layer used by Python to get rid of decorator parameters."""
-        def func(*args_inner, **kwargs_inner):
-            """Decorated function."""
-            for arg in required_args:
-                if request.args.get(arg, None) is None:
-                    abort(
-                        400,
-                        message=f"The \"{arg}\" parameter is required.",
-                        error={
-                            "type": "missing_parameter",
-                            "missing_parameter": arg,
-                        },
-                    )
-            return wrapped(*args_inner, **kwargs_inner)
-        return func
-    return inner

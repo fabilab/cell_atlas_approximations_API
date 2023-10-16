@@ -8,12 +8,10 @@ from models import (
     get_feature_index,
     get_feature_names,
     get_highest_measurement,
-    OrganismNotFoundError,
-    FeatureNotFoundError,
-    MeasurementTypeNotFoundError,
 )
-from api.v1.utils import (
+from api.v1.exceptions import (
     required_parameters,
+    model_exceptions,
 )
 
 
@@ -21,6 +19,7 @@ class HighestMeasurement(Resource):
     """Get measurement in highest cell types"""
 
     @required_parameters('organism', 'feature', 'number')
+    @model_exceptions
     def get(self):
         """Get expression in highest cell types, in one organism"""
         args = request.args
@@ -38,22 +37,12 @@ class HighestMeasurement(Resource):
         if number <= 0:
             abort(400, message='The "number" parameter should be positive.')
 
-        try:
-            result = get_highest_measurement(
-                organism=organism,
-                feature=feature,
-                number=number,
-                measurement_type=measurement_type,
-            )
-        except OrganismNotFoundError:
-            abort(400, message=f"Organism not found: {organism}.")
-        except FeatureNotFoundError:
-            abort(400, message="Some features could not be found.")
-        except MeasurementTypeNotFoundError:
-            abort(
-                400,
-                message=f"Measurement type not found: {measurement_type}.",
-            )
+        result = get_highest_measurement(
+            organism=organism,
+            feature=feature,
+            number=number,
+            measurement_type=measurement_type,
+        )
 
         features_all = get_feature_names(
             organism=organism,

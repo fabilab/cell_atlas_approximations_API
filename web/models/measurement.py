@@ -12,6 +12,7 @@ from models.exceptions import (
     SomeFeaturesNotFoundError,
     TooManyFeaturesError,
     OrganCellTypeError,
+    OrganNotFoundError,
 )
 from models.features import (
     get_feature_index,
@@ -36,7 +37,8 @@ def _get_quantisation(organism, measurement_type):
         with ApproximationFile(approx_path) as db:
             if measurement_type not in db:
                 raise MeasurementTypeNotFoundError(
-                    f"Measurement type not found: {measurement_type}"
+                    f"Measurement type not found: {measurement_type}",
+                    measurement_type=measurement_type,
                 )
             if "quantisation" not in db[measurement_type]:
                 raise KeyError(
@@ -65,7 +67,10 @@ def _get_sorted_feature_index(
         use_neighborhood (bool): Whether to zoom into sub-cell-type detail.
     """
     if organ not in db[measurement_type]["by_tissue"]:
-        raise MeasurementTypeNotFoundError(f"Organ not found: {organ}")
+        raise OrganNotFoundError(
+            f"Organ not found: {organ}",
+            organ=organ,
+        )
 
     db_dataset = db[measurement_type]["by_tissue"][organ]["celltype"]
     if use_neighborhood:
@@ -126,6 +131,7 @@ def _collate_measurement_across_organs(
     if len(organs) == 0:
         raise CellTypeNotFoundError(
             f"Cell type not found: {cell_type}.",
+            cell_type=cell_type,
         )
 
     avgs = []
@@ -184,7 +190,8 @@ def get_measurement(
     with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
-                f"Measurement type not found: {measurement_type}"
+                f"Measurement type not found: {measurement_type}",
+                measurement_type=measurement_type,
             )
 
         # If the data is quantised, undo the quantisation to get real values
@@ -371,7 +378,10 @@ def get_neighborhoods(
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
         if organ not in db[measurement_type]["by_tissue"]:
-            raise MeasurementTypeNotFoundError(f"Organ not found: {organ}")
+            raise OrganNotFoundError(
+                f"Organ not found: {organ}",
+                organ=organ,
+            )
 
         db_dataset = db[measurement_type]["by_tissue"][organ]["celltype"]["neighborhood"]
         ncells_per_cluster = db_dataset["cell_count"][:]

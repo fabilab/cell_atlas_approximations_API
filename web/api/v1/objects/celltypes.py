@@ -6,13 +6,13 @@ from flask_restful import Resource, abort
 from models import (
     get_organs,
     get_celltypes,
-    OrganismNotFoundError,
-    OrganNotFoundError,
-    MeasurementTypeNotFoundError,
+)
+from api.v1.exceptions import (
+    required_parameters,
+    model_exceptions,
 )
 from api.v1.utils import (
     clean_organ_string,
-    required_parameters,
 )
 
 
@@ -20,6 +20,7 @@ class Celltypes(Resource):
     """Get list of cell types for an organ and organism"""
 
     @required_parameters('organism', 'organ')
+    @model_exceptions
     def get(self):
         """Get list of cell types for an organ and organism"""
         args = request.args
@@ -29,17 +30,7 @@ class Celltypes(Resource):
         measurement_type = args.get(
             "measurement_type", "gene_expression")
 
-        try:
-            celltypes = list(get_celltypes(organism=organism, organ=organ))
-        except OrganismNotFoundError:
-            abort(400, message=f"Organism not found: {organism}.")
-        except OrganNotFoundError:
-            abort(400, message=f"Organ not found: {organ}.")
-        except MeasurementTypeNotFoundError:
-            abort(
-                400,
-                message=f"Measurement type not found: {measurement_type}.",
-            )
+        celltypes = list(get_celltypes(organism=organism, organ=organ))
 
         return {
             "organism": organism,

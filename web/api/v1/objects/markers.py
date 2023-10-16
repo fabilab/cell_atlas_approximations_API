@@ -5,15 +5,14 @@ from flask_restful import Resource, abort
 # Helper functions
 from models import (
     get_markers,
-    OrganismNotFoundError,
-    OrganNotFoundError,
-    CellTypeNotFoundError,
-    MeasurementTypeNotFoundError,
+)
+from api.v1.exceptions import (
+    required_parameters,
+    model_exceptions,
 )
 from api.v1.utils import (
     clean_organ_string,
     clean_celltype_string,
-    required_parameters,
 )
 
 
@@ -21,6 +20,7 @@ class Markers(Resource):
     """Get average measurement by cell type"""
 
     @required_parameters('organism', 'organ', 'celltype', 'number')
+    @model_exceptions
     def get(self):
         """Get list of cell types for an organ and organism"""
         args = request.args
@@ -40,25 +40,13 @@ class Markers(Resource):
         if number <= 0:
             abort(400, message='The "number" parameter should be positive.')
 
-        try:
-            markers = get_markers(
-                organism=organism,
-                organ=organ,
-                cell_type=cell_type,
-                number=number,
-                measurement_type=measurement_type,
-            )
-        except OrganismNotFoundError:
-            abort(400, message=f"Organism not found: {organism}.")
-        except OrganNotFoundError:
-            abort(400, message=f"Organ not found: {organ}.")
-        except CellTypeNotFoundError:
-            abort(400, message=f"Cell type not found: {cell_type}.")
-        except MeasurementTypeNotFoundError:
-            abort(
-                400,
-                message=f"Measurement type not found: {measurement_type}.",
-            )
+        markers = get_markers(
+            organism=organism,
+            organ=organ,
+            cell_type=cell_type,
+            number=number,
+            measurement_type=measurement_type,
+        )
 
         return {
             "organism": organism,

@@ -7,14 +7,10 @@ from models import (
     get_feature_index,
     get_feature_names,
     get_similar_features,
-    OrganismNotFoundError,
-    OrganNotFoundError,
-    FeatureNotFoundError,
-    SimilarityMethodError,
-    MeasurementTypeNotFoundError,
 )
-from api.v1.utils import (
+from api.v1.exceptions import (
     required_parameters,
+    model_exceptions,
 )
 
 
@@ -22,6 +18,7 @@ class SimilarFeatures(Resource):
     """Get average measurement by cell type"""
 
     @required_parameters('organism', 'organ', 'feature', 'number')
+    @model_exceptions
     def get(self):
         """Get list of features similar to the focal one"""
         args = request.args
@@ -44,28 +41,14 @@ class SimilarFeatures(Resource):
                 message=f"Max number of similar features is 50, requested: {number}.",
             )
 
-        try:
-            result = get_similar_features(
-                organism=organism,
-                organ=organ,
-                feature_name=feature,
-                number=number,
-                method=method,
-                measurement_type=measurement_type,
-            )
-        except OrganismNotFoundError:
-            abort(400, message=f"Organism not found: {organism}.")
-        except OrganNotFoundError:
-            abort(400, message=f"Organ not found: {organ}.")
-        except FeatureNotFoundError:
-            abort(400, message=f"Feature not found: {feature}.")
-        except SimilarityMethodError:
-            abort(400, message=f"Similarity method not supported: {method}.")
-        except MeasurementTypeNotFoundError:
-            abort(
-                400,
-                message=f"Measurement type not found: {measurement_type}.",
-            )
+        result = get_similar_features(
+            organism=organism,
+            organ=organ,
+            feature_name=feature,
+            number=number,
+            method=method,
+            measurement_type=measurement_type,
+        )
 
         features_all = get_feature_names(
             organism=organism,

@@ -9,18 +9,16 @@ from models import (
     get_celltype_location,
     get_feature_index,
     get_feature_names,
-    OrganismNotFoundError,
-    OrganNotFoundError,
-    FeatureNotFoundError,
-    TooManyFeaturesError,
-    MeasurementTypeNotFoundError,
 )
-from api.v1.exceptions import FeatureStringFormatError
+from api.v1.exceptions import (
+    FeatureStringFormatError,
+    required_parameters,
+    model_exceptions,
+)
 from api.v1.utils import (
     clean_feature_string,
     clean_organ_string,
     clean_celltype_string,
-    required_parameters,
 )
 
 
@@ -28,6 +26,7 @@ class FractionDetected(Resource):
     """Get fraction of detected measurements"""
 
     @required_parameters('organism', 'features')
+    @model_exceptions
     def get(self):
         """Get list of cell types for an organ and organism"""
         args = request.args
@@ -46,49 +45,32 @@ class FractionDetected(Resource):
         if (organ is not None) and (cell_type is not None):
             abort(400, message='Only one of "organ" or "celltype" parameter can be set.')
 
-        try:
-            if organ is not None:
-                organ = clean_organ_string(organ)
-                avgs = get_fraction_detected(
-                    organism=organism,
-                    organ=organ,
-                    features=features,
-                    measurement_type=measurement_type,
-                )
-                cell_types = list(get_celltypes(
-                    organism=organism,
-                    organ=organ,
-                    measurement_type=measurement_type,
-                ))
-            else:
-                cell_type = clean_celltype_string(cell_type)
-                avgs = get_fraction_detected(
-                    organism=organism,
-                    cell_type=cell_type,
-                    features=features,
-                    measurement_type=measurement_type,
-                )
-                organs = list(get_celltype_location(
-                    organism=organism,
-                    cell_type=cell_type,
-                    measurement_type=measurement_type,
-                ))
-        except OrganismNotFoundError:
-            abort(400, message=f"Organism not found: {organism}.")
-        except OrganNotFoundError:
-            abort(400, message=f"Organ not found: {organ}.")
-        except FeatureNotFoundError:
-            abort(400, message="Some features could not be found.")
-        except TooManyFeaturesError:
-            abort(
-                400,
-                message=f"Maximal number of features is 50. Requested: {len(features)}.",
+        if organ is not None:
+            organ = clean_organ_string(organ)
+            avgs = get_fraction_detected(
+                organism=organism,
+                organ=organ,
+                features=features,
+                measurement_type=measurement_type,
             )
-        except MeasurementTypeNotFoundError:
-            abort(
-                400,
-                message=f"Measurement type not found: {measurement_type}.",
+            cell_types = list(get_celltypes(
+                organism=organism,
+                organ=organ,
+                measurement_type=measurement_type,
+            ))
+        else:
+            cell_type = clean_celltype_string(cell_type)
+            avgs = get_fraction_detected(
+                organism=organism,
+                cell_type=cell_type,
+                features=features,
+                measurement_type=measurement_type,
             )
+            organs = list(get_celltype_location(
+                organism=organism,
+                cell_type=cell_type,
+                measurement_type=measurement_type,
+            ))
 
         features_corrected = []
         features_all = get_feature_names(

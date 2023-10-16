@@ -18,7 +18,8 @@ def get_feature_sequences(
     with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
-                f"Measurement type not found: {measurement_type}"
+                f"Measurement type not found: {measurement_type}",
+                measurement_type=measurement_type,
             )
         if 'feature_sequences' not in db[measurement_type]:
             raise FeatureSequencesNotFoundError(

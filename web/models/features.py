@@ -27,7 +27,8 @@ def load_features(organism, measurement_type="gene_expression"):
     with ApproximationFile(approx_path) as db:
         if measurement_type not in db:
             raise MeasurementTypeNotFoundError(
-                f"Measurement type not found: {measurement_type}"
+                f"Measurement type not found: {measurement_type}",
+                measurement_type=measurement_type,
             )
         features = db[measurement_type]["features"].asstr()[:]
     features_lower = pd.Index(features).str.lower()
