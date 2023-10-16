@@ -13,30 +13,24 @@ from models import (
 from api.v1.utils import (
     clean_organ_string,
     clean_celltype_string,
+    required_parameters,
 )
 
 
 class Markers(Resource):
     """Get average measurement by cell type"""
 
+    @required_parameters('organism', 'organ', 'celltype', 'number')
     def get(self):
         """Get list of cell types for an organ and organism"""
         args = request.args
         measurement_type = args.get("measurement_type", "gene_expression")
-        organism = args.get("organism", None)
-        if organism is None:
-            abort(400, message='The "organism" parameter is required.')
-        organ = args.get("organ", None)
-        if organ is None:
-            abort(400, message='The "organ" parameter is required.')
+        organism = args.get("organism")
+        organ = args.get("organ")
         organ = clean_organ_string(organ)
-        cell_type = args.get("celltype", None)
-        if cell_type is None:
-            abort(400, message='The "celltype" parameter is required.')
+        cell_type = args.get("celltype")
         cell_type = clean_celltype_string(cell_type)
-        number = args.get("number", None)
-        if number is None:
-            abort(400, message='The "number" parameter is required.')
+        number = args.get("number")
 
         try:
             number = int(number)

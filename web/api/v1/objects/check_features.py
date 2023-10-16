@@ -12,22 +12,21 @@ from models import (
 )
 from api.v1.utils import (
     clean_feature_string,
+    required_parameters,
 )
 
 
 class HasFeatures(Resource):
     """Get list of features for an organism"""
 
+    @required_parameters('organism', 'features')
     def get(self):
         """Get list of features (genes)"""
         args = request.args
         measurement_type = args.get("measurement_type", "gene_expression")
-        organism = args.get("organism", None)
-        if organism is None:
-            abort(400, message='The "organism" parameter is required.')
-        features = args.get("features", None)
-        if features is None:
-            abort(400, message='The "features" parameter is required.')
+        organism = args.get("organism")
+        features = args.get("features")
+
         try:
             features = clean_feature_string(features, organism, measurement_type)
         except FeatureStringFormatError:

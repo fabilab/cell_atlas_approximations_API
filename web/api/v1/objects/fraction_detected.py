@@ -20,22 +20,20 @@ from api.v1.utils import (
     clean_feature_string,
     clean_organ_string,
     clean_celltype_string,
+    required_parameters,
 )
 
 
 class FractionDetected(Resource):
     """Get fraction of detected measurements"""
 
+    @required_parameters('organism', 'features')
     def get(self):
         """Get list of cell types for an organ and organism"""
         args = request.args
         measurement_type = args.get("measurement_type", "gene_expression")
-        organism = args.get("organism", None)
-        if organism is None:
-            abort(400, message='The "organism" parameter is required.')
-        features = args.get("features", None)
-        if features is None:
-            abort(400, message='The "features" parameter is required.')
+        organism = args.get("organism")
+        features = args.get("features")
         try:
             features = clean_feature_string(features, organism)
         except FeatureStringFormatError:

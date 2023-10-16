@@ -8,18 +8,20 @@ from models import (
     OrganismNotFoundError,
     MeasurementTypeNotFoundError,
 )
+from api.v1.utils import (
+    required_parameters,
+)
 
 
 class Features(Resource):
     """Get list of features for an organism"""
 
+    @required_parameters('organism')
     def get(self):
         """Get list of features (genes)"""
         args = request.args
         measurement_type = args.get("measurement_type", "gene_expression")
-        organism = args.get("organism", None)
-        if organism is None:
-            abort(400, message='The "organism" parameter is required.')
+        organism = args.get("organism")
 
         try:
             features = get_feature_names(

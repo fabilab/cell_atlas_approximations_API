@@ -9,17 +9,19 @@ from models import (
     OrganNotFoundError,
     MeasurementTypeNotFoundError,
 )
+from api.v1.utils import (
+    required_parameters,
+)
 
 
 class CelltypeXOrgan(Resource):
     """Get list of cell types for an organ and organism"""
 
+    @required_parameters('organism')
     def get(self):
         """Get list of cell types for an organ and organism"""
         args = request.args
-        organism = args.get("organism", None)
-        if organism is None:
-            abort(400, message='The "organism" parameter is required.')
+        organism = args.get("organism")
         organs = args.get("organs", None)
         if organs is not None:
             organs = organs.split(",")

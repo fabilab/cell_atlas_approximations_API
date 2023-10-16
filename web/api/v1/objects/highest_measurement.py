@@ -12,25 +12,23 @@ from models import (
     FeatureNotFoundError,
     MeasurementTypeNotFoundError,
 )
+from api.v1.utils import (
+    required_parameters,
+)
 
 
 class HighestMeasurement(Resource):
     """Get measurement in highest cell types"""
 
+    @required_parameters('organism', 'feature', 'number')
     def get(self):
         """Get expression in highest cell types, in one organism"""
         args = request.args
         measurement_type = args.get("measurement_type", "gene_expression")
-        organism = args.get("organism", None)
-        if organism is None:
-            abort(400, message='The "organism" parameter is required.')
-        feature = args.get("feature", None)
-        if feature is None:
-            abort(400, message='The "feature" parameter is required.')
+        organism = args.get("organism")
+        feature = args.get("feature")
+        number = args.get("number")
         unit = config["units"][measurement_type]
-        number = args.get("number", None)
-        if number is None:
-            abort(400, message='The "number" parameter is required.')
 
         try:
             number = int(number)

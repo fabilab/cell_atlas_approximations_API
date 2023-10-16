@@ -11,27 +11,19 @@ from models import (
 )
 from api.v1.utils import (
     clean_celltype_string,
+    required_parameters,
 )
 
 
 class CelltypeLocation(Resource):
     """Get list of cell types for an organ and organism"""
 
+    @required_parameters('organism', 'celltype')
     def get(self):
         """Get list of cell types for an organ and organism"""
         args = request.args
-        organism = args.get("organism", None)
-        if organism is None:
-            abort(
-                400,
-                message='The "organism" parameter is required.',
-            )
-        cell_type = args.get("celltype", None)
-        if cell_type is None:
-            abort(
-                400,
-                message='The "celltype" parameter is required.',
-            )
+        organism = args.get("organism")
+        cell_type = args.get("celltype")
         cell_type = clean_celltype_string(cell_type)
         measurement_type = args.get(
             "measurement_type", "gene_expression")

@@ -13,27 +13,23 @@ from models import (
     SimilarityMethodError,
     MeasurementTypeNotFoundError,
 )
+from api.v1.utils import (
+    required_parameters,
+)
 
 
 class SimilarFeatures(Resource):
     """Get average measurement by cell type"""
 
+    @required_parameters('organism', 'organ', 'feature', 'number')
     def get(self):
         """Get list of features similar to the focal one"""
         args = request.args
         measurement_type = args.get("measurement_type", "gene_expression")
-        organism = args.get("organism", None)
-        if organism is None:
-            abort(400, message='The "organism" parameter is required.')
-        organ = args.get("organ", None)
-        if organ is None:
-            abort(400, message='The "organ" parameter is required.')
-        feature = args.get("feature", None)
-        if feature is None:
-            abort(400, message='The "feature" parameter is required.')
-        number = args.get("number", None)
-        if number is None:
-            abort(400, message='The "number" parameter is required.')
+        organism = args.get("organism")
+        organ = args.get("organ")
+        feature = args.get("feature")
+        number = args.get("number")
         method = args.get("method", "correlation")
 
         try:
