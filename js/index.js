@@ -12,7 +12,9 @@ async function _callEndpoint(endpoint, params = {}) {
     let data;
     if (!response.ok) {
         data = {
-            error: "API call failed: " + response.message,
+            message: "Underlying REST API call failed: " + response.message,
+            error: response.error,
+            status: response.status,
         }
     } else {
         // NOTE: response.body is a stream, so it can be processed only ONCE

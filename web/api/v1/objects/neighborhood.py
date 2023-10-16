@@ -5,6 +5,7 @@ from flask_restful import Resource, abort
 # Helper functions
 from config import configuration as config
 from models import (
+    get_celltypes,
     get_neighborhoods,
     get_feature_index,
     get_feature_names,
@@ -57,6 +58,7 @@ class Neighborhood(Resource):
         organ = args.get("organ", None)
         if organ is None:
             abort(400, message='The "organ" parameter is required.')
+        include_embedding = bool(args.get("include_embedding", False))
 
         try:
             organ = clean_organ_string(organ)
@@ -66,6 +68,11 @@ class Neighborhood(Resource):
                 features=features,
                 measurement_type=measurement_type,
             )
+            cell_types = list(get_celltypes(
+                organism=organism,
+                organ=organ,
+                measurement_type=measurement_type,
+            ))
         except OrganismNotFoundError:
             abort(
                 400,
@@ -100,9 +107,10 @@ class Neighborhood(Resource):
 
         # Unpack neighborhood data for output
         avgs = neis['average']
-        cell_types = neis['celltype']
-        coords_centroid = neis['coords_centroid']
-        convex_hulls = [hull.tolist() for hull in neis['convex_hull']]
+        ncells_per_cluster = neis['ncells']
+        if include_embedding:
+            coords_centroid = neis['coords_centroid']
+            convex_hulls = [hull.tolist() for hull in neis['convex_hull']]
 
         features_corrected = []
         features_all = get_feature_names(
@@ -118,14 +126,19 @@ class Neighborhood(Resource):
             "measurement_type": measurement_type,
             "features": features_corrected,
             "average": avgs.tolist(),
-            "celltypes": cell_types.tolist(),
-            "coords_centroid": coords_centroid.tolist(),
-            "convex_hull": convex_hulls,
+            "celltypes": cell_types,
+            "ncells": ncells_per_cluster.tolist(),
             "unit": unit,
             "organ": organ,
         }
-        if 'frac' in neis:
+        if 'fraction' in neis:
             result["fraction_detected"] = neis['fraction'].tolist()
+
+        if include_embedding:
+            result.update({
+                "coords_centroid": coords_centroid.tolist(),
+                "convex_hull": convex_hulls,
+            })
 
         return result
 

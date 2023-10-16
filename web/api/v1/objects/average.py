@@ -68,7 +68,7 @@ class Average(Resource):
             abort(
                 400,
                 message='Only one of "organ" or "celltype" parameter can be set.',
-                exception='too_many_parameters=organ^celltype',
+                error='too_many_parameters=organ^celltype',
             )
 
         try:

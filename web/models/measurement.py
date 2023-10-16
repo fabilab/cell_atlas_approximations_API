@@ -348,42 +348,51 @@ def get_neighborhoods(
     organ,
     features,
     measurement_type="gene_expression",
+    include_embedding=True,
 ):
     """Get data (average, fraction, coordinates) for local neighborhoods in a tissue."""
 
     averages = get_averages(
         organism,
         features,
-        measurement_type,
         organ=organ,
+        measurement_type=measurement_type,
         use_neighborhood=True,
     )
     fractions = get_fraction_detected(
         organism,
         features,
-        measurement_type,
         organ=organ,
+        measurement_type=measurement_type,
         use_neighborhood=True, 
     )
 
-    # Cell types, coords, and hulls
+    # Cell types (always), coords and hulls (if requested)
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
         if organ not in db[measurement_type]["by_tissue"]:
             raise MeasurementTypeNotFoundError(f"Organ not found: {organ}")
 
         db_dataset = db[measurement_type]["by_tissue"][organ]["celltype"]["neighborhood"]
-        cell_types = db_dataset["index"].asstr()[:]
-        coords_centroid = db_dataset["coords_centroid"][:]
-        convex_hulls = []
-        for i in range(len(coords_centroid)):
-            hull = db_dataset['convex_hull'][str(i)][:]
-            convex_hulls.append(hull)
+        ncells_per_cluster = db_dataset["cell_count"][:]
 
-    return {
-            "average": averages,
-            "fraction": fractions,
-            "celltype": cell_types,
+        if include_embedding:
+            coords_centroids = db_dataset["coords_centroid"][:]
+            convex_hulls = []
+            for i in range(len(coords_centroids)):
+                hull = db_dataset['convex_hull'][str(i)][:]
+                convex_hulls.append(hull)
+
+    result = {
+        "average": averages,
+        "fraction": fractions,
+        "ncells": ncells_per_cluster,
+    }
+
+    if include_embedding:
+        result.update({
             "coords_centroid": coords_centroids,
             "convex_hull": convex_hulls,
-    }
+        })
+
+    return result
