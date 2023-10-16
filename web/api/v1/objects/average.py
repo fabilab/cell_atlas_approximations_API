@@ -19,6 +19,7 @@ from models import (
 )
 from api.v1.exceptions import FeatureStringFormatError
 from api.v1.utils import (
+    required_parameters,
     clean_feature_string,
     clean_organ_string,
     clean_celltype_string,
@@ -28,24 +29,13 @@ from api.v1.utils import (
 class Average(Resource):
     """Get average measurement by cell type"""
 
+    @required_parameters('organism', 'features')
     def get(self):
         """Get list of cell types for an organ and organism"""
         args = request.args
         measurement_type = args.get("measurement_type", "gene_expression")
-        organism = args.get("organism", None)
-        if organism is None:
-            abort(
-                400,
-                message='The "organism" parameter is required.',
-                exception='missing_parameter=organism',
-            )
-        features = args.get("features", None)
-        if features is None:
-            abort(
-                400,
-                message='The "features" parameter is required.',
-                exception='missing_parameter=features',
-            )
+        organism = args.get("organism")
+        features = args.get("features")
         try:
             features = clean_feature_string(features, organism, measurement_type)
         except FeatureStringFormatError:

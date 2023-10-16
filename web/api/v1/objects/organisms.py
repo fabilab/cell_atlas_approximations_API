@@ -8,20 +8,10 @@ from models import (
     MeasurementTypeNotFoundError,
 )
 
-def mydec(*args):
-    def inner(wrapped):
-        def func(*args_inner, **kwargs_inner):
-            print(args)
-            return wrapped(*args_inner, **kwargs_inner)
-        return func
-    return inner
-
-
 
 class Organisms(Resource):
     """Get list of organisms"""
 
-    @mydec('organism', 'celltype')
     def get(self):
         """Get list of organisms"""
         args = request.args
