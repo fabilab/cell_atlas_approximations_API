@@ -2,25 +2,28 @@ const api_version = "v1";
 const api_uri = "https://api.atlasapprox.org/" + api_version + "/";
 
 async function _callEndpoint(endpoint, params = {}) {
-    let uri = api_uri + endpoint;
+    // Filter out "undefined" key/values from params
+    Object.keys(params).forEach(key => params[key] === undefined && delete params[key])
 
+    // Encode GET request URL
+    let uri = api_uri + endpoint;
     const uriSuffix = new URLSearchParams(params).toString();
     if (uriSuffix != "")
         uri += "?" + uriSuffix;
 
     let response = await fetch(uri);
-    let data;
-    if (!response.ok) {
-        data = {
-            message: "Underlying REST API call failed: " + response.message,
-            error: response.error,
-            status: response.status,
-        }
-    } else {
-        // NOTE: response.body is a stream, so it can be processed only ONCE
-        data = await response.json();
-    }
 
+    // NOTE: response.body is a stream, so it can be processed only ONCE
+    const data = await response.json();
+    if (!response.ok) {
+        throw {
+            status: response.status,
+            // Human readable message
+            message: data.message,
+            // Machine readable error structure
+            error: data.error,
+        }
+    }
     return data;
 }
 
@@ -35,31 +38,31 @@ async function measurement_types() {
 }
 
 // ORGANISMS
-async function organisms(measurement_type = "gene_expression") {
+async function organisms({ measurement_type = "gene_expression" }) {
   let params = { measurement_type };
   return await _callEndpoint("organisms", params=params);
 }
 
 // ORGANS
-async function organs(organism, measurement_type = "gene_expression") {
+async function organs({ organism, measurement_type = "gene_expression" }) {
   let params = { organism, measurement_type };
   return await _callEndpoint("organs", params=params);
 }
 
 // CELL TYPES
-async function celltypes(organism, organ, measurement_type = "gene_expression") {
+async function celltypes({ organism, organ, measurement_type = "gene_expression" }) {
   let params = { organism, organ, measurement_type };
   return await _callEndpoint("celltypes", params=params);
 }
 
 // FEATURES
-async function features(organism, organ, measurement_type = "gene_expression") {
+async function features({ organism, organ, measurement_type = "gene_expression" }) {
   let params = { organism, organ, measurement_type };
   return await _callEndpoint("features", params=params);
 }
 
 // FEATURE SEQUENCES
-async function sequences(organism, features, measurement_type = "gene_expression") {
+async function sequences({ organism, features, measurement_type = "gene_expression" }) {
   if (!isString(features))
     features = features.join(",");
   let params = { organism, features, measurement_type };
@@ -67,7 +70,7 @@ async function sequences(organism, features, measurement_type = "gene_expression
 };
 
 // AVERAGE GENE EXPRESSION/CHROMATIN ACCESIBILITY
-async function average(organism, features, organ = null, celltype = null, measurement_type = "gene_expression") {
+async function average({ organism, features, organ = null, celltype = null, measurement_type = "gene_expression" }) {
   if (!isString(features))
     features = features.join(",");
   let params = { organism, features, measurement_type };
@@ -79,7 +82,7 @@ async function average(organism, features, organ = null, celltype = null, measur
 }
 
 // FRACTION EXPRESSING/ACCESSIBLE
-async function fraction_detected(organism, features, organ = null, celltype = null, measurement_type = "gene_expression") {
+async function fraction_detected({ organism, features, organ = null, celltype = null, measurement_type = "gene_expression" }) {
   if (!isString(features))
     features = features.join(",");
   let params = { organism, features, measurement_type };
@@ -90,26 +93,32 @@ async function fraction_detected(organism, features, organ = null, celltype = nu
   return await _callEndpoint("fraction_detected", params=params);
 }
 
+// NEIGHBORHOOD
+async function neighborhood({ organism, organ, measurement_type = "gene_expresion", include_embedding = false }) {
+  let params = { organism, organ, measurement_type, include_embedding };
+  return await _callEndpoint("neighborhood", params=params);
+};
+
 // MARKERS
-async function markers(organism, organ, celltype, number=10, measurement_type = "gene_expression") {
+async function markers({ organism, organ, celltype, number=10, measurement_type = "gene_expression" }) {
   let params = { organism, organ, celltype, number, measurement_type };
   return await _callEndpoint("markers", params=params);
 }
 
 // HIGHEST MEASUREMENT
-async function highest_measurement(organism, feature, number=10, measurement_type = "gene_expression") {
+async function highest_measurement({ organism, feature, number=10, measurement_type = "gene_expression" }) {
   let params = { organism, feature, number, measurement_type };
   return await _callEndpoint("highest_measurement", params=params);
 }
 
 // SIMILAR FEATURES
-async function similar_features(organism, organ, feature, number=10, method = "correlation", measurement_type = "gene_expression") {
+async function similar_features({ organism, organ, feature, number=10, method = "correlation", measurement_type = "gene_expression" }) {
   let params = { organism, organ, feature, number, method, measurement_type };
   return await _callEndpoint("similar_features", params=params);
 }
 
 // SIMILAR CELLTYPES
-async function similar_celltypes(organism, organ, celltype, features, number=10, method = "correlation", measurement_type = "gene_expression") {
+async function similar_celltypes({ organism, organ, celltype, features, number=10, method = "correlation", measurement_type = "gene_expression" }) {
   if (!isString(features))
     features = features.join(",");
   let params = { organism, organ, celltype, features, number, method, measurement_type };
@@ -117,7 +126,7 @@ async function similar_celltypes(organism, organ, celltype, features, number=10,
 }
 
 // CELLTYPEXORGAN TABLE
-async function celltypexorgan(organism, organs=undefined, measurement_type = "gene_expression") {
+async function celltypexorgan({ organism, organs=undefined, measurement_type = "gene_expression" }) {
   let params = { organism, measurement_type };
   if (organs)
     params.organs = organs;
@@ -150,6 +159,7 @@ const atlasapprox = {
     sequences,
     average,
     fraction_detected,
+    neighborhood,
     markers,
     highest_measurement,
     similar_features,
