@@ -29,7 +29,9 @@ class SomeFeaturesNotFoundError(KeyError):
 
 
 class FeatureSequencesNotFoundError(KeyError):
-    pass
+    def __init__(self, msg, organism):
+        self.organism = organism
+        super().__init__(self, msg)
 
 
 class TooManyFeaturesError(ValueError):
@@ -51,3 +53,10 @@ class SimilarityMethodError(NotImplementedError):
 class OrganCellTypeError(KeyError):
     pass
 
+
+class NeighborhoodNotFoundError(KeyError):
+    def __init__(self, organism, organ):
+        self.organism = organism
+        self.organ = organ
+        msg = f"Neighborhood not found: {organism} {organ}"
+        super().__init__(self, msg)

@@ -24,7 +24,7 @@ from api.v1.utils import (
 class Neighborhood(Resource):
     """Get average measurement by cell type"""
 
-    @required_parameters('organism', 'features', 'organ')
+    @required_parameters('organism', 'organ')
     @model_exceptions
     def get(self):
         """Get list of cell types for an organ and organism"""
@@ -33,8 +33,9 @@ class Neighborhood(Resource):
         organism = args.get("organism")
         organ = args.get("organ")
         organ = clean_organ_string(organ)
-        features = args.get("features")
-        features = clean_feature_string(features, organism, measurement_type)
+        features = args.get("features", None)
+        if features is not None:
+            features = clean_feature_string(features, organism, measurement_type)
         unit = config['units'][measurement_type]
 
         include_embedding = bool(args.get("include_embedding", False))
@@ -52,31 +53,34 @@ class Neighborhood(Resource):
         ))
 
         # Unpack neighborhood data for output
-        avgs = neis['average']
         ncells_per_cluster = neis['ncells']
         if include_embedding:
             coords_centroid = neis['coords_centroid']
             convex_hulls = [hull.tolist() for hull in neis['convex_hull']]
 
-        features_corrected = []
-        features_all = get_feature_names(
-            organism=organism,
-            measurement_type=measurement_type,
-        )
-        for fea in features:
-            idx = get_feature_index(organism, fea.lower(), measurement_type=measurement_type)
-            features_corrected.append(features_all[idx])
+        if (features is not None) and len(features):
+            features_corrected = []
+            features_all = get_feature_names(
+                organism=organism,
+                measurement_type=measurement_type,
+            )
+            for fea in features:
+                idx = get_feature_index(organism, fea.lower(), measurement_type=measurement_type)
+                features_corrected.append(features_all[idx])
 
         result = {
-            "organism": organism,
             "measurement_type": measurement_type,
-            "features": features_corrected,
-            "average": avgs.tolist(),
-            "celltypes": cell_types,
-            "ncells": ncells_per_cluster.tolist(),
-            "unit": unit,
+            "organism": organism,
             "organ": organ,
+            "ncells": ncells_per_cluster.tolist(),
+            "celltypes": cell_types,
         }
+        if (features is not None) and len(features):
+            result.update({
+                "average": neis['average'].tolist(),
+                "features": features_corrected,
+                "unit": unit,
+            })
         if 'fraction' in neis:
             result["fraction_detected"] = neis['fraction'].tolist()
 

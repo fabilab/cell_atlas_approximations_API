@@ -13,6 +13,7 @@ from models.exceptions import (
     TooManyFeaturesError,
     OrganCellTypeError,
     OrganNotFoundError,
+    NeighborhoodNotFoundError,
 )
 from models.features import (
     get_feature_index,
@@ -74,7 +75,12 @@ def _get_sorted_feature_index(
 
     db_dataset = db[measurement_type]["by_tissue"][organ]["celltype"]
     if use_neighborhood:
-        db_dataset = db_dataset["neighborhood"]
+        try:
+            db_dataset = db_dataset["neighborhood"]
+        except KeyError:
+            raise NeighborhoodNotFoundError(
+                organism, organ,
+            )
     db_dataset = db_dataset[measurement_subtype]
 
     if features is None:
@@ -353,26 +359,27 @@ def get_highest_measurement(
 def get_neighborhoods(
     organism,
     organ,
-    features,
+    features=None,
     measurement_type="gene_expression",
     include_embedding=True,
 ):
     """Get data (average, fraction, coordinates) for local neighborhoods in a tissue."""
 
-    averages = get_averages(
-        organism,
-        features,
-        organ=organ,
-        measurement_type=measurement_type,
-        use_neighborhood=True,
-    )
-    fractions = get_fraction_detected(
-        organism,
-        features,
-        organ=organ,
-        measurement_type=measurement_type,
-        use_neighborhood=True, 
-    )
+    if (features is not None) and len(features):
+        averages = get_averages(
+            organism,
+            features,
+            organ=organ,
+            measurement_type=measurement_type,
+            use_neighborhood=True,
+        )
+        fractions = get_fraction_detected(
+            organism,
+            features,
+            organ=organ,
+            measurement_type=measurement_type,
+            use_neighborhood=True, 
+        )
 
     # Cell types (always), coords and hulls (if requested)
     approx_path = get_atlas_path(organism)
@@ -394,10 +401,14 @@ def get_neighborhoods(
                 convex_hulls.append(hull)
 
     result = {
-        "average": averages,
-        "fraction": fractions,
         "ncells": ncells_per_cluster,
     }
+
+    if (features is not None) and len(features):
+        result.update({
+            "average": averages,
+            "fraction": fractions,
+        })
 
     if include_embedding:
         result.update({

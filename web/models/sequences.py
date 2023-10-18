@@ -24,6 +24,7 @@ def get_feature_sequences(
         if 'feature_sequences' not in db[measurement_type]:
             raise FeatureSequencesNotFoundError(
                 "Feature sequences not found",
+                organism=organism,
             )
 
         sequence_type = db[measurement_type]["feature_sequences"].attrs["type"]

@@ -21,6 +21,7 @@ from models.exceptions import (
     FeatureSequencesNotFoundError,
     CellTypeNotFoundError,
     SimilarityMethodError,
+    NeighborhoodNotFoundError,
 )
 from models.features import (
     get_features,

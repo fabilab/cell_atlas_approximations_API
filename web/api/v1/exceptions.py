@@ -11,6 +11,7 @@ from models import (
     MeasurementTypeNotFoundError,
     SomeFeaturesNotFoundError,
     TooManyFeaturesError,
+    NeighborhoodNotFoundError,
 )
 
 
@@ -129,7 +130,7 @@ def model_exceptions(func):
         except FeatureSequencesNotFoundError as exc:
             abort(
                 400,
-                message=f"This organism has no feature sequences stored.",
+                message=f"This organism has no feature sequences stored: {exc.organism}.",
                 error={
                     "type": "missing_data",
                     "missing_data": "feature_sequences",
@@ -143,6 +144,15 @@ def model_exceptions(func):
                     "type": "invalid_parameter",
                     "invalid_parameter": "features",
                     "invalid_value": exc.features,
+                }
+            )
+        except NeighborhoodNotFoundError as exc:
+            abort(
+                400,
+                message=f"This organism has no neighborhood stored: {exc.organism}.",
+                error={
+                    "type": "missing_data",
+                    "missing_data": "neighborhood",
                 }
             )
 
