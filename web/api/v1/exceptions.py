@@ -80,7 +80,7 @@ def model_exceptions(func):
         except FeatureNotFoundError as exc:
             abort(
                 400,
-                message="Feature could not be found: {exc.feature}.",
+                message=f"Feature could not be found: {exc.feature}.",
                 error={
                     "type": "invalid_parameter",
                     "invalid_parameter": "feature",
@@ -90,7 +90,7 @@ def model_exceptions(func):
         except SomeFeaturesNotFoundError as exc:
             abort(
                 400,
-                message="Some features could not be found: {exc.features}.",
+                message=f"Some features could not be found: {exc.features}.",
                 error={
                     "type": "invalid_parameter",
                     "invalid_parameter": "features",
