@@ -1,6 +1,8 @@
 """Preload features lazily
 
 The main purpose of this is to enable fast browsing of the h5 file.
+
+NOTE: we do not correct feature names as we do with cell types because it's impossible to know what the user really intended (e.g. Cb19 -> ??)
 """
 import numpy as np
 import pandas as pd

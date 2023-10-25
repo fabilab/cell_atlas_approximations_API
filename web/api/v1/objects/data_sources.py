@@ -23,6 +23,7 @@ class DataSources(Resource):
             "s_lacustris": "Musser et al. 2021 (https://www.science.org/doi/10.1126/science.abj2949)",
             "s_mansoni": "Li et al. 2021 (https://www.nature.com/articles/s41467-020-20794-w)",
             "s_mediterranea": "Plass et al. 2018 (https://doi.org/10.1126/science.aaq1723)",
+            "s_pistillata": "Levi et al. 2021 (https://www.sciencedirect.com/science/article/pii/S0092867421004402)",
             "t_adhaerens": "Sebé-Pedrós et al 2018 (https://www.nature.com/articles/s41559-018-0575-6)",
             "x_laevis": "Liao et al. 2022 (https://www.nature.com/articles/s41467-022-31949-2)",
         }

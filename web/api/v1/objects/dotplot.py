@@ -6,10 +6,17 @@ from flask_restful import Resource, abort
 from config import configuration as config
 from models import (
     get_averages,
+    get_fraction_detected,
     get_celltypes,
     get_celltype_location,
     get_feature_index,
     get_feature_names,
+    OrganismNotFoundError,
+    OrganNotFoundError,
+    CellTypeNotFoundError,
+    SomeFeaturesNotFoundError,
+    TooManyFeaturesError,
+    MeasurementTypeNotFoundError,
 )
 from api.v1.exceptions import (
     FeatureStringFormatError,
@@ -23,8 +30,8 @@ from api.v1.utils import (
 )
 
 
-class Average(Resource):
-    """Get average measurement by cell type"""
+class Dotplot(Resource):
+    """Get average measurement and fraction detected by cell type"""
 
     @required_parameters('organism', 'features')
     @model_exceptions
@@ -60,6 +67,12 @@ class Average(Resource):
                 features=features,
                 measurement_type=measurement_type,
             )
+            fracs = get_fraction_detected(
+                organism=organism,
+                organ=organ,
+                features=features,
+                measurement_type=measurement_type,
+            )
             cell_types = list(get_celltypes(
                 organism=organism,
                 organ=organ,
@@ -73,14 +86,18 @@ class Average(Resource):
                 features=features,
                 measurement_type=measurement_type,
             )
+            fracs = get_fraction_detected(
+                organism=organism,
+                cell_type=cell_type,
+                features=features,
+                measurement_type=measurement_type,
+            )
             organs = list(get_celltype_location(
                 organism=organism,
                 cell_type=cell_type,
                 measurement_type=measurement_type,
             ))
 
-
-        # NOTE: this is just about capitalisation (should rename it really)
         features_corrected = []
         features_all = get_feature_names(
             organism=organism,
@@ -95,6 +112,7 @@ class Average(Resource):
             "measurement_type": measurement_type,
             "features": features_corrected,
             "average": avgs.tolist(),
+            "fraction_detected": fracs.tolist(),
             "unit": unit,
         }
         if organ is not None:
@@ -108,4 +126,5 @@ class Average(Resource):
                 "celltype": cell_type,
             })
         return result
+
 

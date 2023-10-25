@@ -93,6 +93,18 @@ async function fraction_detected({ organism, features, organ = null, celltype = 
   return await _callEndpoint("fraction_detected", params=params);
 }
 
+// DOTPLOT INFORMATION: AVG + FRACTION DETECTED
+async function dotplot({ organism, features, organ = null, celltype = null, measurement_type = "gene_expression" }) {
+  if (!isString(features))
+    features = features.join(",");
+  let params = { organism, features, measurement_type };
+  if (organ != null)
+    params.organ = organ;
+  if (celltype != null)
+    params.celltype = celltype;
+  return await _callEndpoint("dotplot", params=params);
+}
+
 // NEIGHBORHOOD
 async function neighborhood({ organism, organ, measurement_type = "gene_expresion", include_embedding = false }) {
   let params = { organism, organ, measurement_type, include_embedding };
@@ -134,7 +146,7 @@ async function celltypexorgan({ organism, organs=undefined, measurement_type = "
 }
 
 // CELLTYPE LOCATION
-async function celltype_location(organism, celltype, measurement_type = "gene_expression") {
+async function celltype_location({ organism, celltype, measurement_type = "gene_expression" }) {
   let params = { organism, celltype, measurement_type };
   return await _callEndpoint("celltype_location", params=params);
 }
@@ -159,6 +171,7 @@ const atlasapprox = {
     sequences,
     average,
     fraction_detected,
+    dotplot,
     neighborhood,
     markers,
     highest_measurement,

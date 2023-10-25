@@ -5,6 +5,8 @@ from models.utils import ApproximationFile
 from models.features import get_feature_index
 from models.exceptions import (
     FeatureSequencesNotFoundError,
+    FeatureNotFoundError,
+    SomeFeaturesNotFoundError,
 )
 
 
@@ -29,13 +31,25 @@ def get_feature_sequences(
 
         sequence_type = db[measurement_type]["feature_sequences"].attrs["type"]
         sequences = []
+        features_not_found = []
         for fea in features:
-            idx = get_feature_index(
-                organism,
-                fea.lower(),
-                measurement_type=measurement_type,
-            )
+            try:
+                idx = get_feature_index(organism, fea.lower(), measurement_type)
+            except FeatureNotFoundError as exc:
+                features_not_found.append(fea)
+                continue
+
+            # If there are features not found, don't bother collecting sequences anymore
+            if len(features_not_found):
+                continue
+
             seq = db[measurement_type]["feature_sequences"]["sequences"].asstr()[idx]
             sequences.append(seq)
+
+        if len(features_not_found):
+            raise SomeFeaturesNotFoundError(
+                f"Some features not found: {features}",
+                features=features_not_found,
+            )
 
     return features, sequences, sequence_type

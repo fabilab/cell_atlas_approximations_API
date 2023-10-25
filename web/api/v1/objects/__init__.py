@@ -15,6 +15,7 @@ from api.v1.objects.similar_celltypes import SimilarCelltypes
 from api.v1.objects.celltypexorgan import CelltypeXOrgan
 from api.v1.objects.celltype_location import CelltypeLocation
 from api.v1.objects.neighborhood import Neighborhood
+from api.v1.objects.dotplot import Dotplot
 
 
 __all__ = (
@@ -22,6 +23,7 @@ __all__ = (
     "Organisms",
     "Organs",
     "Celltypes",
+    "Dotplot",
     "HasFeatures",
     "Features",
     "FeatureSequences",
