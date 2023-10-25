@@ -196,7 +196,7 @@ def get_markers(
                 measurement_type=measurement_type,
             )
         if organ not in db[measurement_type]["by_tissue"]:
-            raise MeasurementTypeNotFoundError(
+            raise OrganNotFoundError(
                 f"Organ not found: {organ}",
                 organ=organ,
             )
