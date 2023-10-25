@@ -318,6 +318,7 @@ def get_highest_measurement(
         "celltypes": [],
         "organs": [],
         "average": [],
+        "fraction_detected": [],
     }
     found_once = False
     for organ in organs:
@@ -334,12 +335,21 @@ def get_highest_measurement(
                 measurement_type=measurement_type,
             )[0]
             found_once = True
+            frac_organ = get_fraction_detected(
+                organism,
+                [feature],
+                organ=organ,
+                measurement_type=measurement_type,
+            )[0]
         except SomeFeaturesNotFoundError:
             avg_organ = np.zeros(len(celltypes), np.float32)
+            frac_organ = np.zeros(len(celltypes), np.float32)
         result["celltypes"].extend(celltypes)
         result["organs"].extend([organ for ct in celltypes])
         result["average"].append(avg_organ)
+        result["fraction_detected"].append(frac_organ)
     result["average"] = np.concatenate(result["average"])
+    result["fraction_detected"] = np.concatenate(result["fraction_detected"])
 
     if not found_once:
         raise FeatureNotFoundError(
@@ -352,6 +362,7 @@ def get_highest_measurement(
     result["celltypes"] = [result["celltypes"][i] for i in idx_top]
     result["organs"] = [result["organs"][i] for i in idx_top]
     result["average"] = result["average"][idx_top]
+    result["fraction_detected"] = result["fraction_detected"][idx_top]
 
     return result
 

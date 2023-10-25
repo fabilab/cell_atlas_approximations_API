@@ -58,5 +58,6 @@ class HighestMeasurement(Resource):
             "organs": result["organs"],
             "celltypes": result["celltypes"],
             "average": result["average"].tolist(),
+            "fraction_detected": result["fraction_detected"].tolist(),
             "unit": unit,
         }
