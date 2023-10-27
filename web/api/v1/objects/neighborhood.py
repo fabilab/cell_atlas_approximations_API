@@ -86,8 +86,8 @@ class Neighborhood(Resource):
 
         if include_embedding:
             result.update({
-                "coords_centroid": coords_centroid.tolist(),
-                "convex_hull": convex_hulls,
+                "centroids": coords_centroid.tolist(),
+                "boundaries": convex_hulls,
             })
 
         return result
