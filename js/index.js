@@ -106,7 +106,7 @@ async function dotplot({ organism, features, organ = null, celltype = null, meas
 }
 
 // NEIGHBORHOOD
-async function neighborhood({ organism, organ, measurement_type = "gene_expresion", include_embedding = false }) {
+async function neighborhood({ organism, organ, measurement_type = "gene_expression", include_embedding = false }) {
   let params = { organism, organ, measurement_type, include_embedding };
   return await _callEndpoint("neighborhood", params=params);
 };
