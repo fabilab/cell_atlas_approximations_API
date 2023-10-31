@@ -1,6 +1,7 @@
 let atlasapprox = require('..');
 
-atlasapprox.setAPIURI("http://127.0.0.1:5000/" + atlasapprox.api_version + "/");
+// Uncomment to test local API server
+//atlasapprox.setAPIURI("http://127.0.0.1:5000/" + atlasapprox.api_version + "/");
 
 let result;
 (async () => {
@@ -35,10 +36,6 @@ let result;
     result = await atlasapprox.fraction_detected({ organism: "m_musculus", organ: "lung", features: ["Col1a1", "Ptprc"] });
     console.log(result);
 
-    // neighborhood
-    result = await atlasapprox.neighborhood({ organism: "i_pulchra", organ: "whole", features: ["TRINITY_DN18225_c0_g1", "TRINITY_DN18226_c0_g1"] });
-    console.log(result);
-
     // markers
     result = await atlasapprox.markers({ organism: "m_musculus", organ: "lung", celltype: "fibroblast" });
     console.log(result);
@@ -65,6 +62,13 @@ let result;
     
     // data sources
     result = await atlasapprox.data_sources();
+    console.log(result);
+
+    // neighborhood
+    result = await atlasapprox.neighborhood({ organism: "i_pulchra", organ: "whole", features: ["TRINITY_DN18225_c0_g1", "TRINITY_DN18226_c0_g1"] });
+    console.log(result);
+
+    result = await atlasapprox.neighborhood({ organism: "m_leidyi", organ: "whole", features: "ML25764a,ML358828a,ML071151a,ML065728a" });
     console.log(result);
 
 })();

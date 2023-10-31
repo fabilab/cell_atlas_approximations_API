@@ -44,6 +44,8 @@ const formatFeatures = (features) => {
 
   if (!isString(features))
     return features.join(",");
+
+  return features;
 };
 
 ///////////////////////////////////////////////////////////////////////////////
