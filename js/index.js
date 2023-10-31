@@ -1,5 +1,14 @@
 const api_version = "v1";
-const api_uri = "https://api.atlasapprox.org/" + api_version + "/";
+const api_uri_default = "https://api.atlasapprox.org/" + api_version + "/";
+let api_uri = api_uri_default + "";
+
+const setAPIURI = (uri) => {
+  api_uri = uri;
+};
+
+const resetAPIURI = () => {
+  api_uri = api_uri_default;
+};
 
 async function _callEndpoint(endpoint, params = {}) {
     // Filter out "undefined" key/values from params
@@ -28,6 +37,14 @@ async function _callEndpoint(endpoint, params = {}) {
 }
 
 let isString = value => typeof value === 'string' || value instanceof String;  
+
+const formatFeatures = (features) => {
+  if ((features === undefined) || (features === null))
+    return features
+
+  if (!isString(features))
+    return features.join(",");
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 // Public API
@@ -63,16 +80,14 @@ async function features({ organism, organ, measurement_type = "gene_expression" 
 
 // FEATURE SEQUENCES
 async function sequences({ organism, features, measurement_type = "gene_expression" }) {
-  if (!isString(features))
-    features = features.join(",");
+  features = formatFeatures(features);
   let params = { organism, features, measurement_type };
   return await _callEndpoint("sequences", params=params);
 };
 
 // AVERAGE GENE EXPRESSION/CHROMATIN ACCESIBILITY
 async function average({ organism, features, organ = null, celltype = null, measurement_type = "gene_expression" }) {
-  if (!isString(features))
-    features = features.join(",");
+  features = formatFeatures(features);
   let params = { organism, features, measurement_type };
   if (organ != null)
     params.organ = organ;
@@ -83,8 +98,7 @@ async function average({ organism, features, organ = null, celltype = null, meas
 
 // FRACTION EXPRESSING/ACCESSIBLE
 async function fraction_detected({ organism, features, organ = null, celltype = null, measurement_type = "gene_expression" }) {
-  if (!isString(features))
-    features = features.join(",");
+  features = formatFeatures(features);
   let params = { organism, features, measurement_type };
   if (organ != null)
     params.organ = organ;
@@ -95,8 +109,7 @@ async function fraction_detected({ organism, features, organ = null, celltype = 
 
 // DOTPLOT INFORMATION: AVG + FRACTION DETECTED
 async function dotplot({ organism, features, organ = null, celltype = null, measurement_type = "gene_expression" }) {
-  if (!isString(features))
-    features = features.join(",");
+  features = formatFeatures(features);
   let params = { organism, features, measurement_type };
   if (organ != null)
     params.organ = organ;
@@ -106,8 +119,9 @@ async function dotplot({ organism, features, organ = null, celltype = null, meas
 }
 
 // NEIGHBORHOOD
-async function neighborhood({ organism, organ, measurement_type = "gene_expression", include_embedding = false }) {
-  let params = { organism, organ, measurement_type, include_embedding };
+async function neighborhood({ organism, organ, features = null, measurement_type = "gene_expression", include_embedding = false }) {
+  features = formatFeatures(features);
+  let params = { organism, organ, measurement_type, features, include_embedding };
   return await _callEndpoint("neighborhood", params=params);
 };
 
@@ -131,8 +145,7 @@ async function similar_features({ organism, organ, feature, number=10, method = 
 
 // SIMILAR CELLTYPES
 async function similar_celltypes({ organism, organ, celltype, features, number=10, method = "correlation", measurement_type = "gene_expression" }) {
-  if (!isString(features))
-    features = features.join(",");
+  features = formatFeatures(features);
   let params = { organism, organ, celltype, features, number, method, measurement_type };
   return await _callEndpoint("similar_celltypes", params=params);
 }
@@ -180,6 +193,9 @@ const atlasapprox = {
     celltypexorgan,
     celltype_location,
     data_sources,
+    setAPIURI,
+    resetAPIURI,
+    api_version,
 }
 
 module.exports = atlasapprox;
