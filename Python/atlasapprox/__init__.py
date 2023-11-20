@@ -34,13 +34,26 @@ baseurl += f"{api_version}/"
 show_credit = os.getenv("ATLASAPPROX_HIDECREDITS") is None
 credit = """Data sources for the approximations:
 
-Human:
+- Human:
   - RNA: Tabula Sapiens (https://www.science.org/doi/10.1126/science.abl4896)
   - ATAC: Zhang et al. 2021 (https://doi.org/10.1016/j.cell.2021.10.024)
-Mouse: Tabula Muris Senis (https://www.nature.com/articles/s41586-020-2496-1)
-Lemur: Tabula Microcebus (https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
-C elegans: Cao et al. 2017 (https://www.science.org/doi/10.1126/science.aam8940)
-Zebrafish: Wagner et al. 2018 (https://www.science.org/doi/10.1126/science.aar4362)
+- Mouse: Tabula Muris Senis (https://www.nature.com/articles/s41586-020-2496-1)
+- Mouse lemur: Tabula Microcebus (https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
+- C elegans: Cao et al. 2017 (https://www.science.org/doi/10.1126/science.aam8940)
+- Zebrafish: Wagner et al. 2018 (https://www.science.org/doi/10.1126/science.aar4362)
+- Clytia hemisphaerica: Chari et al. 2021 (https://www.science.org/doi/10.1126/sciadv.abh1683#sec-4)
+- Drosophila: Li et al. 2022 (https://doi.org/10.1126/science.abk2432
+- Hofstenia miamia: Hulett et al. 2023 (https://www.nature.com/articles/s41467-023-38016-4)
+- Isodiametra pulchra: Duruz et al. 2020 (https://academic.oup.com/mbe/article/38/5/1888/6045962)
+- Lemna minuta: Abramson et al. 2022 (https://doi.org/10.1093/plphys/kiab564)
+- Mnemiopsis leidyi: Sebé-Pedrós et al 2018 (https://www.nature.com/articles/s41559-018-0575-6)
+- Nematostella vectensis: Steger et al 2022 (https://doi.org/10.1016/j.celrep.2022.111370)
+- Spongilla lacustris: Musser et al. 2021 (https://www.science.org/doi/10.1126/science.abj2949)
+- Schistosoma mansoni: Li et al. 2021 (https://www.nature.com/articles/s41467-020-20794-w)
+- Schmidtea mediterranea: Plass et al. 2018 (https://doi.org/10.1126/science.aaq1723)
+- Stylophora pistillata: Levi et al. 2021 (https://www.sciencedirect.com/science/article/pii/S0092867421004402)
+- Trichoplax adhaerens: Sebé-Pedrós et al 2018 (https://www.nature.com/articles/s41559-018-0575-6)
+- Xenopus laevis: Liao et al. 2022 (https://www.nature.com/articles/s41467-022-31949-2)
 
 To hide this message, set the environment variable ATLASAPPROX_HIDECREDITS to any
 nonzero value, e.g.:
@@ -53,6 +66,7 @@ To propose a new atlas be added to the list of approximations, please contact
 Fabio Zanini (fabio DOT zanini AT unsw DOT edu DOT au)."""
 if show_credit:
     print(credit)
+    show_credit = False
 
 
 class API:
@@ -197,6 +211,184 @@ class API:
             )
             return matrix
         raise BadRequestError(response.json()["message"])
+
+    def dotplot(
+        self,
+        organism: str,
+        organ: str,
+        features: Sequence[str],
+        measurement_type: str = "gene_expression",
+    ):
+        """Get average and fraction detected for specific features.
+
+        Args:
+            organism: The organism to query.
+            organ: The organ to query.
+            features: The features (e.g. genes) to query.
+            measurement_type: The measurement type to query.
+
+        Return: A pandas.DataFrame with the fraction expressing. Each column is
+            a cell type, each row a feature.
+        """
+        response = requests.get(
+            baseurl + "fraction_detected",
+            params={
+                "organism": organism,
+                "organ": organ,
+                "features": ",".join(features),
+                "measurement_type": measurement_type,
+            },
+        )
+        if response.ok:
+            resjson = response.json()
+            celltypes = resjson["celltypes"]
+            features = resjson["features"]
+            matrix = pd.DataFrame(
+                resjson["fraction_detected"],
+                index=features,
+                columns=celltypes,
+            )
+            return matrix
+        raise BadRequestError(response.json()["message"])
+
+    def features(
+        self,
+        organism: str,
+        measurement_type: str = "gene_expression",
+    ):
+        """Get names of features (e.g. genes) in this organism and measurement type.
+
+        Args:
+            organism: The organism to query.
+            measurement_type: The measurement type to query.
+        Return: A pandas.Index with the features.
+        """
+        response = requests.get(
+            baseurl + "features",
+            params={
+                "organism": organism,
+                "measurement_type": measurement_type,
+            },
+        )
+        if not response.ok:
+            raise BadRequestError(response.json()["message"])
+
+        resjson = response.json()
+        features = resjson["features"]
+        result = pd.Index(
+            features,
+            name='features',
+        )
+        return result
+
+    def sequences(
+        self,
+        organism: str,
+        features: Sequence[str],
+        measurement_type: str = "gene_expression",
+    ):
+        """Return the sequences of the requested features and their type.
+
+        Args:
+            organism: The organism to query.
+            features: The features (e.g. genes) to query.
+            measurement_type: The measurement type to query.
+        Return: A dictionary with two keys, "type" indicating what kind of sequences
+            they are, and "sequences" with a list of the sequences in the same order.
+            If a feature sequence is not found, it is set to None.
+        """
+        response = requests.get(
+            baseurl + "sequences",
+            params={
+                "organism": organism,
+                "features": ",".join(features),
+                "measurement_type": measurement_type,
+            },
+        )
+        if not response.ok:
+            raise BadRequestError(response.json()["message"])
+
+        resjson = response.json()
+        sequences = resjson["sequences"]
+        seqtype = resjson["type"]
+        for i, seq in enumerate(sequences):
+            if seq == "":
+                sequences[i] = None
+
+        return {
+            "type": seqtype,
+            "sequences": sequences,
+        }
+
+    def neighborhood(
+        self,
+        organism: str,
+        organ: str,
+        features: Union[None, Sequence[str]] = None,
+        include_embeding: bool = True,
+        measurement_type: str = "gene_expression",
+    ):
+        """Neighborhood or cell state information.
+
+        Args:
+            organism: The organism to query.
+            features: The features (e.g. genes) to query. This argument is optional.
+            measurement_type: The measurement type to query.
+        Return: A dict with a few key/value pairs:
+            TODO
+        """
+        params = {
+            "organism": organism,
+            "measurement_type": measurement_type,
+            "include_embedding": include_embedding,
+        }
+        if (features is not None) and len(features):
+            params["features"] = ",".join(features),
+
+        response = requests.get(
+            baseurl + "neighborhood",
+            params=params,
+        )
+        if not response.ok:
+            raise BadRequestError(response.json()["message"])
+
+        resjson = response.json()
+        ncells = resjson["ncells"]
+        celltypes = resjson["celltypes"]
+        ncells = pd.DataFrame(
+            ncells,
+            index=celltypes,
+        )
+        res = {
+            "ncells": ncells,
+        }
+        if (features is not None) and len(features):
+            res["average"] = pd.DataFrame(
+                resjson["average"],
+                index=celltypes,
+                columns=features,
+            )
+            if "fraction_detected" in resjson:
+                res["fraction_detected"] = pd.DataFrame(
+                    resjson["fraction_detected"],
+                    index=celltypes,
+                    columns=features,
+                )
+
+        if include_embedding:
+            res["centroids"] = pd.DataFrame(
+                resjson["centroids"],
+                columns=["embedding 1", "embedding 2"],
+            )
+            res["boundaries"] = []
+            for bound in resjson["boundaries"]:
+                bound_new = pd.DataFrame(
+                    bound,
+                    columns=["embedding 1", "embedding 2"],
+                )
+                res["boundaries"].append(bound_new)
+
+        return res
 
     def similar_features(
         self,
