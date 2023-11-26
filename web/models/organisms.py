@@ -15,7 +15,6 @@ def load_organisms(
     atlas_folder = pathlib.Path(config["paths"]["compressed_atlas"])
     _organisms = []
     for filename in os.listdir(atlas_folder):
-        print(filename)
         organism, ending = filename.split(".")
         if ending != "h5":
             continue
