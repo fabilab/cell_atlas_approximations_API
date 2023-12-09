@@ -44,6 +44,9 @@ from models.similar import (
 from models.celltypes import (
     get_celltype_index,
 )
+from models.quantisation import (
+    get_quantisation,
+)
 
 
 def get_organs(
@@ -225,6 +228,13 @@ def get_markers(
         idx_other = [i for i in range(ncell_types) if i != idx]
         vector = mat[idx]
         mat_other = mat[idx_other]
+
+        # If the data is quantised, undo the quantisation to get real values
+        dequantise = "quantisation" in db[measurement_type]
+        if dequantise:
+            quantisation = get_quantisation(organism, measurement_type)
+            vector = quantisation[vector]
+            mat_other = quantisation[mat_other]
 
     # Compute difference (vector - other)
     mat_other -= vector

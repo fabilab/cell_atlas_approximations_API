@@ -27,15 +27,20 @@ def get_similar_features(
         organism,
         measurement_type=similar_type,
     )
+
     idx = (features_lowercase == feature_name.lower()).nonzero()[0][0]
 
     if method in ("correlation", "cosine"):
+        if similar_type == measurement_type == 'gene_expression':
+            measurement_subtype = 'fraction'
+        else:
+            measurement_subtype = 'average'
         fracs = get_measurement(
             organism,
             features=None,
             organ=organ,
             measurement_type=similar_type,
-            measurement_subtype="fraction",
+            measurement_subtype=measurement_subtype,
         )
         frac = fracs[:, idx]
 

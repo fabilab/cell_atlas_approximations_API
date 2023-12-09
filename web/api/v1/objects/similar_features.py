@@ -41,6 +41,7 @@ class SimilarFeatures(Resource):
                 message=f"Max number of similar features is 50, requested: {number}.",
             )
 
+        # TODO: for now, set the query and target measurement type to match
         result = get_similar_features(
             organism=organism,
             organ=organ,
@@ -48,6 +49,7 @@ class SimilarFeatures(Resource):
             number=number,
             method=method,
             measurement_type=measurement_type,
+            similar_type=measurement_type,
         )
 
         features_all = get_feature_names(
