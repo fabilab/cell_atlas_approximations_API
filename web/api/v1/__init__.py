@@ -17,6 +17,7 @@ from api.v1.objects import (
     SimilarFeatures,
     SimilarCelltypes,
     CelltypeXOrgan,
+    OrganXOrganism,
     CelltypeLocation,
     Neighborhood,
 )
@@ -44,6 +45,7 @@ api_dict = {
         "similar_features": SimilarFeatures,
         "similar_celltypes": SimilarCelltypes,
         "celltypexorgan": CelltypeXOrgan,
+        "organxorganism": OrganXOrganism,
         "celltype_location": CelltypeLocation,
         "data_sources": DataSources,
     }

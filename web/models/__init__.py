@@ -166,6 +166,7 @@ def get_celltypexorgan(
             organs_celltypes[(organ, celltype)] = abundance
 
     dtype = bool if boolean else int
+    # Cell types are rows, organs are columns
     data = pd.Series(organs_celltypes).unstack(0, fill_value=0).astype(dtype)
 
     # Sort from the cell types with the highest abundance
@@ -174,6 +175,34 @@ def get_celltypexorgan(
     data = data.loc[(data != 0).sum(axis=1).sort_values(ascending=False).index]
 
     return data
+
+
+def get_organxorganism(
+    celltype,
+    measurement_type="gene_expression",
+    ):
+    """Get a presence/absence matrix of a cell type across organs and organisms."""
+    organisms = get_organisms(
+        measurement_type=measurement_type,
+    )
+
+    res = {}
+    for organism in organisms:
+        data = get_celltypexorgan(
+            organism,
+            measurement_type=measurement_type,
+        )
+        if celltype not in data.index:
+            continue
+        organs = data.columns[data.loc[celltype] > 0].tolist()
+        for organ in organs:
+            res[(organism, organ)] = 1
+    res = pd.Series(res).unstack(0, fill_value=0)
+
+    # Exclude if all empty
+    res = res.loc[:, res.any(axis=0)]
+
+    return res
 
 
 def get_markers(

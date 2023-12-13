@@ -160,6 +160,12 @@ async function celltypexorgan({ organism, organs=undefined, measurement_type = "
   return await _callEndpoint("celltypexorgan", params=params);
 }
 
+// ORGANXORGANISM TABLE
+async function organxorganism({ celltype, measurement_type = "gene_expression" }) {
+  let params = { celltype, measurement_type };
+  return await _callEndpoint("organxorganism", params=params);
+}
+
 // CELLTYPE LOCATION
 async function celltype_location({ organism, celltype, measurement_type = "gene_expression" }) {
   let params = { organism, celltype, measurement_type };
@@ -193,6 +199,7 @@ const atlasapprox = {
     similar_features,
     similar_celltypes,
     celltypexorgan,
+    organxorganism,
     celltype_location,
     data_sources,
     setAPIURI,
