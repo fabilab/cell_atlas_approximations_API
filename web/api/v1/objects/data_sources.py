@@ -12,6 +12,7 @@ class DataSources(Resource):
             "a_thaliana": "Shahan et al 2022 (https://www.sciencedirect.com/science/article/pii/S1534580722000338)",
             "c_elegans": "Cao et al. 2017 (https://www.science.org/doi/10.1126/science.aam8940)",
             "c_hemisphaerica": "Chari et al. 2021 (https://www.science.org/doi/10.1126/sciadv.abh1683#sec-4)",
+            "c_intestinalis": "Cao et al. 2019 (https://www.nature.com/articles/s41586-019-1385-y)",
             "d_melanogaster": "Li et al. 2022 (https://doi.org/10.1126/science.abk2432)",
             "d_rerio": "Wagner et al. 2018 (https://www.science.org/doi/10.1126/science.aar4362)",
             "h_miamia": "Hulett et al. 2023 (https://www.nature.com/articles/s41467-023-38016-4)",
