@@ -49,6 +49,28 @@ from models.quantisation import (
 )
 
 
+def get_data_sources():
+    """Get a dictionary of all data sources."""
+    data_sources = {}
+    organisms = get_organisms()
+    for organism in organisms:
+        approx_path = get_atlas_path(organism)
+        with ApproximationFile(approx_path) as db:
+            data_source = {}
+            for measurement_type in db:
+                data_source[measurement_type] = db[measurement_type]["source"]
+            if len(data_source) == 1:
+                data_source = data_source[measurement_type]
+            else:
+                tmp_map = {
+                    "gene_expression": "RNA",
+                    "chromatin_accessibility": "ATAC",
+                }
+                data_source = ", ".join([tmp_map[mt] + ": " + val for mt, val in data_source])
+        data_sources[organism] = data_source
+    return data_sources
+
+
 def get_organs(
     organism,
     measurement_type="gene_expression",
