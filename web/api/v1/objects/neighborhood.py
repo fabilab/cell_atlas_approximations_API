@@ -38,7 +38,7 @@ class Neighborhood(Resource):
             features = clean_feature_string(features, organism, measurement_type)
         unit = config['units'][measurement_type]
 
-        include_embedding = bool(args.get("include_embedding", False))
+        include_embedding = str(args.get("include_embedding", 'false')).lower() != 'false'
 
         neis = get_neighborhoods(
             organism=organism,
