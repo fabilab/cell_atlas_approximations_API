@@ -69,8 +69,8 @@ async function organs({ organism, measurement_type = "gene_expression" }) {
 }
 
 // CELL TYPES
-async function celltypes({ organism, organ, measurement_type = "gene_expression" }) {
-  let params = { organism, organ, measurement_type };
+async function celltypes({ organism, organ, measurement_type = "gene_expression", include_abundance = false }) {
+  let params = { organism, organ, measurement_type, include_abundance };
   return await _callEndpoint("celltypes", params=params);
 }
 

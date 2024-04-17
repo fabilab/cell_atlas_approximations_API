@@ -137,12 +137,16 @@ Cell types
   - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
   - ``organ``: The organ of interest. Must be among the available ones for the chosen organism. A special value, ``whole``, returns the union of all cell types across all organs.
   - ``measurement_type`` (optional, default ``gene_expresion``): What kind of measurement to query about.
+  - ``include_abundance`` (optional, default ``false``): Whether to include cell numbers for each type.
 
 **Returns**: An object/dict with the following keys:
   - ``measurement_type``: The measurement type selected.
   - ``organism``: The organism chosen (this confirms it exists in the database).
   - ``organ``: The organ chosen (same comment).
   - ``celltypes``: The list of cell types for that organism and organ.
+
+If the ``include_abundance`` parameter was specified as true, the dict also has the following key-value pairs:
+  - ``abundance``: The number of cells for each cell type.
 
 Cell type location
 ++++++++++++++++++
@@ -246,6 +250,49 @@ If the ``celltype`` parameter was specified instead, the dict also has the follo
 
 .. note::
    For some measurement types (e.g. chromatin accessibility), fraction of cells with signal is currently defined as exactly equal the average measurement, so the two API calls are equivalent except for the keys of the output dictionary.
+
+Dotplot data (average and fraction detected at once)
+++++++++++++++++++++++++++++++++++++++++++++++++++++
+**Endpoint**: ``/dotplot``
+
+**Parameters**:
+  - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
+  - ``organ``: The organ of interest. Must be among the available ones for the chosen organism. Either this or the ``celltype`` parameter are required and you cannot specify both.
+  - ``celltype``: The cell type of interest. Must be present in at least one organ. Either this or the ``organ`` parameter are required and you cannot specify both.
+  - ``features``: A list of features (e.g. genes) for which the average measurement in the atlas is requested.
+  - ``measurement_type`` (optional, default ``gene_expresion``): What kind of measurement to query about. 
+
+**Returns**: A dict with the following key-value pairs:
+  - ``measurement_type``: The measurement type selected.
+  - ``organism``: The organism chosen (this confirms it exists in the database).
+  - ``features``: The features requested. Any spelling correction is included here.
+  - ``average``: The average measurement (e.g. gene expression) for each cell type and feature.
+  - ``fraction_detected``: The fraction of cells with detected signal (e.g. gene expression) for each cell type and feature.
+
+If the ``organ`` parameter was specified, the dict also has the following key-value pairs:
+  - ``organ``: The organ chosen.
+  - ``celltypes``: A list containing all celltypes from any of the chosen organ.
+
+If the ``celltype`` parameter was specified instead, the dict also has the following key-value pairs:
+  - ``celltype``: The cell type chosen.
+  - ``organs``: The organs containing the chosen cell type.
+
+.. note::
+   For some measurement types (e.g. chromatin accessibility), fraction of cells with signal is currently defined as exactly equal the average measurement, so the two API calls are equivalent except for the keys of the output dictionary.
+
+Neighborhoods (cell states)
++++++++++++++++++++++++++++
+**Endpoint**: ``/neighborhood``
+
+**Parameters**:
+  - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
+  - ``organ``: The organ of interest. Must be among the available ones for the chosen organism.
+  - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
+  - ``include_embedding`` (optional, default ``false``): Whether to include embedding coordinates for each neighborhood.
+
+**Returns**: A dict with the following key-value pairs:
+  TODO
+
 
 Marker features
 +++++++++++++++
