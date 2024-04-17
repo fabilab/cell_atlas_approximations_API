@@ -34,26 +34,35 @@ baseurl += f"{api_version}/"
 show_credit = os.getenv("ATLASAPPROX_HIDECREDITS") is None
 credit = """Data sources for the approximations:
 
-- Human:
+Animals:
+- Homo sapiens (human):
   - RNA: Tabula Sapiens (https://www.science.org/doi/10.1126/science.abl4896)
   - ATAC: Zhang et al. 2021 (https://doi.org/10.1016/j.cell.2021.10.024)
-- Mouse: Tabula Muris Senis (https://www.nature.com/articles/s41586-020-2496-1)
-- Mouse lemur: Tabula Microcebus (https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
-- C elegans: Cao et al. 2017 (https://www.science.org/doi/10.1126/science.aam8940)
-- Zebrafish: Wagner et al. 2018 (https://www.science.org/doi/10.1126/science.aar4362)
+- Mus musculus (mouse): Tabula Muris Senis (https://www.nature.com/articles/s41586-020-2496-1)
+- Microcebus murinus (mouse lemur): Tabula Microcebus (https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
+- Caenorhabditis elegans: Cao et al. 2017 (https://www.science.org/doi/10.1126/science.aam8940)
+- Crassostrea gigas: Piovani et al. 2023 (https://doi.org/10.1126/sciadv.adg6034)
+- Danio rerio (zebrafish): Wagner et al. 2018 (https://www.science.org/doi/10.1126/science.aar4362)
 - Clytia hemisphaerica: Chari et al. 2021 (https://www.science.org/doi/10.1126/sciadv.abh1683#sec-4)
-- Drosophila: Li et al. 2022 (https://doi.org/10.1126/science.abk2432
+- Drosophila melanogaster (fruitfly): Li et al. 2022 (https://doi.org/10.1126/science.abk2432
 - Hofstenia miamia: Hulett et al. 2023 (https://www.nature.com/articles/s41467-023-38016-4)
 - Isodiametra pulchra: Duruz et al. 2020 (https://academic.oup.com/mbe/article/38/5/1888/6045962)
-- Lemna minuta: Abramson et al. 2022 (https://doi.org/10.1093/plphys/kiab564)
 - Mnemiopsis leidyi: Sebé-Pedrós et al 2018 (https://www.nature.com/articles/s41559-018-0575-6)
 - Nematostella vectensis: Steger et al 2022 (https://doi.org/10.1016/j.celrep.2022.111370)
+- Prostheceraeus crozieri: Piovani et al. 2023 (https://doi.org/10.1126/sciadv.adg6034)
+- Platynereis dumerilii: Achim et al 2017 (https://academic.oup.com/mbe/article/35/5/1047/4823215)
+- Strongylocentrotus purpuratus (sea urchin): Paganos et al. 2021 (https://doi.org/10.7554/eLife.70416)
 - Spongilla lacustris: Musser et al. 2021 (https://www.science.org/doi/10.1126/science.abj2949)
 - Schistosoma mansoni: Li et al. 2021 (https://www.nature.com/articles/s41467-020-20794-w)
 - Schmidtea mediterranea: Plass et al. 2018 (https://doi.org/10.1126/science.aaq1723)
 - Stylophora pistillata: Levi et al. 2021 (https://www.sciencedirect.com/science/article/pii/S0092867421004402)
 - Trichoplax adhaerens: Sebé-Pedrós et al 2018 (https://www.nature.com/articles/s41559-018-0575-6)
+- Triticum aestivum (wheat): Zhang et al 2023 (https://genomebiology.biomedcentral.com/articles/10.1186/s13059-023-02908-x)
 - Xenopus laevis: Liao et al. 2022 (https://www.nature.com/articles/s41467-022-31949-2)
+
+Plants:
+- Arabidopsis thaliana: Shahan et al 2022 (https://www.sciencedirect.com/science/article/pii/S1534580722000338)
+- Lemna minuta: Abramson et al. 2022 (https://doi.org/10.1093/plphys/kiab564)
 
 To hide this message, set the environment variable ATLASAPPROX_HIDECREDITS to any
 nonzero value, e.g.:
@@ -119,6 +128,7 @@ class API:
         organism: str,
         organ: str,
         measurement_type: str = "gene_expression",
+        include_abundance: bool = False,
     ):
         """Get a list of celltypes in an organ and organism.
 
@@ -126,12 +136,13 @@ class API:
             organism: The organism to query.
             organ: The organ to query.
             measurement_type: The measurement type to query.
+            include_abundance: Whether to include abundance in the result (optional).
 
         Return: A list of cell types.
         """
-        if ("celltypes" not in self.cache) or ((measurement_type, organism, organ) not in self.cache["celltypes"]):
-            _fetch_celltypes(self, organism, organ, measurement_type)
-        return self.cache["celltypes"][(measurement_type, organism, organ)]
+        if ("celltypes" not in self.cache) or ((measurement_type, organism, organ, include_abundance) not in self.cache["celltypes"]):
+            _fetch_celltypes(self, organism, organ, measurement_type, include_abundance)
+        return self.cache["celltypes"][(measurement_type, organism, organ, include_abundance)]
 
     def average(
         self,

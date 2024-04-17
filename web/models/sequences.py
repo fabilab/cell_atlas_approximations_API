@@ -7,6 +7,7 @@ from models.exceptions import (
     FeatureSequencesNotFoundError,
     FeatureNotFoundError,
     SomeFeaturesNotFoundError,
+    MeasurementTypeNotFoundError,
 )
 
 
@@ -18,7 +19,7 @@ def get_feature_sequences(
     """Get the sequences of a list of features."""
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
-        if measurement_type not in db:
+        if measurement_type not in db['measurements']:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}",
                 measurement_type=measurement_type,
