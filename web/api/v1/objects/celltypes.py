@@ -6,6 +6,7 @@ from flask_restful import Resource, abort
 from models import (
     get_organs,
     get_celltypes,
+    get_celltype_abundance,
 )
 from api.v1.exceptions import (
     required_parameters,
@@ -29,12 +30,25 @@ class Celltypes(Resource):
         organ = clean_organ_string(organ)
         measurement_type = args.get(
             "measurement_type", "gene_expression")
+        include_abundance = str(args.get("include_abundance", 'false')).lower() != 'false'
 
-        celltypes = list(get_celltypes(organism=organism, organ=organ))
+        if include_abundance:
+            res = get_celltype_abundance(organism=organism, organ=organ, measurement_type=measurement_type)
+            celltypes = list(res.index)
+            # Numpy integers are not serialisable
+            abundance = [int(x) for x in res.values]
+            del res
+        else:
+            celltypes = list(get_celltypes(organism=organism, organ=organ, measurement_type=measurement_type))
 
-        return {
+        result = {
             "organism": organism,
             "organ": organ,
             "measurement_type": measurement_type,
             "celltypes": celltypes,
         }
+
+        if include_abundance:
+            result['abundance'] = abundance
+
+        return result

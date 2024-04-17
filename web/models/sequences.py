@@ -23,13 +23,13 @@ def get_feature_sequences(
                 f"Measurement type not found: {measurement_type}",
                 measurement_type=measurement_type,
             )
-        if 'feature_sequences' not in db[measurement_type]:
+        if 'feature_sequences' not in db['measurements'][measurement_type]:
             raise FeatureSequencesNotFoundError(
                 "Feature sequences not found",
                 organism=organism,
             )
 
-        sequence_type = db[measurement_type]["feature_sequences"].attrs["type"]
+        sequence_type = db['measurements'][measurement_type]["feature_sequences"].attrs["type"]
         sequences = []
         features_not_found = []
         for fea in features:
@@ -43,7 +43,7 @@ def get_feature_sequences(
             if len(features_not_found):
                 continue
 
-            seq = db[measurement_type]["feature_sequences"]["sequences"].asstr()[idx]
+            seq = db['measurements'][measurement_type]["feature_sequences"]["sequences"].asstr()[idx]
             sequences.append(seq)
 
         if len(features_not_found):

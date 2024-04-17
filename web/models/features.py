@@ -27,12 +27,12 @@ def load_features(organism, measurement_type="gene_expression"):
     """Preload list of features for an organism"""
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
-        if measurement_type not in db:
+        if measurement_type not in db['measurements']:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}",
                 measurement_type=measurement_type,
             )
-        features = db[measurement_type]["features"].asstr()[:]
+        features = db['measurements'][measurement_type]["var_names"].asstr()[:]
     features_lower = pd.Index(features).str.lower()
     features_lower = pd.Series(
         np.arange(len(features)),

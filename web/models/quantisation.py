@@ -20,16 +20,16 @@ def get_quantisation(organism, measurement_type):
     if (organism, measurement_type) not in quantisations:
         approx_path = get_atlas_path(organism)
         with ApproximationFile(approx_path) as db:
-            if measurement_type not in db:
+            if measurement_type not in db['measurements']:
                 raise MeasurementTypeNotFoundError(
                     f"Measurement type not found: {measurement_type}",
                     measurement_type=measurement_type,
                 )
-            if "quantisation" not in db[measurement_type]:
+            if "quantisation" not in db['measurements'][measurement_type]:
                 raise KeyError(
                     f"No 'quantisation' key found for {organism}, {measurement_type}."
                 )
-            quantisations[(organism, measurement_type)] = db[measurement_type][
+            quantisations[(organism, measurement_type)] = db['measurements'][measurement_type][
                 "quantisation"
             ][:]
     return quantisations[(organism, measurement_type)]

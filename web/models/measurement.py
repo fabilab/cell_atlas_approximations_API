@@ -38,13 +38,14 @@ def _get_sorted_feature_index(
         measurement_subtype (str): "average" or "fraction".
         use_neighborhood (bool): Whether to zoom into sub-cell-type detail.
     """
-    if organ not in db[measurement_type]["by_tissue"]:
+    gby = db['measurements'][measurement_type]['grouped_by']['tissue->celltype']
+    if organ not in gby['values']['tissue'].asstr()[:]:
         raise OrganNotFoundError(
             f"Organ not found: {organ}",
             organ=organ,
         )
 
-    db_dataset = db[measurement_type]["by_tissue"][organ]["celltype"]
+    db_dataset = db['measurements'][measurement_type]["data"]['tissue->celltype'][organ]
     if use_neighborhood:
         try:
             db_dataset = db_dataset["neighborhood"]
@@ -165,14 +166,14 @@ def get_measurement(
 
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
-        if measurement_type not in db:
+        if measurement_type not in db['measurements']:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}",
                 measurement_type=measurement_type,
             )
 
         # If the data is quantised, undo the quantisation to get real values
-        dequantise = "quantisation" in db[measurement_type]
+        dequantise = "quantisation" in db['measurements'][measurement_type]
 
         if organ is not None:
             # Get index for each feature, then sort for speed, then reorder
@@ -366,13 +367,14 @@ def get_neighborhoods(
     # Cell types (always), coords and hulls (if requested)
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
-        if organ not in db[measurement_type]["by_tissue"]:
+        gby = db['measurements'][measurement_type]['grouped_by']['tissue->celltype']
+        if organ not in gby['values']['tissue'].asstr()[:]:
             raise OrganNotFoundError(
                 f"Organ not found: {organ}",
                 organ=organ,
             )
 
-        db_dataset = db[measurement_type]["by_tissue"][organ]["celltype"]["neighborhood"]
+        db_dataset = db['measurements'][measurement_type]["data"]['tissue->celltype'][organ]["neighborhood"]
         ncells_per_cluster = db_dataset["cell_count"][:]
 
         if include_embedding:

@@ -8,6 +8,7 @@ from models.utils import ApproximationFile
 # Global lists of organisms, evaluated lazily
 organisms = {}
 
+
 def load_organisms(
     measurement_type="gene_expression",
 ):
@@ -15,12 +16,16 @@ def load_organisms(
     atlas_folder = pathlib.Path(config["paths"]["compressed_atlas"])
     _organisms = []
     for filename in os.listdir(atlas_folder):
-        organism, ending = filename.split(".")
-        if ending != "h5":
+        # Old folders etc.
+        if not filename.endswith('h5'):
             continue
+        organism, ending = filename.split(".")
         approx_path = atlas_folder / filename
         with ApproximationFile(approx_path) as db:
-            if measurement_type in db:
+            # Old file formats etc.
+            if 'measurements' not in db:
+                continue
+            if measurement_type in db['measurements']:
                 _organisms.append(organism)
     _organisms.sort()
     organisms[measurement_type] = _organisms

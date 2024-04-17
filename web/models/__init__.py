@@ -57,8 +57,8 @@ def get_data_sources():
         approx_path = get_atlas_path(organism)
         with ApproximationFile(approx_path) as db:
             data_source = {}
-            for measurement_type in db:
-                data_source[measurement_type] = db[measurement_type]["source"]
+            for measurement_type in db['measurements']:
+                data_source[measurement_type] = db['measurements'][measurement_type].attrs["source"]
             if len(data_source) == 1:
                 data_source = data_source[measurement_type]
             else:
@@ -66,7 +66,8 @@ def get_data_sources():
                     "gene_expression": "RNA",
                     "chromatin_accessibility": "ATAC",
                 }
-                data_source = ", ".join([tmp_map[mt] + ": " + val for mt, val in data_source])
+                print(data_source)
+                data_source = ", ".join([tmp_map[mt] + ": " + val.rstrip('.') for mt, val in data_source.items()])
         data_sources[organism] = data_source
     return data_sources
 
@@ -78,12 +79,13 @@ def get_organs(
     """Get a list of organs from one organism"""
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
-        if measurement_type not in db:
+        if measurement_type not in db['measurements']:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}",
                 measurement_type=measurement_type,
             )
-        organs = list(db[measurement_type]["by_tissue"].keys())
+        gby = db['measurements'][measurement_type]['grouped_by']['tissue->celltype']
+        organs = list(gby['values']['tissue'].asstr()[:])
     organs.sort()
     return organs
 
@@ -96,20 +98,23 @@ def get_celltypes(
     """Get list of celltypes within an organ"""
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
-        if measurement_type not in db:
+        if measurement_type not in db['measurements']:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}",
                 measurement_type=measurement_type,
             )
-        if organ not in db[measurement_type]["by_tissue"]:
+        gby = db['measurements'][measurement_type]['grouped_by']['tissue->celltype']
+
+        if (organ is None) or (organ == 'all'):
+            return gby['values']['celltype'].asstr()[:]
+
+        if organ not in gby['values']['tissue'].asstr()[:]:
             raise OrganNotFoundError(
                 f"Organ not found: {organ}",
                 organ=organ,
             )
-
-        celltypes = db[measurement_type]["by_tissue"][organ]["celltype"][
-            "index"
-        ].asstr()[:]
+        data = db['measurements'][measurement_type]['data']['tissue->celltype'][organ]
+        celltypes = data["obs_names"].asstr()[:]
     return celltypes
 
 
@@ -140,23 +145,22 @@ def get_celltype_abundance(
     """Get number of cells for each type within an organ"""
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
-        if measurement_type not in db:
+        if measurement_type not in db['measurements']:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}",
                 measurement_type=measurement_type,
             )
-        if organ not in db[measurement_type]["by_tissue"]:
+
+        gby = db['measurements'][measurement_type]['grouped_by']['tissue->celltype']
+        if organ not in gby['values']['tissue'].asstr()[:]:
             raise OrganNotFoundError(
                 f"Organ not found: {organ}",
                 organ=organ,
             )
 
-        celltypes = db[measurement_type]["by_tissue"][organ]["celltype"][
-            "index"
-        ].asstr()[:]
-        cell_numbers = db[measurement_type]["by_tissue"][organ]["celltype"][
-            "cell_count"
-        ][:]
+        data = db['measurements'][measurement_type]['data']['tissue->celltype'][organ]
+        celltypes = data["obs_names"].asstr()[:]
+        cell_numbers = data["cell_count"][:]
     return pd.Series(cell_numbers, index=celltypes)
 
 
@@ -244,22 +248,23 @@ def get_markers(
 
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
-        if measurement_type not in db:
+        if measurement_type not in db['measurements']:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}",
                 measurement_type=measurement_type,
             )
-        if organ not in db[measurement_type]["by_tissue"]:
+
+        gby = db['measurements'][measurement_type]['grouped_by']['tissue->celltype']
+        if organ not in gby['values']['tissue'].asstr()[:]:
             raise OrganNotFoundError(
                 f"Organ not found: {organ}",
                 organ=organ,
             )
 
-        # H5 group to use
-        sub_db = db[measurement_type]["by_tissue"][organ]["celltype"]
+        data = db['measurements'][measurement_type]['data']['tissue->celltype'][organ]
 
         # Cell types and indices
-        cell_types = sub_db["index"].asstr()[:]
+        cell_types = data["obs_names"].asstr()[:]
         ncell_types = len(cell_types)
 
         if cell_type not in cell_types:
@@ -269,7 +274,7 @@ def get_markers(
             )
 
         # Matrix of measurements (rows are cell types)
-        mat = sub_db[method]
+        mat = data[method]
 
         # Index cell types
         celltype_index_dict = get_celltype_index(cell_type, cell_types)
@@ -281,7 +286,7 @@ def get_markers(
         mat_other = mat[idx_other]
 
         # If the data is quantised, undo the quantisation to get real values
-        dequantise = "quantisation" in db[measurement_type]
+        dequantise = "quantisation" in db['measurements'][measurement_type]
         if dequantise:
             quantisation = get_quantisation(organism, measurement_type)
             vector = quantisation[vector]
