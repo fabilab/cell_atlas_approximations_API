@@ -48,10 +48,18 @@ class Markers(Resource):
             measurement_type=measurement_type,
         )
 
-        return {
+        if cell_type == 'all':
+            markers, targets = markers
+
+        result =  {
             "organism": organism,
             "organ": organ,
             "measurement_type": measurement_type,
             "celltype": cell_type,
             "markers": list(markers),
         }
+
+        if cell_type == 'all':
+            result['targets'] = targets
+
+        return result

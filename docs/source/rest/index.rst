@@ -289,10 +289,33 @@ Neighborhoods (cell states)
   - ``organ``: The organ of interest. Must be among the available ones for the chosen organism.
   - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
   - ``include_embedding`` (optional, default ``false``): Whether to include embedding coordinates for each neighborhood.
+  - ``features``: A list of features (e.g. genes) for which cell state-level average and fraction detected are requested.
+
 
 **Returns**: A dict with the following key-value pairs:
-  TODO
+  - ``measurement_type``: The measurement type selected.
+  - ``organism``: The organism chosen (this confirms it exists in the database).
+  - ``organ``: The organ chosen.
+  - ``celltypes``: A list of cell types in the tissue.
+  - ``ncells``: A table (list of lists) with the number of cells for each cell type in each neighborhood (cell state).
 
+If the ``features`` parameter was specified and at least one feature was found, the dict also has the following key-value pairs:
+
+  - ``features``: The features requested (optional). Any spelling correction is included here. 
+  - ``average``: A list of average measurements for each cell state.
+  - ``unit``: The unit of measurement for this measurement type.
+
+If ``features`` was requested for a measurement type that has both averages and fraction detected (e.g. gene expression), the dict also has the following key-value pair:
+
+  - ``fraction_detected``: The fraction of cells with detected signal (e.g. gene expression) for each cell state and feature.
+
+If ``include_embedding`` was true, the dict also has the following key-value pairs:
+
+  - ``centroids``: The x and y coordinates of the centroid of each cell state in a tissue-level embedding (e.g. UMAP).
+  - ``boundaries``: A list of convex hulls. Each hull is a list of (x, y) coordinates with the perimeter of that cell state in the same embedding as the centroids.
+
+.. note::
+   If no features are selected but ``include_embedding`` is true, this endpoint call can be used to gain *only* the cell state embedding.
 
 Marker features
 +++++++++++++++
@@ -301,7 +324,7 @@ Marker features
 **Parameters**:
   - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
   - ``organ``: The organ of interest. Must be among the available ones for the chosen organism.
-  - ``celltype``: The cell type for which marker features are requested.
+  - ``celltype``: The cell type for which marker features are requested. The special string ``all`` can be used to indicate markers for each cell type in the tissue are requested.
   - ``number``: The number of marker features to return.
   - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
 
@@ -312,8 +335,12 @@ Marker features
   - ``celltype``: The cell type chosen.
   - ``markers``: The markers (e.g. genes, peaks) that are measured at higher level in the chosen cell type compared to other cell types within the same organ.
 
+If ``celltype`` was set to ``all``, the dict also has the following key-value pair:
+
+  - ``targets``: A list of cell types of the same length as ``markers``. For each marker in the list, this specified what cell type it is marking.
+
 .. note::
-   There are multiple methods to determine marker features (e.g. genes). Future versions of the API might allow the user to choose between methods.
+   There are multiple methods to determine marker features (e.g. genes). Future versions of the API will allow the user to choose between methods.
 
 Highest-measurement cell types
 ++++++++++++++++++++++++++++++

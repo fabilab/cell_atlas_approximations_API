@@ -265,7 +265,23 @@ def get_markers(
 
         # Cell types and indices
         cell_types = data["obs_names"].asstr()[:]
-        ncell_types = len(cell_types)
+
+        # If all markers for the tissue are requested, merge a recursive call and bail
+        # TODO: do this explicitely, it's probably faster by a decent bit
+        if cell_type == 'all':
+            markers = []
+            targets = []
+            for ct in cell_types:
+                markers_ct = list(get_markers(
+                    organism,
+                    organ,
+                    ct,
+                    number,
+                    measurement_type=measurement_type,
+                ))
+                markers.extend(markers_ct)
+                targets.extend([ct] * len(markers_ct))
+            return markers, targets
 
         if cell_type not in cell_types:
             raise CellTypeNotFoundError(
@@ -277,6 +293,7 @@ def get_markers(
         mat = data[method]
 
         # Index cell types
+        ncell_types = len(cell_types)
         celltype_index_dict = get_celltype_index(cell_type, cell_types)
         cell_type = celltype_index_dict["celltype"]
         idx = celltype_index_dict["index"]
