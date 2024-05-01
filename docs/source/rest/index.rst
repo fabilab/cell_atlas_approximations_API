@@ -323,10 +323,11 @@ Marker features
 
 **Parameters**:
   - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
-  - ``organ``: The organ of interest. Must be among the available ones for the chosen organism.
-  - ``celltype``: The cell type for which marker features are requested. The special string ``all`` can be used to indicate markers for each cell type in the tissue are requested.
+  - ``organ``: The organ of interest. Must be among the available ones for the chosen organism. If ``versus`` is set to ``other_organs``, the special string ``all`` can be used to request markers for each organ.
+  - ``celltype``: The cell type of interest. If ``versus`` is set to ``other_celltypes`` (the default), the special string ``all`` can be used to request markers for each cell type in the tissue.
   - ``number``: The number of marker features to return.
   - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
+  - ``versus``: Either ``other_celltypes`` (default) or ``other_organs``. The default is to compare the chosen cell type with other cell types from the same organ. The alternative option is to compare against the same cell type in other organs.
 
 **Returns**: A dict with the following key-value pairs:
   - ``measurement_type``: The measurement type selected.
@@ -335,9 +336,9 @@ Marker features
   - ``celltype``: The cell type chosen.
   - ``markers``: The markers (e.g. genes, peaks) that are measured at higher level in the chosen cell type compared to other cell types within the same organ.
 
-If ``celltype`` was set to ``all``, the dict also has the following key-value pair:
+If either ``celltype`` or ``organ`` was set to ``all``, the dict also has the following key-value pair:
 
-  - ``targets``: A list of cell types of the same length as ``markers``. For each marker in the list, this specified what cell type it is marking.
+  - ``targets``: A list of cell types/organs of the same length as ``markers``. For each marker in the list, this specified what cell type/organ it is marking.
 
 .. note::
    There are multiple methods to determine marker features (e.g. genes). Future versions of the API will allow the user to choose between methods.

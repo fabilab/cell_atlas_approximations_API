@@ -10,6 +10,10 @@ class OrganNotFoundError(KeyError):
         super().__init__(self, msg)
 
 
+class OneOrganError(Exception):
+    pass
+
+
 class MeasurementTypeNotFoundError(KeyError):
     def __init__(self, msg, measurement_type):
         self.measurement_type = measurement_type

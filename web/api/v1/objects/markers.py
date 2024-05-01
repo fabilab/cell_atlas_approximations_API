@@ -4,7 +4,8 @@ from flask_restful import Resource, abort
 
 # Helper functions
 from models import (
-    get_markers,
+    get_markers_vs_other_celltypes,
+    get_markers_vs_other_tissues,
 )
 from api.v1.exceptions import (
     required_parameters,
@@ -31,6 +32,12 @@ class Markers(Resource):
         cell_type = args.get("celltype")
         cell_type = clean_celltype_string(cell_type)
         number = args.get("number")
+        versus = args.get("versus", "other_celltypes")
+
+        if versus not in ("other_celltypes", "other_organs"):
+            abort(
+                400,
+                message='The "versus" parameter should be either "other_celltypes" or "other_organs".')
 
         try:
             number = int(number)
@@ -40,16 +47,26 @@ class Markers(Resource):
         if number <= 0:
             abort(400, message='The "number" parameter should be positive.')
 
-        markers = get_markers(
-            organism=organism,
-            organ=organ,
-            cell_type=cell_type,
-            number=number,
-            measurement_type=measurement_type,
-        )
-
-        if cell_type == 'all':
-            markers, targets = markers
+        if versus == "other_celltypes":
+            markers = get_markers_vs_other_celltypes(
+                organism=organism,
+                organ=organ,
+                cell_type=cell_type,
+                number=number,
+                measurement_type=measurement_type,
+            )
+            if cell_type == 'all':
+                markers, targets = markers
+        else:
+            markers = get_markers_vs_other_tissues(
+                organism=organism,
+                organ=organ,
+                cell_type=cell_type,
+                number=number,
+                measurement_type=measurement_type,
+            )
+            if organ == 'all':
+                markers, targets = markers
 
         result =  {
             "organism": organism,
@@ -59,7 +76,9 @@ class Markers(Resource):
             "markers": list(markers),
         }
 
-        if cell_type == 'all':
+        if (versus == "other_celltypes") and (cell_type == 'all'):
+            result['targets'] = targets
+        elif (versus == "other_organs") and (organ == 'all'):
             result['targets'] = targets
 
         return result
