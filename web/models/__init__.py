@@ -9,7 +9,10 @@ import pandas as pd
 
 from config import configuration as config
 from models.organisms import get_organisms
-from models.paths import get_atlas_path
+from models.paths import (
+    get_atlas_path,
+    get_interactions_path,
+)
 from models.utils import ApproximationFile
 from models.exceptions import (
     OrganismNotFoundError,
@@ -50,6 +53,9 @@ from models.quantisation import (
 from models.markers import (
     get_markers_vs_other_celltypes,
     get_markers_vs_other_tissues,
+)
+from models.interactions import (
+    get_interaction_partners,
 )
 
 

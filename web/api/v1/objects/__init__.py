@@ -17,6 +17,7 @@ from api.v1.objects.organxorganism import OrganXOrganism
 from api.v1.objects.celltype_location import CelltypeLocation
 from api.v1.objects.neighborhood import Neighborhood
 from api.v1.objects.dotplot import Dotplot
+from api.v1.objects.interaction_partners import InteractionPartners
 
 
 __all__ = (
@@ -39,4 +40,5 @@ __all__ = (
     "OrganXOrganism",
     "DataSources",
     "CelltypeLocation",
+    "InteractionPartners",
 )

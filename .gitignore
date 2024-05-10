@@ -12,6 +12,7 @@ web/secret_key.txt
 
 # Processed data files
 web/static/atlas_data
+web/static/interactions
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

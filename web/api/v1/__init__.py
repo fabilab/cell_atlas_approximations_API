@@ -20,6 +20,7 @@ from api.v1.objects import (
     OrganXOrganism,
     CelltypeLocation,
     Neighborhood,
+    InteractionPartners,
 )
 
 __all__ = (
@@ -41,6 +42,7 @@ api_dict = {
         "dotplot": Dotplot,
         "neighborhood": Neighborhood,
         "markers": Markers,
+        "interaction_partners": InteractionPartners,
         "highest_measurement": HighestMeasurement,
         "similar_features": SimilarFeatures,
         "similar_celltypes": SimilarCelltypes,

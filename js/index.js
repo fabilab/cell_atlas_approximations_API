@@ -128,10 +128,16 @@ async function neighborhood({ organism, organ, features = null, measurement_type
 };
 
 // MARKERS
-async function markers({ organism, organ, celltype, number=10, measurement_type = "gene_expression" }) {
-  let params = { organism, organ, celltype, number, measurement_type };
+async function markers({ organism, organ, celltype, number=10, measurement_type = "gene_expression", versus = "other_celltypes" }) {
+  let params = { organism, organ, celltype, number, measurement_type, versus };
   return await _callEndpoint("markers", params=params);
 }
+
+// INTERACTION PARTNERS
+async function interaction_partners({ organism, features, measurement_type = "gene_expression" }) {
+  let params = { organism, features, measurement_type };
+  return await _callEndpoint("interaction_partners", params=params);
+};
 
 // HIGHEST MEASUREMENT
 async function highest_measurement({ organism, feature, number=10, measurement_type = "gene_expression" }) {
@@ -195,6 +201,7 @@ const atlasapprox = {
     dotplot,
     neighborhood,
     markers,
+    interaction_partners,
     highest_measurement,
     similar_features,
     similar_celltypes,

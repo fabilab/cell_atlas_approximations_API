@@ -44,6 +44,14 @@ let result;
     result = await atlasapprox.markers({ organism: "m_musculus", organ: "lung", celltype: "fibroblast" });
     console.log(result);
 
+    console.log("markers (other organs)");
+    result = await atlasapprox.markers({ organism: "m_musculus", organ: "lung", celltype: "fibroblast", versus: "other_organs" });
+    console.log(result);
+
+    console.log("interaction_partners");
+    result = await atlasapprox.interaction_partners({ organism: "m_musculus", features: "Cd19,Notch1" });
+    console.log(result);
+
     console.log("highest measurement");
     result = await atlasapprox.highest_measurement({ organism: "m_musculus", feature: "Ins1" });
     console.log(result);
