@@ -18,6 +18,7 @@ from api.v1.objects.celltype_location import CelltypeLocation
 from api.v1.objects.neighborhood import Neighborhood
 from api.v1.objects.dotplot import Dotplot
 from api.v1.objects.interaction_partners import InteractionPartners
+from api.v1.objects.homologs import Homologs
 
 
 __all__ = (
@@ -41,4 +42,5 @@ __all__ = (
     "DataSources",
     "CelltypeLocation",
     "InteractionPartners",
+    "Homologs",
 )

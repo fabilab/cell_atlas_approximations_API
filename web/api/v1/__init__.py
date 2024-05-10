@@ -21,6 +21,7 @@ from api.v1.objects import (
     CelltypeLocation,
     Neighborhood,
     InteractionPartners,
+    Homologs,
 )
 
 __all__ = (
@@ -43,6 +44,7 @@ api_dict = {
         "neighborhood": Neighborhood,
         "markers": Markers,
         "interaction_partners": InteractionPartners,
+        "homologs": Homologs,
         "highest_measurement": HighestMeasurement,
         "similar_features": SimilarFeatures,
         "similar_celltypes": SimilarCelltypes,

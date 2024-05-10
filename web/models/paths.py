@@ -29,3 +29,8 @@ def get_interactions_path(organism):
             organism=organism,
         )
     return interaction_path
+
+
+def get_protein_embeddings_path():
+    """Get the file containing all protein embeddings."""
+    return pathlib.Path(config["paths"]["protein_embeddings"])

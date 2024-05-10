@@ -6,6 +6,7 @@ feature_types: ['gene_expression', 'chromatin_accessibility']
 paths:
   compressed_atlas: "./static/atlas_data"
   interactions: "./static/interactions"
+  protein_embeddings: "./static/protein_embeddings/prost_embeddings.h5"
 
 units:
   gene_expression: "counts per ten thousand"

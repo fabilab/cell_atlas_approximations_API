@@ -57,6 +57,9 @@ from models.markers import (
 from models.interactions import (
     get_interaction_partners,
 )
+from models.homology import (
+    get_homologs,
+)
 
 
 def get_data_sources():
