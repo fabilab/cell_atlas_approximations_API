@@ -139,6 +139,12 @@ async function interaction_partners({ organism, features, measurement_type = "ge
   return await _callEndpoint("interaction_partners", params=params);
 };
 
+// HOMOlOGS
+async function homologs({ source_organism, features, target_organism }) {
+  let params = { source_organism, features, target_organism };
+  return await _callEndpoint("homologs", params=params);
+};
+
 // HIGHEST MEASUREMENT
 async function highest_measurement({ organism, feature, number=10, measurement_type = "gene_expression" }) {
   let params = { organism, feature, number, measurement_type };

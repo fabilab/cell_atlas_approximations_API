@@ -27,6 +27,17 @@ class Homologs(Resource):
         args = request.args
         source_organism = args.get("source_organism")
         target_organism = args.get("target_organism")
+        if source_organism == target_organism:
+            abort(
+                400,
+                message=f"Source and target organisms cannot be the same: {source_organism}.",
+                error={
+                    "type": "invalid_parameter",
+                    "invalid_parameter": "organism",
+                    "invalid_value": source_organism,
+                }
+            )
+
         features = args.get("features")
         features = clean_feature_string(
             features, source_organism, measurement_type="gene_expression",

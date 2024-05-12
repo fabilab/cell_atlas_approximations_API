@@ -87,4 +87,6 @@ let result;
     result = await atlasapprox.neighborhood({ organism: "m_leidyi", organ: "whole", features: "ML25764a,ML358828a,ML071151a,ML065728a" });
     console.log(result);
 
+    result = await atlasapprox.homologs({ source_organism: "m_musculus", features: ["Cd19", "Ms4a1"], target_organism: "h_sapiens" }); 
+
 })();

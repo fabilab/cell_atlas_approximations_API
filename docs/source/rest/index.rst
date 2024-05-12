@@ -343,6 +343,36 @@ If either ``celltype`` or ``organ`` was set to ``all``, the dict also has the fo
 .. note::
    There are multiple methods to determine marker features (e.g. genes). Future versions of the API will allow the user to choose between methods.
 
+Interactions
+++++++++++++
+**Endpoint**: ``/interaction_partners``
+
+**Parameters**:
+  - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
+  - ``features``: The features to look for interaction partners with.
+
+**Returns**: A dictionary with the following key-value pairs:
+  - ``queries``: A list of features queried.
+  - ``targets``: A list of iinteraction partners.
+
+The two lists have equal length and are paired. Each pair of entries (e.g. the first entry of each list) indicates an interaction. Because each feature can be part of multiple interactions, queried features might (and typically do) appear multiple times.
+
+Homologs
+++++++++
+**Endpoint**: ``/homologs``
+
+**Parameters**:
+  - ``source_organism``: The source organism of interest, for which the features are known. Must be one of the available ones as returned by ``organisms``.
+  - ``features``: The features to look for.
+  - ``target_organism``: The target organism of interest, for which the features are unknown. Must be one of the available ones as returned by ``organisms`` and, of course, must be different from ``source_organism``.
+
+**Returns**: A list of triplets, one for each homology relationship. each triplet contains:
+  - The first value is a feature in ``source_organism``.
+  - The second value is a homologous feature in ``target_organism``.
+  - The third value is a measure of distance between the two features. Lower values indicate stronger homology.
+
+Currently, homology is estimated using `PROST <https://doi.org/10.1073/pnas.2211823120>`_.
+
 Highest-measurement cell types
 ++++++++++++++++++++++++++++++
 **Endpoint**: ``/highest_measurement``
