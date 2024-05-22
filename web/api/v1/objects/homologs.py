@@ -4,7 +4,7 @@ from flask_restful import Resource, abort
 
 # Helper functions
 from models import (
-    get_feature_index,
+    get_feature_indices,
     get_feature_names,
     get_homologs,
 )
@@ -44,15 +44,16 @@ class Homologs(Resource):
         )
 
         # NOTE: this is just about capitalisation (should rename it really)
-        features_corrected = []
+        idxs = get_feature_indices(
+            source_organism,
+            [fea.lower() for fea in features],
+            measurement_type="gene_expression",
+        )
         features_all = get_feature_names(
             organism=source_organism,
             measurement_type="gene_expression",
         )
-        for fea in features:
-            idx = get_feature_index(source_organism, fea.lower(),
-                                    measurement_type="gene_expression")
-            features_corrected.append(features_all[idx])
+        features_corrected = list(features_all[idxs])
 
         result = get_homologs(
             source_organism,

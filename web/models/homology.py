@@ -56,7 +56,11 @@ def get_homologs(
     emb_queries = _get_prost_embeddings(organism=query_organism, features=query_features)
     emb_target = _get_prost_embeddings(organism=target_organism)
 
-    matches = []
+    result = {
+        'queries': [],
+        'targets': [],
+        'distances': [],
+    }
     for feature, embedding in zip(emb_queries['features'], emb_queries['embeddings']):
         # PROST requires L1 distance
         dis = np.abs((emb_target['embeddings'] - embedding)).sum(axis=1)
@@ -76,6 +80,8 @@ def get_homologs(
 
         # Append to matches
         for homolog, dis_homolog in zip(homologs, dis_homologs):
-            matches.append([feature, homolog, float(dis_homolog)])
-    return matches
+            result['queries'].append(feature)
+            result['targets'].append(homolog)
+            result['distances'].append(float(dis_homolog))
+    return result
 

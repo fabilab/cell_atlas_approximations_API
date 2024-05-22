@@ -15,6 +15,7 @@ from models.exceptions import (
     OrganismNotFoundError,
     MeasurementTypeNotFoundError,
     SimilarityMethodError,
+    SomeFeaturesNotFoundError,
 )
 
 # This dict has (organism, measurement_type) as keys and pandas series as
@@ -71,6 +72,31 @@ def get_feature_index(
 
     return idx
 
+def get_feature_indices(
+    organism,
+    feature_names,
+    measurement_type="gene_expression",
+):
+    """Get the numeric index for multiple features."""
+    result = []
+    missing = []
+    for feature_name in feature_names:
+        try:
+            idx = get_feature_index(
+                organism,
+                feature_name,
+                measurement_type=measurement_type,
+            )
+            result.append(idx)
+        except FeatureNotFoundError:
+            missing.append(feature_name)
+
+    if len(missing):
+        raise SomeFeaturesNotFoundError(
+            "Some features not found: " + ", ".join(missing) + ".",
+            features=missing,
+        )
+    return result
 
 def get_feature_names(
     organism,

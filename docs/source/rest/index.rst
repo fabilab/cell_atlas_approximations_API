@@ -353,12 +353,12 @@ Interactions
 
 **Returns**: A dictionary with the following key-value pairs:
   - ``queries``: A list of features queried.
-  - ``targets``: A list of iinteraction partners.
+  - ``targets``: A list of interaction partners.
 
 The two lists have equal length and are paired. Each pair of entries (e.g. the first entry of each list) indicates an interaction. Because each feature can be part of multiple interactions, queried features might (and typically do) appear multiple times.
 
-Homologs
-++++++++
+Homologous features
++++++++++++++++++++
 **Endpoint**: ``/homologs``
 
 **Parameters**:
@@ -366,12 +366,14 @@ Homologs
   - ``features``: The features to look for.
   - ``target_organism``: The target organism of interest, for which the features are unknown. Must be one of the available ones as returned by ``organisms`` and, of course, must be different from ``source_organism``.
 
-**Returns**: A list of triplets, one for each homology relationship. each triplet contains:
-  - The first value is a feature in ``source_organism``.
-  - The second value is a homologous feature in ``target_organism``.
-  - The third value is a measure of distance between the two features. Lower values indicate stronger homology.
+**Returns**: A dictionary with the following key-value pairs:
+  - ``queries``: A list of features queried in ``source_organism``.
+  - ``targets``: A list of homologous features in ``target_organism``.
+  - ``distances``: A list of distances between each query and its homolog. Lower values indicate stronger homology.
 
-Currently, homology is estimated using `PROST <https://doi.org/10.1073/pnas.2211823120>`_.
+The three lists have equal length and are paired. Each triplet of entries indicates a homology relationship. Because each feature can have multiple homologs (i.e. paralogs), queried features might (and typically do) appear multiple times.
+
+Currently, homology is estimated using `PROST <https://doi.org/10.1073/pnas.2211823120>`_. Therefore, only gene expression for protein-coding genes is supported.
 
 Highest-measurement cell types
 ++++++++++++++++++++++++++++++

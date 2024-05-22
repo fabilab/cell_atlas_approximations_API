@@ -314,8 +314,8 @@ def get_highest_measurement(
                 measurement_type=measurement_type,
             )[0]
         except SomeFeaturesNotFoundError:
-            avg_organ = np.zeros(len(celltypes), np.float32)
-            frac_organ = np.zeros(len(celltypes), np.float32)
+            # NOTE: you cannot be the highest expressor if you are zero
+            continue
         result["celltypes"].extend(celltypes)
         result["organs"].extend([organ for ct in celltypes])
         result["average"].append(avg_organ)
@@ -331,6 +331,10 @@ def get_highest_measurement(
 
     # Find top expressors
     idx_top = result["average"].argsort()[::-1][:number]
+
+    # Exclude zero expressors
+    idx_top = [i for i in idx_top if result["average"][i] > 0]
+
     result["celltypes"] = [result["celltypes"][i] for i in idx_top]
     result["organs"] = [result["organs"][i] for i in idx_top]
     result["average"] = result["average"][idx_top]

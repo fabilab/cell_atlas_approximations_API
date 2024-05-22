@@ -208,6 +208,7 @@ const atlasapprox = {
     neighborhood,
     markers,
     interaction_partners,
+    homologs,
     highest_measurement,
     similar_features,
     similar_celltypes,

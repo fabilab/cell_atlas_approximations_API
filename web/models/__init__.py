@@ -29,6 +29,7 @@ from models.exceptions import (
 from models.features import (
     get_features,
     get_feature_index,
+    get_feature_indices,
     get_feature_names,
 )
 from models.sequences import (
