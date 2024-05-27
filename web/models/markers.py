@@ -18,6 +18,9 @@ from models.exceptions import (
 from models.celltypes import (
     get_celltype_index,
 )
+from models.quantisation import (
+    get_quantisation,
+)
 from models.features import (
     get_features,
     get_feature_index,
