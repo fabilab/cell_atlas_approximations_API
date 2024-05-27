@@ -70,6 +70,12 @@ def get_feature_index(
             feature=feature_name,
         ) from exc
 
+    # FIXME: same gene with just difference in capitalisation (fly)
+    # we want to fix the upstream data before we come up with clever
+    # tricks here, for now take the first (this fully masks the second gene)
+    if isinstance(idx, pd.Series):
+        idx = idx.values[0]
+
     return idx
 
 def get_feature_indices(

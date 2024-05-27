@@ -66,6 +66,7 @@ def _get_sorted_feature_index(
         except FeatureNotFoundError as exc:
             features_not_found.append(fea)
             continue
+
         idx_series[fea] = idx
 
     if len(features_not_found):
