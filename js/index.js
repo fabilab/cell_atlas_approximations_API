@@ -146,8 +146,8 @@ async function homologs({ source_organism, features, target_organism }) {
 };
 
 // HIGHEST MEASUREMENT
-async function highest_measurement({ organism, feature, number=10, measurement_type = "gene_expression" }) {
-  let params = { organism, feature, number, measurement_type };
+async function highest_measurement({ organism, feature, number=10, measurement_type = "gene_expression", per_organ = false }) {
+  let params = { organism, feature, number, measurement_type, per_organ };
   return await _callEndpoint("highest_measurement", params=params);
 }
 
