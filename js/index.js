@@ -128,8 +128,8 @@ async function neighborhood({ organism, organ, features = null, measurement_type
 };
 
 // MARKERS
-async function markers({ organism, organ, celltype, number=10, measurement_type = "gene_expression", versus = "other_celltypes" }) {
-  let params = { organism, organ, celltype, number, measurement_type, versus };
+async function markers({ organism, organ, celltype, number=10, measurement_type = "gene_expression", versus = "other_celltypes", surface_only = false }) {
+  let params = { organism, organ, celltype, number, measurement_type, versus, surface_only };
   return await _callEndpoint("markers", params=params);
 }
 

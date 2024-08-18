@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 
 from models.paths import get_atlas_path
 from models.utils import ApproximationFile
@@ -26,6 +27,9 @@ from models.features import (
     get_feature_index,
     get_feature_names,
 )
+from models.surface import (
+    get_surface_genes,
+)
 
 
 
@@ -35,6 +39,7 @@ def get_markers_vs_other_celltypes(
     cell_type,
     number,
     measurement_type="gene_expression",
+    surface_only=False,
 ):
     """Get marker features for a specific cell type in an organ."""
     # In theory, one could use various methods to find markers
@@ -43,6 +48,12 @@ def get_markers_vs_other_celltypes(
     # For ATAC-Seq, average and fraction are the same thing
     else:
         method = "average"
+
+    features = get_feature_names(organism, measurement_type)
+    if surface_only:
+        surface_genes = get_surface_genes(organism)
+        surface_ser_sorted = pd.Series(features)
+        surface_ser_sorted = surface_ser_sorted[surface_ser_sorted.isin(surface_genes)]
 
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
@@ -89,14 +100,16 @@ def get_markers_vs_other_celltypes(
 
         # Matrix of measurements (rows are cell types)
         mat = data[method]
+        if surface_only:
+            mat = mat[:, surface_ser_sorted.index.values]
 
         # Index cell types
         ncell_types = len(cell_types)
         celltype_index_dict = get_celltype_index(cell_type, cell_types)
         cell_type = celltype_index_dict["celltype"]
         idx = celltype_index_dict["index"]
-
         idx_other = [i for i in range(ncell_types) if i != idx]
+
         vector = mat[idx]
         mat_other = mat[idx_other]
 
@@ -122,12 +135,12 @@ def get_markers_vs_other_celltypes(
     idx_markers = idx_markers[closest_value[idx_markers] > 0]
 
     # Get the feature names
-    features = get_feature_names(
-        organism,
-        measurement_type,
-    )[idx_markers]
+    if surface_only:
+        markers = surface_ser_sorted.values[idx_markers]
+    else:
+        markers = features[idx_markers]
 
-    return features
+    return markers
 
 
 def get_markers_vs_other_tissues(
@@ -136,6 +149,7 @@ def get_markers_vs_other_tissues(
     cell_type,
     number,
     measurement_type="gene_expression",
+    surface_only=False,
 ):
     """Get marker features for a specific cell type in an organ."""
     # In theory, one could use various methods to find markers
@@ -144,6 +158,12 @@ def get_markers_vs_other_tissues(
     # For ATAC-Seq, average and fraction are the same thing
     else:
         method = "average"
+
+    features = get_feature_names(organism, measurement_type)
+    if surface_only:
+        surface_genes = get_surface_genes(organism)
+        surface_ser_sorted = pd.Series(features)
+        surface_ser_sorted = surface_ser_sorted[surface_ser_sorted.isin(surface_genes)]
 
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
@@ -196,6 +216,8 @@ def get_markers_vs_other_tissues(
                 continue
 
             vect_tissue = data_tissue[method][cell_types.index(cell_type)]
+            if surface_only:
+                vect_tissue = vect_tissue[surface_ser_sorted.index.values]
             mat.append(vect_tissue)
             organs_mat.append(tissue)
 
@@ -233,11 +255,11 @@ def get_markers_vs_other_tissues(
     idx_markers = idx_markers[closest_value[idx_markers] > 0]
 
     # Get the feature names
-    features = get_feature_names(
-        organism,
-        measurement_type,
-    )[idx_markers]
+    if surface_only:
+        markers = surface_ser_sorted.values[idx_markers]
+    else:
+        markers = features[idx_markers]
 
-    return features
+    return markers
 
 

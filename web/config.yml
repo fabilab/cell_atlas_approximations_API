@@ -7,6 +7,7 @@ paths:
   compressed_atlas: "./static/atlas_data"
   interactions: "./static/interactions"
   protein_embeddings: "./static/protein_embeddings/prost_embeddings.h5"
+  surface_genes: "./static/surface_genes/surface_genes.h5"
 
 units:
   gene_expression: "counts per ten thousand"

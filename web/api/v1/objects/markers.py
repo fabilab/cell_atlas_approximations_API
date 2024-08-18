@@ -33,6 +33,7 @@ class Markers(Resource):
         cell_type = clean_celltype_string(cell_type)
         number = args.get("number")
         versus = args.get("versus", "other_celltypes")
+        surface_only = str(args.get("surface_only", 'false')).lower() != 'false'
 
         if versus not in ("other_celltypes", "other_organs"):
             abort(
@@ -54,6 +55,7 @@ class Markers(Resource):
                 cell_type=cell_type,
                 number=number,
                 measurement_type=measurement_type,
+                surface_only=surface_only,
             )
             if cell_type == 'all':
                 markers, targets = markers
@@ -64,6 +66,7 @@ class Markers(Resource):
                 cell_type=cell_type,
                 number=number,
                 measurement_type=measurement_type,
+                surface_only=surface_only,
             )
             if organ == 'all':
                 markers, targets = markers

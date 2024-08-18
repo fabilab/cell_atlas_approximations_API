@@ -28,6 +28,7 @@ class HighestMeasurement(Resource):
         feature = args.get("feature")
         number = args.get("number")
         unit = config["units"][measurement_type]
+        per_organ = str(args.get("per_organ", 'false')).lower() != 'false'
 
         try:
             number = int(number)
@@ -42,6 +43,7 @@ class HighestMeasurement(Resource):
             feature=feature,
             number=number,
             measurement_type=measurement_type,
+            per_organ=per_organ,
         )
 
         features_all = get_feature_names(

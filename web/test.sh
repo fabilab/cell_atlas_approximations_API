@@ -8,7 +8,7 @@
 set -e
 
 CLEAN=0
-UPDATE=0  # Change this to run pip every time (slows down dev a little)
+UPDATE=0 # Change this to run pip every time (slows down dev a little)
 VENV_DIR=.venv
 VERBOSE=1
 MAIN_FLASK_FILE=app.py
@@ -19,22 +19,22 @@ PYTEST=${VENV_DIR}/bin/pytest
 export FLASK_DEBUG=1
 
 if [ x$CLEAN = x1 ]; then
-    rm -rf ${VENV_DIR}
+	rm -rf ${VENV_DIR}
 fi
 
 if [ ! -d ${VENV_DIR} ]; then
-    python -m venv ${VENV_DIR}
+	python -m venv ${VENV_DIR}
 fi
 
 if [ x$UPDATE = x1 ]; then
- ${VENV_DIR}/bin/pip install -r requirements.txt
+	${VENV_DIR}/bin/pip install -r requirements.txt
 fi
 
 if [ x$CERT = x1 ]; then
-  if [ x$VERBOSE = x1 ]; then
-    echo "${FLASK} run --cert=adhoc"
-  fi
-  ${FLASK} run --cert=adhoc
+	if [ x$VERBOSE = x1 ]; then
+		echo "${FLASK} run --cert=adhoc"
+	fi
+	${FLASK} run --cert=adhoc
 else
-  ${FLASK} run
+	${FLASK} run
 fi

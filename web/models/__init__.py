@@ -61,6 +61,9 @@ from models.interactions import (
 from models.homology import (
     get_homologs,
 )
+from models.surface import (
+    get_surface_genes,
+)
 
 
 def get_data_sources():
