@@ -341,14 +341,14 @@ def get_highest_measurement(
             result["average"].append(avg_organ)
             result["fraction_detected"].append(frac_organ)
 
-    result["average"] = np.concatenate(result["average"])
-    result["fraction_detected"] = np.concatenate(result["fraction_detected"])
-
     if not found_once:
         raise FeatureNotFoundError(
             f"Feature not found: {feature}.",
             feature=feature,
         )
+
+    result["average"] = np.concatenate(result["average"])
+    result["fraction_detected"] = np.concatenate(result["fraction_detected"])
 
     if not per_organ:
         # Find top expressors
