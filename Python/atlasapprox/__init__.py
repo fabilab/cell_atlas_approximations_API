@@ -14,6 +14,7 @@ from atlasapprox.utils import (
    _fetch_celltypes,
 )
 
+__version__ = "0.2.1"
 
 __all__ = (
     "api_version",
@@ -23,7 +24,6 @@ __all__ = (
 )
 
 
-__version__ = "0.2.1"
 api_version = "v1"
 
 baseurl = os.getenv(
@@ -85,6 +85,12 @@ class API:
 
     cache = {}
 
+    def __init__(self, url=None):
+        """Create an instance of the atlasapprox API.
+
+        """
+        self.baseurl = url if url is not None else baseurl
+
     def measurement_types(self):
         """Get a list of measurement types.
 
@@ -122,7 +128,7 @@ class API:
         Returns: A list of organs.
         """
         if ("organs" not in self.cache) or (organism not in self.cache["organs"]):
-            _fetch_organs(self, organism)
+            _fetch_organs(self, organism, measurement_type)
         return self.cache["organs"][organism]
 
     def celltypes(

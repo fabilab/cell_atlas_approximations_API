@@ -1,37 +1,45 @@
-def _fetch_organisms(self):
+import requests
+
+from atlasapprox.exceptions import BadRequestError
+
+
+def _fetch_organisms(api, measurement_type: str):
     """Fetch organisms data"""
     response = requests.get(
-        baseurl + "organisms",
+        api.baseurl + "organisms",
         params={
             "measurement_type": measurement_type,
         },
     )
     if response.ok:
-        if "organisms" not in self.cache:
-            self.cache["organisms"] = {}
-        self.cache["organisms"][measurement_type] = response.json()["organisms"]
+        if "organisms" not in api.cache:
+            api.cache["organisms"] = {}
+        api.cache["organisms"][measurement_type] = response.json()["organisms"]
     else:
         raise BadRequestError(response.json()["message"])
 
-def _fetch_organs(self, organism: str):
+
+def _fetch_organs(api, organism: str, measurement_type: str):
     """Fetch organ data"""
     response = requests.get(
-        baseurl + "organs",
+        api.baseurl + "organs",
         params={
             "organism": organism,
+            "measurement_type": measurement_type,
         },
     )
     if response.ok:
-        if "organs" not in self.cache:
-            self.cache["organs"] = {}
-        self.cache["organs"][(measurement_type, organism)] = response.json()["organs"]
+        if "organs" not in api.cache:
+            api.cache["organs"] = {}
+        api.cache["organs"][(measurement_type, organism)] = response.json()["organs"]
     else:
         raise BadRequestError(response.json()["message"])
 
-def _fetch_celltypes(self, organism: str, organ: str, measurement_type: str, include_abundance: bool):
+
+def _fetch_celltypes(api, organism: str, organ: str, measurement_type: str, include_abundance: bool):
     """Fetch cell type data"""
     response = requests.get(
-        baseurl + "celltypes",
+        api.baseurl + "celltypes",
         params={
             "organism": organism,
             "organ": organ,
@@ -40,16 +48,16 @@ def _fetch_celltypes(self, organism: str, organ: str, measurement_type: str, inc
         },
     )
     if response.ok:
-        if "celltypes" not in self.cache:
-            self.cache["celltypes"] = {}
+        if "celltypes" not in api.cache:
+            api.cache["celltypes"] = {}
         if include_abundance:
             res_dict = response.json()
             res = {
                 'celltypes': res_dict['celltypes'],
                 'abundance': res_dict['abundance'],
             }
-            self.cache["celltypes"][(measurement_type, organism, organ, include_abundance)] = res
+            api.cache["celltypes"][(measurement_type, organism, organ, include_abundance)] = res
         else:
-            self.cache["celltypes"][(measurement_type, organ, include_abundance)] = response.json()["celltypes"]
+            api.cache["celltypes"][(measurement_type, organ, include_abundance)] = response.json()["celltypes"]
     else:
         raise BadRequestError(response.json()["message"])
