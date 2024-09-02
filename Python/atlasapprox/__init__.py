@@ -19,9 +19,11 @@ __all__ = (
     "api_version",
     "BadRequestError",
     "API",
+    __version__,
 )
 
 
+__version__ = "0.2.1"
 api_version = "v1"
 
 baseurl = os.getenv(
@@ -61,7 +63,7 @@ Animals:
 - Xenopus laevis: Liao et al. 2022 (https://www.nature.com/articles/s41467-022-31949-2)
 
 Plants:
-- Arabidopsis thaliana: Shahan et al 2022 (https://www.sciencedirect.com/science/article/pii/S1534580722000338)
+- Arabidopsis thaliana: Shahan et al 2022 (https://www.sciencedirect.com/science/article/pii/S1534580722000338), Xu et al. 2024 (https://www.biorxiv.org/content/10.1101/2024.03.04.583414v1)
 - Lemna minuta: Abramson et al. 2022 (https://doi.org/10.1093/plphys/kiab564)
 
 To hide this message, set the environment variable ATLASAPPROX_HIDECREDITS to any

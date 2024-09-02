@@ -45,9 +45,10 @@ setup(
     packages=find_packages(),
     install_requires=[
         "requests",
+        "numpy",
         "pandas",
     ],
-    python_requires=">=3.7",
+    python_requires=">=3.8",
     platforms="ALL",
     keywords=[
         "single cell",
