@@ -14,7 +14,7 @@ from atlasapprox.utils import (
    _fetch_celltypes,
 )
 
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 
 __all__ = (
     "api_version",

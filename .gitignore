@@ -1,5 +1,5 @@
 # Pypi token
-Python/token.txt
+Python/*.token
 
 # Node stuff
 node_modules
