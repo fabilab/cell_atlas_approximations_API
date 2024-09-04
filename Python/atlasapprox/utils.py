@@ -58,6 +58,6 @@ def _fetch_celltypes(api, organism: str, organ: str, measurement_type: str, incl
             }
             api.cache["celltypes"][(measurement_type, organism, organ, include_abundance)] = res
         else:
-            api.cache["celltypes"][(measurement_type, organ, include_abundance)] = response.json()["celltypes"]
+            api.cache["celltypes"][(measurement_type, organism, organ, include_abundance)] = response.json()["celltypes"]
     else:
         raise BadRequestError(response.json()["message"])
