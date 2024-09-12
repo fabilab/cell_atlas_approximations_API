@@ -10,6 +10,7 @@ from api.v1.objects.fraction_detected import FractionDetected
 from api.v1.objects.markers import Markers
 from api.v1.objects.data_sources import DataSources
 from api.v1.objects.highest_measurement import HighestMeasurement
+from api.v1.objects.highest_measurement_multiple import HighestMeasurementMultiple
 from api.v1.objects.similar_features import SimilarFeatures
 from api.v1.objects.similar_celltypes import SimilarCelltypes
 from api.v1.objects.celltypexorgan import CelltypeXOrgan
@@ -34,6 +35,7 @@ __all__ = (
     "FractionDetected",
     "Neighborhood",
     "HighestMeasurement",
+    "HighestMeasurementMultiple",
     "Markers",
     "SimilarCelltypes",
     "SimilarFeatures",

@@ -38,8 +38,11 @@ from models.sequences import (
 from models.measurement import (
     get_averages,
     get_fraction_detected,
-    get_highest_measurement,
     get_neighborhoods,
+)
+from models.highest_measurement import (
+    get_highest_measurement,
+    get_highest_measurement_multiple,
 )
 from models.similar import (
     get_similar_features,

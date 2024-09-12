@@ -78,6 +78,7 @@ def get_feature_index(
 
     return idx
 
+
 def get_feature_indices(
     organism,
     feature_names,
@@ -104,6 +105,7 @@ def get_feature_indices(
         )
     return result
 
+
 def get_feature_names(
     organism,
     measurement_type="gene_expression",
@@ -114,3 +116,14 @@ def get_feature_names(
 
     features = feature_series[(organism, measurement_type)]["name"].values
     return features
+
+
+def filter_existing_features(
+    organism,
+    feature_names,
+    measurement_type="gene_expression",
+    ):
+    """Get the list of features that are actually found in that organism."""
+    feature_names = pd.Index(feature_names)
+    feature_names = feature_names[feature_names.isin(get_features(organism, measurement_type=measurement_type))]
+    return feature_names.values
