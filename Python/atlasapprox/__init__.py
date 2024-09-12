@@ -14,7 +14,7 @@ from atlasapprox.utils import (
    _fetch_celltypes,
 )
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 
 __all__ = (
     "api_version",
@@ -59,12 +59,15 @@ Animals:
 - Schmidtea mediterranea: Plass et al. 2018 (https://doi.org/10.1126/science.aaq1723)
 - Stylophora pistillata: Levi et al. 2021 (https://www.sciencedirect.com/science/article/pii/S0092867421004402)
 - Trichoplax adhaerens: Sebé-Pedrós et al 2018 (https://www.nature.com/articles/s41559-018-0575-6)
-- Triticum aestivum (wheat): Zhang et al 2023 (https://genomebiology.biomedcentral.com/articles/10.1186/s13059-023-02908-x)
 - Xenopus laevis: Liao et al. 2022 (https://www.nature.com/articles/s41467-022-31949-2)
 
 Plants:
 - Arabidopsis thaliana: Shahan et al 2022 (https://www.sciencedirect.com/science/article/pii/S1534580722000338), Xu et al. 2024 (https://www.biorxiv.org/content/10.1101/2024.03.04.583414v1)
 - Lemna minuta: Abramson et al. 2022 (https://doi.org/10.1093/plphys/kiab564)
+- Fragaria vesca: Bai et al. 2022 (https://doi.org/10.1093/hr/uhab055)
+- Oryza sativa: Zhang et al. 2022 (https://doi.org/10.1038/s41467-021-22352-4)
+- Triticum aestivum (wheat): Zhang et al 2023 (https://genomebiology.biomedcentral.com/articles/10.1186/s13059-023-02908-x)
+- Zea mays: Marand et al. 2021 (https://doi.org/10.1016/j.cell.2021.04.014)
 
 To hide this message, set the environment variable ATLASAPPROX_HIDECREDITS to any
 nonzero value, e.g.:
@@ -598,6 +601,67 @@ class API:
         )
         result.set_index(["celltype", "organ"], inplace=True)
         return result["average"]
+
+    def highest_measurement_multiple(
+        self,
+        organism: str,
+        features: List(str),
+        number: int,
+        measurement_type: str = "gene_expression",
+    ):
+        """Get the highest measurements by cell type across an organism.
+
+        Args:
+            organism: The organism to query.
+            number: The number of cell types to list. The actual number might
+                be lower if not enough cell types were found.
+            measurement_type: The measurement type to query.
+
+        Returns: A pandas.Series with a multi-index containing cell type and
+            organ and values corresponding to the average measurement (e.g.
+            gene expression) for that feature in that cell type and organ.
+        """
+        response = requests.get(
+            baseurl + "highest_measurement_multiple",
+            params={
+                "organism": organism,
+                "features": features,
+                "number": number,
+                "measurement_type": measurement_type,
+            },
+        )
+        if not response.ok:
+            raise BadRequestError(response.json()["message"])
+
+        resp_result = response.json()
+
+        # Score Series
+        result = pd.DataFrame(
+            {
+                "celltype": resp_result["celltypes"],
+                "organ": resp_result["organs"],
+                "score": resp_result["score"],
+            }
+        )
+        result.set_index(["celltype", "organ"], inplace=True)
+
+        # Average and fraction detected
+        result_average = pd.DataFrame(
+            resp_result['average'],
+            index=result.index,
+            columns=resp_result['features'],
+        )
+        result_fraction = pd.DataFrame(
+            resp_result['fraction_detected'],
+            index=result.index,
+            columns=resp_result['features'],
+        )
+
+        return {
+            'score': result["score"],
+            'average': result_average,
+            'fraction_detected': result_fraction,
+        }
 
     def celltype_location(
         self,

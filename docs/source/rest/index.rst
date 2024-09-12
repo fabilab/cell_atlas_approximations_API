@@ -375,7 +375,7 @@ The three lists have equal length and are paired. Each triplet of entries indica
 
 Currently, homology is estimated using `PROST <https://doi.org/10.1073/pnas.2211823120>`_. Therefore, only gene expression for protein-coding genes is supported.
 
-Highest-measurement cell types
+Highest-measurement
 ++++++++++++++++++++++++++++++
 **Endpoint**: ``/highest_measurement``
 
@@ -388,11 +388,38 @@ Highest-measurement cell types
 **Returns**: A dict with the following key-value pairs:
   - ``measurement_type``: The measurement type selected.
   - ``organism``: The organism chosen.
-  - ``feature``: The feature chosen.
+  - ``feature``: The feature chosen, autocorrected for capitalisation and such.
   - ``celltypes``: A list of cell types with the highest measurement (e.g. expression) for that feature
   - ``organs``: A list of corresponding organs. This parameter and ``celltypes`` should be interpreted together as pairs that fully specify cell types.
   - ``average``: average measurement (e.g. expression) in those cell types and organs.
+  - ``fraction_detected``: The fraction of cells with detected signal (e.g. gene expression) for each cell type and organ.
   - ``unit``: The unit of measurement for the average measurement returned.
+
+Highest-measurement across multiple features
+++++++++++++++++++++++++++++++
+**Endpoint**: ``/highest_measurement_multiple``
+
+**Parameters**:
+  - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
+  - ``features``: The features to look for.
+  - ``number``: The number of cell types to return.
+  - ``measurement_type`` (default: ``gene_expression``): Optional parameter to choose what type of measurement is sought. Currently, only ``gene_expression`` is supported.
+
+**Returns**: A dict with the following key-value pairs:
+  - ``measurement_type``: The measurement type selected.
+  - ``organism``: The organism chosen.
+  - ``features``: The features chosen, autocorrected for capitalisation and such.
+  - ``celltypes``: A list of cell types with the highest measurement (e.g. expression) for that feature
+  - ``organs``: A list of corresponding organs. This parameter and ``celltypes`` should be interpreted together as pairs that fully specify cell types.
+  - ``average``: Average measurement (e.g. expression) in those cell types and organs for the chosen features.
+  - ``score``: A list of "scores" used to rank cell type-organ pairs to determine the highest combined measurement (higher is better). The exact meaning of the score is to be considered immaterial and is subject to change.
+  - ``fraction_detected``: The fraction of cells with detected signal (e.g. gene expression) for each cell type, organ and feature.
+  - ``unit``: The unit of measurement for the average measurement returned.
+
+.. note::
+   If not all features requested can be found, the server will respond with the ones that could be found and ignore the other ones. This should be fine in most casesbut
+   but could lead to unexpected ranking if key features were missing (e.g. misspelled beyond our autocorrection ability). If no features were found at all, an error
+   is returned.
 
 Similar features
 ++++++++++++++++

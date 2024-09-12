@@ -151,6 +151,12 @@ async function highest_measurement({ organism, feature, number=10, measurement_t
   return await _callEndpoint("highest_measurement", params=params);
 }
 
+// HIGHEST MEASUREMENT MULTIPLE
+async function highest_measurement_multiple({ organism, features, number=10, measurement_type = "gene_expression", per_organ = false }) {
+  let params = { organism, features, number, measurement_type, per_organ };
+  return await _callEndpoint("highest_measurement_multiple", params=params);
+}
+
 // SIMILAR FEATURES
 async function similar_features({ organism, organ, feature, number=10, method = "correlation", measurement_type = "gene_expression" }) {
   let params = { organism, organ, feature, number, method, measurement_type };
@@ -210,6 +216,7 @@ const atlasapprox = {
     interaction_partners,
     homologs,
     highest_measurement,
+    highest_measurement_multiple,
     similar_features,
     similar_celltypes,
     celltypexorgan,
