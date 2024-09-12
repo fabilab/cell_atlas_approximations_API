@@ -129,7 +129,7 @@ class API:
         """
         if ("organs" not in self.cache) or (organism not in self.cache["organs"]):
             _fetch_organs(self, organism, measurement_type)
-        return self.cache["organs"][organism]
+        return self.cache["organs"][(measurement_type, organism)]
 
     def celltypes(
         self,
