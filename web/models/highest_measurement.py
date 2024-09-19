@@ -120,6 +120,7 @@ def get_highest_measurement(
 def get_highest_measurement_multiple(
     organism,
     features,
+    features_negative=tuple(),
     measurement_type="gene_expression",
     number=10,
     per_organ=False,
@@ -146,13 +147,13 @@ def get_highest_measurement_multiple(
 
     # NOTE: I tried a few versions of this, geometric average expression seems to work
     # pretty well actually... compared to a few fancier things at least
-    def _score_measurements(matrix):
+    def _score_measurements(matrix, signs):
         mat = np.log1p(matrix)
         ## Normalse
         #mat = (matrix.T / matrix.max(axis=1)).T
         # Exponential kernel
         #mat = np.exp(mat - 1)
-        return mat.mean(axis=0)
+        return signs @ mat / len(signs)
 
     organs = get_organs(
         organism,
@@ -174,6 +175,18 @@ def get_highest_measurement_multiple(
         )
     features = features_found
     result["features"] = list(features)
+    del features_found
+
+    if len(features_negative):
+        features_found = filter_existing_features(organism, features_negative, measurement_type=measurement_type)
+        if len(features_found) != 0:    
+            features_negative = features_found
+            result["features_negative"] = list(features_negative)
+        del features_found
+
+    features_both = list(features) + list(features_negative)
+    signs = -np.ones(len(features_both))
+    signs[:len(features)] = 1
 
     for organ in organs:
         celltypes = get_celltypes(
@@ -184,20 +197,20 @@ def get_highest_measurement_multiple(
 
         avg_organ = get_averages(
             organism,
-            features,
+            features_both,
             organ=organ,
             measurement_type=measurement_type,
         ).T
         frac_organ = get_fraction_detected(
             organism,
-            features,
+            features_both,
             organ=organ,
             measurement_type=measurement_type,
         ).T
 
         if per_organ:
             # Find top expressors, per organ
-            score = _score_measurements(avg_organ.T)
+            score = _score_measurements(avg_organ.T, signs)
             result["score"].append(score)
             idx_top_organ = score.argsort()[::-1][:number]
             result["celltypes"].extend([celltypes[i] for i in idx_top_organ])
@@ -217,7 +230,7 @@ def get_highest_measurement_multiple(
         result["score"] = np.concatenate(result["score"])
     else:
         # Find top expressors
-        result["score"] = _score_measurements(result["average"])
+        result["score"] = _score_measurements(result["average"], signs)
         idx_top = result["score"].argsort()[::-1][:number]
 
         # Exclude zero expressors
