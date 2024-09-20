@@ -4,13 +4,16 @@ import re
 
 def clean_feature_string(features, organism=None, measurement_type="gene_expression"):
     """Clean feature string and split into a list."""
+    if features is None:
+        return []
+
     features = features.replace('"', "").replace("'", "").replace(" ", "")
 
     # Split a single string into a list of features
     features = features.split(",")
 
     # Convert everything to lowercase, the models include a back-conversion
-    features = [fea.lower() for fea in features]
+    features = [fea.lower() for fea in features if fea]
 
     return features
 

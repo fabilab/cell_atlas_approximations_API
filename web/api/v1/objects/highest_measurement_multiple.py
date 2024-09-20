@@ -31,10 +31,7 @@ class HighestMeasurementMultiple(Resource):
         features = args.get("features")
         features = clean_feature_string(features, organism, measurement_type)
         features_neg = args.get("features_negative")
-        if features_neg is not None:
-            features_neg = clean_feature_string(features_neg, organism, measurement_type)
-        else:
-            features_neg = []
+        features_neg = clean_feature_string(features_neg, organism, measurement_type)
         number = args.get("number")
         unit = config["units"][measurement_type]
         per_organ = str(args.get("per_organ", 'false')).lower() != 'false'
