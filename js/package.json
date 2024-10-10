@@ -1,6 +1,6 @@
 {
   "name": "@fabilab/atlasapprox",
-  "version": "0.2.13",
+  "version": "0.2.14",
   "description": "JavaScript APIs for Cell Atlas Approximations",
   "main": "index.js",
   "scripts": {

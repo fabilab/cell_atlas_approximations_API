@@ -44,9 +44,9 @@ If you are exploring the API from scratch, you would usually:
   2. Ask about available `organs` within your organism of interest.
   3. Ask about `average` gene expression in that organ.
 
-Each API method is described in detail below.
 
-Reference API
--------------
-.. automodule:: atlasapprox
-   :members:
+.. toctree::
+   :maxdepth: 1
+
+   API Reference <api>
+   Example gallery <gallery/index>

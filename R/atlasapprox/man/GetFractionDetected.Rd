@@ -20,5 +20,5 @@ A data.frame of fraction of expressing cells by cell type in that organism and o
 GetFractionDetected
 }
 \examples{
-GetFractionDetected("h_sapiens", "Lung", c("COL1A1", "PTPRC")) 
+GetFractionDetected("h_sapiens", "Lung", c("COL1A1", "PTPRC"))
 }

@@ -1,4 +1,5 @@
 """Module to access, validate, and correct cell types."""
+
 from levenshtein_finder import LevenshteinFinder
 
 from models.exceptions import (
@@ -12,8 +13,8 @@ def get_celltype_index(celltype, celltypes, max_distance=3):
 
     if celltype in celltypes:
         result = {
-            'index': celltypes.index(celltype),
-            'celltype': celltype,
+            "index": celltypes.index(celltype),
+            "celltype": celltype,
         }
         return result
 
@@ -35,8 +36,7 @@ def get_celltype_index(celltype, celltypes, max_distance=3):
         )
 
     result = {
-        'index': celltypes_close[0]['idx'],
-        'celltype': celltypes_close[0]['data'],
+        "index": celltypes_close[0]["idx"],
+        "celltype": celltypes_close[0]["data"],
     }
     return result
-

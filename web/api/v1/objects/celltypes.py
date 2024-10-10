@@ -20,7 +20,7 @@ from api.v1.utils import (
 class Celltypes(Resource):
     """Get list of cell types for an organ and organism"""
 
-    @required_parameters('organism', 'organ')
+    @required_parameters("organism", "organ")
     @model_exceptions
     def get(self):
         """Get list of cell types for an organ and organism"""
@@ -28,18 +28,25 @@ class Celltypes(Resource):
         organism = args.get("organism")
         organ = args.get("organ")
         organ = clean_organ_string(organ)
-        measurement_type = args.get(
-            "measurement_type", "gene_expression")
-        include_abundance = str(args.get("include_abundance", 'false')).lower() != 'false'
+        measurement_type = args.get("measurement_type", "gene_expression")
+        include_abundance = (
+            str(args.get("include_abundance", "false")).lower() != "false"
+        )
 
         if include_abundance:
-            res = get_celltype_abundance(organism=organism, organ=organ, measurement_type=measurement_type)
+            res = get_celltype_abundance(
+                organism=organism, organ=organ, measurement_type=measurement_type
+            )
             celltypes = list(res.index)
             # Numpy integers are not serialisable
             abundance = [int(x) for x in res.values]
             del res
         else:
-            celltypes = list(get_celltypes(organism=organism, organ=organ, measurement_type=measurement_type))
+            celltypes = list(
+                get_celltypes(
+                    organism=organism, organ=organ, measurement_type=measurement_type
+                )
+            )
 
         result = {
             "organism": organism,
@@ -49,6 +56,6 @@ class Celltypes(Resource):
         }
 
         if include_abundance:
-            result['abundance'] = abundance
+            result["abundance"] = abundance
 
         return result

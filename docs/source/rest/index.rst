@@ -196,6 +196,18 @@ Table of organ x organism for a cell type
   - ``celltype``: The chosen cell type, spell corrected if necessary.
   - ``detected``: A table (list of lists) of boolean values, with 1 indicating presence and 0 indicating absence of the chosen cell type in that organ and organism. Order of rows and columns as in the ``organs`` and ``organisms`` part of the returned object.
 
+Table of cell types x organism
+++++++++++++++++++++++++++++++
+**Endpoint**: ``/celltypexorganism``
+
+**Parameters**:
+  - ``measurement_type`` (optional, default ``gene_expresion``): What kind of measurement to query about.
+
+**Returns**: An object/dict with the following keys:
+  - ``measurement_type``: The measurement type selected.
+  - ``celltypes``: A list containing all celltypes across the entire database.
+  - ``organisms``: The list of organisms across the entire database.
+  - ``detected``: A table (list of lists) of boolean values, with 1 indicating presence and 0 indicating absence of the chosen cell type in that organism. Order of rows and columns as in the ``celltypes`` and ``organisms`` part of the returned object.
 
 Averages
 ++++++++
@@ -396,7 +408,7 @@ Highest-measurement
   - ``unit``: The unit of measurement for the average measurement returned.
 
 Highest-measurement across multiple features
-++++++++++++++++++++++++++++++
+++++++++++++++++++++++++++++++++++++++++++++
 **Endpoint**: ``/highest_measurement_multiple``
 
 **Parameters**:

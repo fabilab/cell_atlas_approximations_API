@@ -10,8 +10,8 @@ Quick start
    
 Requirements
 ------------
-  - A UNIX terminal. Windows will probably not work, but if you need Windows terminal support, please open a GitHub issue and we can
-work together to find a solution.
+
+  - A UNIX terminal. Windows will probably not work, but if you need Windows terminal support, please open a GitHub issue and we can work together to find a solution.
   - `curl`: Future versions will support other cli request handlers such as `wget`.
 
 Installation

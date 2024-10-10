@@ -152,8 +152,8 @@ async function highest_measurement({ organism, feature, number=10, measurement_t
 }
 
 // HIGHEST MEASUREMENT MULTIPLE
-async function highest_measurement_multiple({ organism, features, number=10, measurement_type = "gene_expression", per_organ = false }) {
-  let params = { organism, features, number, measurement_type, per_organ };
+async function highest_measurement_multiple({ organism, features, features_negative = "", number=10, measurement_type = "gene_expression", per_organ = false }) {
+  let params = { organism, features, features_negative, number, measurement_type, per_organ };
   return await _callEndpoint("highest_measurement_multiple", params=params);
 }
 

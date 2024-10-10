@@ -13,5 +13,5 @@ The cell atlases used as data sources for the approximations
 GetDataSources
 }
 \examples{
-GetDataSources() 
+GetDataSources()
 }

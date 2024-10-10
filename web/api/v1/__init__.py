@@ -1,4 +1,5 @@
 """Main module for API v1"""
+
 from api.v1.endpoints import get_api_endpoint
 from api.v1.objects import (
     MeasurementTypes,
@@ -19,15 +20,14 @@ from api.v1.objects import (
     SimilarCelltypes,
     CelltypeXOrgan,
     OrganXOrganism,
+    CelltypeXOrganism,
     CelltypeLocation,
     Neighborhood,
     InteractionPartners,
     Homologs,
 )
 
-__all__ = (
-    "api_dict",
-)
+__all__ = ("api_dict",)
 
 api_dict = {
     "endpoint_handler": get_api_endpoint,
@@ -52,7 +52,8 @@ api_dict = {
         "similar_celltypes": SimilarCelltypes,
         "celltypexorgan": CelltypeXOrgan,
         "organxorganism": OrganXOrganism,
+        "celltypexorganism": CelltypeXOrganism,
         "celltype_location": CelltypeLocation,
         "data_sources": DataSources,
-    }
+    },
 }

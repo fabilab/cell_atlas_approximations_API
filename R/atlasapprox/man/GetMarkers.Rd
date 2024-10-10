@@ -13,7 +13,7 @@ GetMarkers(organism, organ, cell_type, number)
 
 \item{cell_type}{The cell type to find markers for}
 
-\item{number}{The number of markers to find}
+\item{number}{The number of markers to return}
 }
 \value{
 An array of markers for that cell type in that organism and organ
@@ -22,5 +22,5 @@ An array of markers for that cell type in that organism and organ
 GetMarkers
 }
 \examples{
-GetMarkers("h_sapiens", "Lung", "fibroblast", 5) 
+GetMarkers("h_sapiens", "Lung", "fibroblast", 5)
 }

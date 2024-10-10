@@ -16,5 +16,5 @@ An array of available organs from that organism
 GetOrgans
 }
 \examples{
-GetOrgans("h_sapiens") 
+GetOrgans("h_sapiens")
 }

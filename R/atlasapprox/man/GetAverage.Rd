@@ -20,5 +20,5 @@ A data.frame of average gene expression by cell type in that organism and organ
 GetAverage
 }
 \examples{
-GetAverage("h_sapiens", "Lung", c("COL1A1", "PTPRC")) 
+GetAverage("h_sapiens", "Lung", c("COL1A1", "PTPRC"))
 }

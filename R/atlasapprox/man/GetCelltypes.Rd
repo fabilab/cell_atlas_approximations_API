@@ -18,5 +18,5 @@ An array of available cell types from that organism and organ
 GetCelltypes
 }
 \examples{
-GetCelltypes("h_sapiens", "Lung") 
+GetCelltypes("h_sapiens", "Lung")
 }

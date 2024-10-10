@@ -16,5 +16,5 @@ An array of available features (genes) from that organism
 GetFeatures
 }
 \examples{
-GetFeatures("h_sapiens") 
+GetFeatures("h_sapiens")
 }

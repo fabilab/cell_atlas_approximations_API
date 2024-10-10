@@ -13,5 +13,5 @@ An array of available organisms
 GetOrganisms
 }
 \examples{
-GetOrganisms() 
+GetOrganisms()
 }

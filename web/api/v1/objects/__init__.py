@@ -15,6 +15,7 @@ from api.v1.objects.similar_features import SimilarFeatures
 from api.v1.objects.similar_celltypes import SimilarCelltypes
 from api.v1.objects.celltypexorgan import CelltypeXOrgan
 from api.v1.objects.organxorganism import OrganXOrganism
+from api.v1.objects.celltypexorganism import CelltypeXOrganism
 from api.v1.objects.celltype_location import CelltypeLocation
 from api.v1.objects.neighborhood import Neighborhood
 from api.v1.objects.dotplot import Dotplot
@@ -41,6 +42,7 @@ __all__ = (
     "SimilarFeatures",
     "CelltypeXOrgan",
     "OrganXOrganism",
+    "CelltypeXOrganism",
     "DataSources",
     "CelltypeLocation",
     "InteractionPartners",

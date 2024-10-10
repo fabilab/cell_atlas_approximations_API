@@ -1,6 +1,7 @@
 """
 Cell atlas approximations, Python API interface.
 """
+
 import os
 import requests
 import numpy as np
@@ -9,12 +10,12 @@ from typing import Sequence, Union
 
 from atlasapprox.exceptions import BadRequestError
 from atlasapprox.utils import (
-   _fetch_organisms,
-   _fetch_organs,
-   _fetch_celltypes,
+    _fetch_organisms,
+    _fetch_organs,
+    _fetch_celltypes,
 )
 
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 
 __all__ = (
     "api_version",
@@ -40,16 +41,17 @@ Animals:
 - Homo sapiens (human):
   - RNA: Tabula Sapiens (https://www.science.org/doi/10.1126/science.abl4896)
   - ATAC: Zhang et al. 2021 (https://doi.org/10.1016/j.cell.2021.10.024)
-- Mus musculus (mouse): Tabula Muris Senis (https://www.nature.com/articles/s41586-020-2496-1)
-- Microcebus murinus (mouse lemur): Tabula Microcebus (https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
+- Amphimedon queenslandica: Sebé-Pedrós et al 2018 (https://www.nature.com/articles/s41559-018-0575-6)
 - Caenorhabditis elegans: Cao et al. 2017 (https://www.science.org/doi/10.1126/science.aam8940)
 - Crassostrea gigas: Piovani et al. 2023 (https://doi.org/10.1126/sciadv.adg6034)
-- Danio rerio (zebrafish): Wagner et al. 2018 (https://www.science.org/doi/10.1126/science.aar4362)
 - Clytia hemisphaerica: Chari et al. 2021 (https://www.science.org/doi/10.1126/sciadv.abh1683#sec-4)
+- Danio rerio (zebrafish): Wagner et al. 2018 (https://www.science.org/doi/10.1126/science.aar4362)
 - Drosophila melanogaster (fruitfly): Li et al. 2022 (https://doi.org/10.1126/science.abk2432
 - Hofstenia miamia: Hulett et al. 2023 (https://www.nature.com/articles/s41467-023-38016-4)
 - Isodiametra pulchra: Duruz et al. 2020 (https://academic.oup.com/mbe/article/38/5/1888/6045962)
+- Microcebus murinus (mouse lemur): Tabula Microcebus (https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
 - Mnemiopsis leidyi: Sebé-Pedrós et al 2018 (https://www.nature.com/articles/s41559-018-0575-6)
+- Mus musculus (mouse): Tabula Muris Senis (https://www.nature.com/articles/s41586-020-2496-1)
 - Nematostella vectensis: Steger et al 2022 (https://doi.org/10.1016/j.celrep.2022.111370)
 - Prostheceraeus crozieri: Piovani et al. 2023 (https://doi.org/10.1126/sciadv.adg6034)
 - Platynereis dumerilii: Achim et al 2017 (https://academic.oup.com/mbe/article/35/5/1047/4823215)
@@ -67,7 +69,7 @@ Plants:
 - Fragaria vesca: Bai et al. 2022 (https://doi.org/10.1093/hr/uhab055)
 - Oryza sativa: Zhang et al. 2022 (https://doi.org/10.1038/s41467-021-22352-4)
 - Triticum aestivum (wheat): Zhang et al 2023 (https://genomebiology.biomedcentral.com/articles/10.1186/s13059-023-02908-x)
-- Zea mays: Marand et al. 2021 (https://doi.org/10.1016/j.cell.2021.04.014)
+- Zea mays: Marand et al. 2021 (https://doi.org/10.1016/j.cell.2021.04.014), Xu et al. 2024 (https://www.biorxiv.org/content/10.1101/2024.03.04.583414v1)
 
 To hide this message, set the environment variable ATLASAPPROX_HIDECREDITS to any
 nonzero value, e.g.:
@@ -89,9 +91,7 @@ class API:
     cache = {}
 
     def __init__(self, url=None):
-        """Create an instance of the atlasapprox API.
-
-        """
+        """Create an instance of the atlasapprox API."""
         self.baseurl = url if url is not None else baseurl
 
     def measurement_types(self):
@@ -151,9 +151,14 @@ class API:
 
         Return: A list of cell types.
         """
-        if ("celltypes" not in self.cache) or ((measurement_type, organism, organ, include_abundance) not in self.cache["celltypes"]):
+        if ("celltypes" not in self.cache) or (
+            (measurement_type, organism, organ, include_abundance)
+            not in self.cache["celltypes"]
+        ):
             _fetch_celltypes(self, organism, organ, measurement_type, include_abundance)
-        return self.cache["celltypes"][(measurement_type, organism, organ, include_abundance)]
+        return self.cache["celltypes"][
+            (measurement_type, organism, organ, include_abundance)
+        ]
 
     def average(
         self,
@@ -299,7 +304,7 @@ class API:
         features = resjson["features"]
         result = pd.Index(
             features,
-            name='features',
+            name="features",
         )
         return result
 
@@ -365,7 +370,7 @@ class API:
             "include_embedding": include_embedding,
         }
         if (features is not None) and len(features):
-            params["features"] = ",".join(features),
+            params["features"] = (",".join(features),)
 
         response = requests.get(
             baseurl + "neighborhood",
@@ -435,12 +440,12 @@ class API:
                 - euclidean: Euclidean distance of average measurement (e.g. expression)
                 - manhattan: Taxicab/Manhattan/L1 distance of average measurement
                 - log-euclidean: Log the average measurement with a pseudocount
-                  of 0.001, then compute euclidean distance. This tends to
-                  highlight sparsely measured features
+                of 0.001, then compute euclidean distance. This tends to
+                highlight sparsely measured features
             measurement_type: The measurement type to query.
 
         Return: A pandas.Series with the similar features and their distance
-            from the focal feature according to the chosen method.
+        from the focal feature according to the chosen method.
         """
         response = requests.get(
             baseurl + "similar_features",
@@ -489,12 +494,12 @@ class API:
                 - euclidean: Euclidean distance of average measurement (e.g. expression)
                 - manhattan: Taxicab/Manhattan/L1 distance of average measurement
                 - log-euclidean: Log the average measurement with a pseudocount
-                  of 0.001, then compute euclidean distance. This tends to
-                  highlight sparsely measured features
+                of 0.001, then compute euclidean distance. This tends to
+                highlight sparsely measured features
             measurement_type: The measurement type to query.
 
         Return: A pandas.Series with the similar (organ, celltype) and their
-            distance from the focal feature according to the chosen method.
+        distance from the focal feature according to the chosen method.
         """
         response = requests.get(
             baseurl + "similar_celltypes",
@@ -516,7 +521,7 @@ class API:
         distances = resjson["distances"]
         index = pd.MultiIndex.from_arrays(
             [similar_organs, similar_celltypes],
-            names=['organ', 'cell type'],
+            names=["organ", "cell type"],
         )
         result = pd.Series(
             distances,
@@ -605,14 +610,17 @@ class API:
     def highest_measurement_multiple(
         self,
         organism: str,
-        features: List(str),
+        features: Sequence[str],
         number: int,
+        features_negative: Union[None, Sequence[str]] = None,
         measurement_type: str = "gene_expression",
     ):
         """Get the highest measurements by cell type across an organism.
 
         Args:
             organism: The organism to query.
+            features: The features making up the signature to look for.
+            features_negative: The features that should not be detected by the queried cell types.
             number: The number of cell types to list. The actual number might
                 be lower if not enough cell types were found.
             measurement_type: The measurement type to query.
@@ -621,11 +629,14 @@ class API:
             organ and values corresponding to the average measurement (e.g.
             gene expression) for that feature in that cell type and organ.
         """
+        features = list(features)
+        features_negative = [] if features_negative is None else list(features_negative)
         response = requests.get(
             baseurl + "highest_measurement_multiple",
             params={
                 "organism": organism,
                 "features": features,
+                "features_negative": features_negative,
                 "number": number,
                 "measurement_type": measurement_type,
             },
@@ -645,22 +656,26 @@ class API:
         )
         result.set_index(["celltype", "organ"], inplace=True)
 
+        features_both += resp_result["features"]
+        if "features_negative" in resp_result:
+            features_both += resp_result["features_negative"]
+
         # Average and fraction detected
         result_average = pd.DataFrame(
-            resp_result['average'],
+            resp_result["average"],
             index=result.index,
-            columns=resp_result['features'],
+            columns=features_both,
         )
         result_fraction = pd.DataFrame(
-            resp_result['fraction_detected'],
+            resp_result["fraction_detected"],
             index=result.index,
-            columns=resp_result['features'],
+            columns=features_both,
         )
 
         return {
-            'score': result["score"],
-            'average': result_average,
-            'fraction_detected': result_fraction,
+            "score": result["score"],
+            "average": result_average,
+            "fraction_detected": result_fraction,
         }
 
     def celltype_location(

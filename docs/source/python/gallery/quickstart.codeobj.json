@@ -1,0 +1,174 @@
+{
+ "aa.API": [
+  {
+   "is_class": true,
+   "is_explicit": false,
+   "module": "atlasapprox",
+   "module_short": "atlasapprox",
+   "name": "API"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "atlasapprox",
+   "module_short": "atlasapprox",
+   "name": "API"
+  }
+ ],
+ "api": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "atlasapprox",
+   "module_short": "atlasapprox",
+   "name": "API"
+  }
+ ],
+ "api.average": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "atlasapprox",
+   "module_short": "atlasapprox",
+   "name": "API.average"
+  }
+ ],
+ "ax": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes._axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.axes",
+   "module_short": "matplotlib.axes",
+   "name": "Axes"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Axes"
+  }
+ ],
+ "expression": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas.core.frame",
+   "module_short": "pandas.core.frame",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas.core",
+   "module_short": "pandas.core",
+   "name": "DataFrame"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "DataFrame"
+  }
+ ],
+ "fig": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure"
+  }
+ ],
+ "fig.tight_layout": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "Figure.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Figure.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.figure",
+   "module_short": "matplotlib.figure",
+   "name": "FigureBase.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "FigureBase.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.artist",
+   "module_short": "matplotlib.artist",
+   "name": "Artist.tight_layout"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib",
+   "module_short": "matplotlib",
+   "name": "Artist.tight_layout"
+  }
+ ],
+ "plt.subplots": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "subplots"
+  }
+ ],
+ "sns.heatmap": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "builtins",
+   "module_short": "builtins",
+   "name": "function"
+  },
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "seaborn",
+   "module_short": "seaborn",
+   "name": "heatmap"
+  }
+ ]
+}
