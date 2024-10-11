@@ -21,7 +21,7 @@
     <td><a href="https://badge.fury.io/py/atlasapprox"><img src="https://badge.fury.io/py/atlasapprox.svg"></a></td>
     <td><img src="https://cranlogs.r-pkg.org/badges/atlasapprox"></td>
     <td><a href="https://badge.fury.io/js/@fabilab%2Fatlasapprox"><img src="https://badge.fury.io/js/@fabilab%2Fatlasapprox.svg"></a></td>
-    <td>(see repo)</td>
+    <td> <a href="https://raw.githubusercontent.com/fabilab/cell_atlas_approximations_API/refs/heads/main/shell/atlasapprox">here</a></td>
   </tr>
   <tr>
     <td>Docs</td>
