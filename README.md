@@ -10,22 +10,22 @@
   <tr>
     <td>Build</td>
     <td><a href="https://github.com/fabilab/cell_atlas_approximations_API/actions"><img src="https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/rest_test.yml/badge.svg"></a></td>
-    <td>[![Python CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/python_build.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)</td>
+    <td><a href="https://github.com/fabilab/cell_atlas_approximations_API/actions"><img src="https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/python_build.yml/badge.svg"></a></td>
     <td>(missing)</td>
-    <td>[![JS CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/js_test.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)</td>
+    <td><a href="https://github.com/fabilab/cell_atlas_approximations_API/actions"><img src="https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/js_test.yml/badge.svg"></a></td>
     <td>(missing)</td>
   </tr>
   <tr>
     <td>Release</td>
-    <td>REST</td>
-    <td>[![PyPI version](https://badge.fury.io/py/atlasapprox.svg)](https://badge.fury.io/py/atlasapprox)</td>
-    <td>![CRAN Downloads](https://cranlogs.r-pkg.org/badges/atlasapprox)</td>
-    <td>[![npm version](https://badge.fury.io/js/@fabilab%2Fatlasapprox.svg)](https://badge.fury.io/js/@fabilab%2Fatlasapprox)</td>
+    <td>(N.A.)</td>
+    <td><a href="https://badge.fury.io/py/atlasapprox"><img src="https://badge.fury.io/py/atlasapprox.svg"></a></td>
+    <td><img src="https://cranlogs.r-pkg.org/badges/atlasapprox"></td>
+    <td><a href="https://badge.fury.io/js/@fabilab%2Fatlasapprox"><img src="https://badge.fury.io/js/@fabilab%2Fatlasapprox.svg"></a></td>
     <td>(see repo)</td>
   </tr>
   <tr>
     <td>Docs</td>
-    <td colspan="5">[![Documentation Status](https://readthedocs.org/projects/atlasapprox/badge/?version=latest)](https://apidocs.atlasapprox.org/en/latest/?badge=latest)</td>
+    <td colspan="5"><a href="https://apidocs.atlasapprox.org/en/latest/?badge=latest"><img src="https://readthedocs.org/projects/atlasapprox/badge/?version=latest"></a></td>
   </tr>
 </table>
 
