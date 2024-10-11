@@ -22,7 +22,7 @@ jobs:
         OS_NAME: ${{ matrix.os }}
         CONDA_PY: ${{ matrix.python-version }}
       working-directory: rest
-      run: pip install pytest unittest requests
+      run: pip install pytest requests
 
     - name: Test with pytest
       env:
