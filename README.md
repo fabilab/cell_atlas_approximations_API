@@ -1,4 +1,5 @@
-| | REST | Python | R | JS | Shell |
+| Ops | REST | Python | R | JS | Shell |
+|-----|------|--------|---|----|-------|
 |Test|[![REST CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/rest_test.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)|[![Python CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/python_build.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)| |[![JS CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/js_test.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)| |
 |Release|N.A.|[![PyPI version](https://badge.fury.io/py/atlasapprox.svg)](https://badge.fury.io/py/atlasapprox)|![CRAN Downloads](https://cranlogs.r-pkg.org/badges/atlasapprox)|[![npm version](https://badge.fury.io/js/@fabilab%2Fatlasapprox.svg)](https://badge.fury.io/js/@fabilab%2Fatlasapprox)| (see repo)|
 |Docs <td colspan=4>[![Documentation Status](https://readthedocs.org/projects/atlasapprox/badge/?version=latest)](https://apidocs.atlasapprox.org/en/latest/?badge=latest)
