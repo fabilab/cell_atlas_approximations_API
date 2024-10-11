@@ -25,7 +25,7 @@
   </tr>
   <tr>
     <td>Docs</td>
-    <td colspan="5"><a href="https://apidocs.atlasapprox.org/en/latest/?badge=latest"><img src="https://readthedocs.org/projects/atlasapprox/badge/?version=latest"></a></td>
+    <td align="center" colspan="5"><a href="https://apidocs.atlasapprox.org/en/latest/?badge=latest"><img src="https://readthedocs.org/projects/atlasapprox/badge/?version=latest"></a></td>
   </tr>
 </table>
 
