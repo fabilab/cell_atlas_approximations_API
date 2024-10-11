@@ -133,12 +133,14 @@ Note that the output is a serialized JSON string: you'll probably need some kind
 </details>
 
 ## Repo contents
-- `data`: files required for the compression of current cell atlases
 - `preprocess`: scripts used for the approximations
 - `web`: webserver code in Flask that implements the RESTful API
-- `Python`: package code providing a Python interface for the RESTful API
-- `R`: package code providing an R interface for the RESTful API
-- `docs`: user documentation for the API
+- `rest`: testing code for the RESTful API
+- `Python`: package code providing a Python interface
+- `R`: package code providing an R interface
+- `js`: package code providing a JavaScript interface
+- `shell`: shell script
+- `docs`: user documentation
 
 ## Authors
 - [Fabio Zanini @ fabilab](https://fabilab.org)
