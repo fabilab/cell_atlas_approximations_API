@@ -1,8 +1,34 @@
-|  | REST | Python | R | JS | Shell |
-|-----|------|--------|---|----|-------|
-|Test|[![REST CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/rest_test.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)|[![Python CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/python_build.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)| |[![JS CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/js_test.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)| |
-|Release|N.A.|[![PyPI version](https://badge.fury.io/py/atlasapprox.svg)](https://badge.fury.io/py/atlasapprox)|![CRAN Downloads](https://cranlogs.r-pkg.org/badges/atlasapprox)|[![npm version](https://badge.fury.io/js/@fabilab%2Fatlasapprox.svg)](https://badge.fury.io/js/@fabilab%2Fatlasapprox)| (see repo)|
-|Docs <td colspan=5>[![Documentation Status](https://readthedocs.org/projects/atlasapprox/badge/?version=latest)](https://apidocs.atlasapprox.org/en/latest/?badge=latest)|
+<table>
+  <tr>
+    <td></td>
+    <td>REST</td>
+    <td>Python</td>
+    <td>R</td>
+    <td>JS</td>
+    <td>Shell</td>
+  </tr>
+  <tr>
+    <td>Build</td>
+    <td>[![REST CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/rest_test.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)</td>
+    <td>[![Python CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/python_build.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)</td>
+    <td>(missing)</td>
+    <td>[![JS CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/js_test.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)</td>
+    <td>(missing)</td>
+  </tr>
+  <tr>
+    <td>Release</td>
+    <td>REST</td>
+    <td>[![PyPI version](https://badge.fury.io/py/atlasapprox.svg)](https://badge.fury.io/py/atlasapprox)</td>
+    <td>![CRAN Downloads](https://cranlogs.r-pkg.org/badges/atlasapprox)</td>
+    <td>[![npm version](https://badge.fury.io/js/@fabilab%2Fatlasapprox.svg)](https://badge.fury.io/js/@fabilab%2Fatlasapprox)</td>
+    <td>(see repo)</td>
+  </tr>
+  <tr>
+    <td>Docs</td>
+    <td colspan="5">[![Documentation Status](https://readthedocs.org/projects/atlasapprox/badge/?version=latest)](https://apidocs.atlasapprox.org/en/latest/?badge=latest)</td>
+  </tr>
+</table>
+
 <img src="https://raw.githubusercontent.com/fabilab/cell_atlas_approximations/main/figures/figure_API.png" width="150" height="150">
 
 # Cell Atlas Approximations - API
