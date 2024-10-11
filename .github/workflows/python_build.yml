@@ -24,12 +24,12 @@ jobs:
       working-directory: Python
       run: pip install pytest
 
-    - name: Install atlasapprox
+    - name: Install atlasapprox, including plotting extensions
       env:
         OS_NAME: ${{ matrix.os }}
         CONDA_PY: ${{ matrix.python-version }}
       working-directory: Python
-      run: pip install .
+      run: pip install .[plotting]
 
     - name: Test with pytest
       env:
