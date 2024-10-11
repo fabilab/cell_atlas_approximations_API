@@ -53,6 +53,7 @@ print_help () {
   echo "  highest_measurement: A list of cell types across a whole organism with the highest measurement (e.g. expression) of one feature (gene)."
   echo "  similar_features: A list of features similar to the specified one in an organism and organ."
   echo "  similar_celltypes: A list of cell types similar to the specified one across an entire organism."
+  echo "  highest_measurement: A list of cell types across a whole organism with the highest measurement (e.g. expression) of one feature (gene)."
   echo ""
   echo "Examples:"
   echo "  atlasapprox organisms"
