@@ -14,6 +14,7 @@ from atlasapprox.utils import (
     _fetch_organs,
     _fetch_celltypes,
 )
+import atlasapprox.pl as pl
 
 __version__ = "0.2.4"
 
@@ -21,6 +22,7 @@ __all__ = (
     "api_version",
     "BadRequestError",
     "API",
+    "pl",
     __version__,
 )
 
@@ -56,9 +58,9 @@ Animals:
 - Prostheceraeus crozieri: Piovani et al. 2023 (https://doi.org/10.1126/sciadv.adg6034)
 - Platynereis dumerilii: Achim et al 2017 (https://academic.oup.com/mbe/article/35/5/1047/4823215)
 - Strongylocentrotus purpuratus (sea urchin): Paganos et al. 2021 (https://doi.org/10.7554/eLife.70416)
-- Spongilla lacustris: Musser et al. 2021 (https://www.science.org/doi/10.1126/science.abj2949)
 - Schistosoma mansoni: Li et al. 2021 (https://www.nature.com/articles/s41467-020-20794-w)
 - Schmidtea mediterranea: Plass et al. 2018 (https://doi.org/10.1126/science.aaq1723)
+- Spongilla lacustris: Musser et al. 2021 (https://www.science.org/doi/10.1126/science.abj2949)
 - Stylophora pistillata: Levi et al. 2021 (https://www.sciencedirect.com/science/article/pii/S0092867421004402)
 - Trichoplax adhaerens: Sebé-Pedrós et al 2018 (https://www.nature.com/articles/s41559-018-0575-6)
 - Xenopus laevis: Liao et al. 2022 (https://www.nature.com/articles/s41467-022-31949-2)
@@ -176,8 +178,8 @@ class API:
             measurement_type: The measurement type to query.
 
         Return: A pandas.DataFrame with the gene expression. Each column is
-            a cell type, each row a feature. The unit of measurement, or
-            normalisation, is counts per ten thousand (cptt).
+        a cell type, each row a feature. The unit of measurement, or
+        normalisation, is counts per ten thousand (cptt).
         """
         response = requests.get(
             baseurl + "average",
@@ -215,7 +217,8 @@ class API:
             features: The features (e.g. genes) to query.
             measurement_type: The measurement type to query.
 
-        Return: A pandas.DataFrame with the fraction expressing. Each column is
+        Return:
+            A pandas.DataFrame with the fraction expressing. Each column is
             a cell type, each row a feature.
         """
         response = requests.get(
@@ -258,7 +261,7 @@ class API:
             a cell type, each row a feature.
         """
         response = requests.get(
-            baseurl + "fraction_detected",
+            baseurl + "dotplot",
             params={
                 "organism": organism,
                 "organ": organ,
@@ -270,12 +273,20 @@ class API:
             resjson = response.json()
             celltypes = resjson["celltypes"]
             features = resjson["features"]
-            matrix = pd.DataFrame(
+            average = pd.DataFrame(
+                resjson["average"],
+                index=features,
+                columns=celltypes,
+            )
+            fraction = pd.DataFrame(
                 resjson["fraction_detected"],
                 index=features,
                 columns=celltypes,
             )
-            return matrix
+            return {
+                "average": average,
+                "fraction_detected": fraction,
+            }
         raise BadRequestError(response.json()["message"])
 
     def features(

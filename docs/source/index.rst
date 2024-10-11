@@ -22,6 +22,7 @@ Because of their small size, atlas approximations are well suited for acess over
   - List the cell types across an entire organism that have the highest expression of a certain gene.
   - Find marker genes for a specific cell type.
   - Show a table of which cell types are found in multiple tissues (e.g. various kinds immune cells).
+  - Find what cell types are present in what organism.
 
 Version
 -------
@@ -59,41 +60,41 @@ Authors
 
 Citation
 --------
-**Xu et al.** (2024) Lightweight and scalable approximations democratise access to single cell atlases. [biorxiv](https://www.biorxiv.org/content/10.1101/2024.01.03.573994v1).
+**Xu et al.** (2024) Lightweight and scalable approximations democratise access to single cell atlases. `biorxiv <https://www.biorxiv.org/content/10.1101/2024.01.03.573994v1>`_.
 
 Data Sources
 ------------
 Animals:
 
 - *Homo sapiens*: 
-  - RNA: [Tabula Sapiens](https://www.science.org/doi/10.1126/science.abl4896)
-  - ATAC: [Zhang et al. 2021](https://doi.org/10.1016/j.cell.2021.10.024)
-- *Amphimedon queenslandica*: [Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)
-- *Caenorhabditis elegans*: [Cao et al. 2017](https://www.science.org/doi/10.1126/science.aam8940)
-- *Crassostrea gigas*: [Piovani et al. 2023](https://doi.org/10.1126/sciadv.adg6034)
-- *Clytia hemisphaerica*: [Chari et al. 2021](https://www.science.org/doi/10.1126/sciadv.abh1683#sec-4)
-- *Danio rerio*: [Wagner et al. 2018](https://www.science.org/doi/10.1126/science.aar4362)
+  - RNA: `Tabula Sapiens <https://www.science.org/doi/10.1126/science.abl4896>`_
+  - ATAC: `Zhang et al. 2021 <https://doi.org/10.1016/j.cell.2021.10.024>`_
+- *Amphimedon queenslandica*: `Sebé-Pedrós et al 2018 <https://www.nature.com/articles/s41559-018-0575-6>`_
+- *Caenorhabditis elegans*: `Cao et al. 2017 <https://www.science.org/doi/10.1126/science.aam8940>`_
+- *Crassostrea gigas*: `Piovani et al. 2023 <https://doi.org/10.1126/sciadv.adg6034>`_
+- *Clytia hemisphaerica*: `Chari et al. 2021 <https://www.science.org/doi/10.1126/sciadv.abh1683#sec-4>`_
+- *Danio rerio*: `Wagner et al. 2018 <https://www.science.org/doi/10.1126/science.aar4362>`_
 - *Drosophila melanogaster* (fruitfly): [Li et al. 2022](https://doi.org/10.1126/science.abk2432
-- *Hofstenia miamia*: [Hulett et al. 2023](https://www.nature.com/articles/s41467-023-38016-4)
-- *Isodiametra pulchra*: [Duruz et al. 2020](https://academic.oup.com/mbe/article/38/5/1888/6045962)
-- *Microcebus murinus*: [Tabula Microcebus](https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
-- *Mnemiopsis leidyi*: [Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)
-- *Mus musculus*: [Tabula Muris Senis](https://www.nature.com/articles/s41586-020-2496-1)
-- *Nematostella vectensis*: [Steger et al 2022](https://doi.org/10.1016/j.celrep.2022.111370)
-- *Prostheceraeus crozieri*: [Piovani et al. 2023](https://doi.org/10.1126/sciadv.adg6034)
-- *Platynereis dumerilii*: [Achim et al 2017](https://academic.oup.com/mbe/article/35/5/1047/4823215)
-- *Strongylocentrotus purpuratus* (sea urchin): [Paganos et al. 2021](https://doi.org/10.7554/eLife.70416)
-- *Schistosoma mansoni*: [Li et al. 2021](https://www.nature.com/articles/s41467-020-20794-w)
-- *Schmidtea mediterranea*: [Plass et al 2018](https://www.science.org/doi/10.1126/science.aaq1723#sec-10)
-- *Spongilla lacustris*: [Musser et al. 2021](https://www.science.org/doi/10.1126/science.abj2949)
-- *Stylophora pistillata*: [Levi et al. 2021](https://www.sciencedirect.com/science/article/pii/S0092867421004402)
-- *Trichoplax adhaerens*: [Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)
-- *Xenopus laevis*: [Liao et al 2022](https://www.nature.com/articles/s41467-022-31949-2#ref-CR14)
+- *Hofstenia miamia*: `Hulett et al. 2023 <https://www.nature.com/articles/s41467-023-38016-4>`_
+- *Isodiametra pulchra*: `Duruz et al. 2020 <https://academic.oup.com/mbe/article/38/5/1888/6045962>`_
+- *Microcebus murinus*: `Tabula Microcebus <https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2>`_
+- *Mnemiopsis leidyi*: `Sebé-Pedrós et al 2018 <https://www.nature.com/articles/s41559-018-0575-6>`_
+- *Mus musculus*: `Tabula Muris Senis <https://www.nature.com/articles/s41586-020-2496-1>`_
+- *Nematostella vectensis*: `Steger et al 2022 <https://doi.org/10.1016/j.celrep.2022.111370>`_
+- *Prostheceraeus crozieri*: `Piovani et al. 2023 <https://doi.org/10.1126/sciadv.adg6034>`_
+- *Platynereis dumerilii*: `Achim et al 2017 <https://academic.oup.com/mbe/article/35/5/1047/4823215>`_
+- *Strongylocentrotus purpuratus* (sea urchin): `Paganos et al. 2021 <https://doi.org/10.7554/eLife.70416>`_
+- *Schistosoma mansoni*: `Li et al. 2021 <https://www.nature.com/articles/s41467-020-20794-w>`_
+- *Schmidtea mediterranea*: `Plass et al 2018 <https://www.science.org/doi/10.1126/science.aaq1723#sec-10>`_
+- *Spongilla lacustris*: `Musser et al. 2021 <https://www.science.org/doi/10.1126/science.abj2949>`_
+- *Stylophora pistillata*: `Levi et al. 2021 <https://www.sciencedirect.com/science/article/pii/S0092867421004402>`_
+- *Trichoplax adhaerens*: `Sebé-Pedrós et al 2018 <https://www.nature.com/articles/s41559-018-0575-6>`_
+- *Xenopus laevis*: `Liao et al 2022 <https://www.nature.com/articles/s41467-022-31949-2#ref-CR14>`_
 
 Plants:
-- *Arabidopsis thaliana*: [Shahan et al 2022](https://www.sciencedirect.com/science/article/pii/S1534580722000338), [Xu et al. 2024](https://www.biorxiv.org/content/10.1101/2024.03.04.583414v1)
-- *Lemna minuta*: [Abramson et al. 2022](https://doi.org/10.1093/plphys/kiab564)
-- *Fragaria vesca*: [Bai et al. 2022](https://doi.org/10.1093/hr/uhab055)
-- *Oryza sativa*: [Zhang et al. 2022](https://doi.org/10.1038/s41467-021-22352-4)
-- *Triticum aestivum* (wheat): [Zhang et al 2023](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-023-02908-x)
-- *Zea mays* (maize/corn): [Marand et al. 2021](https://doi.org/10.1016/j.cell.2021.04.014), [Xu et al. 2024](https://www.biorxiv.org/content/10.1101/2024.03.04.583414v1)
+- *Arabidopsis thaliana*: `Shahan et al 2022](https://www.sciencedirect.com/science/article/pii/S1534580722000338), [Xu et al. 2024 <https://www.biorxiv.org/content/10.1101/2024.03.04.583414v1>`_
+- *Lemna minuta*: `Abramson et al. 2022 <https://doi.org/10.1093/plphys/kiab564>`_
+- *Fragaria vesca*: `Bai et al. 2022 <https://doi.org/10.1093/hr/uhab055>`_
+- *Oryza sativa*: `Zhang et al. 2022 <https://doi.org/10.1038/s41467-021-22352-4>`_
+- *Triticum aestivum* (wheat): `Zhang et al 2023 <https://genomebiology.biomedcentral.com/articles/10.1186/s13059-023-02908-x>`_
+- *Zea mays* (maize/corn): `Marand et al. 2021](https://doi.org/10.1016/j.cell.2021.04.014), [Xu et al. 2024 <https://www.biorxiv.org/content/10.1101/2024.03.04.583414v1>`_
