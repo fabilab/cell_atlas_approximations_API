@@ -9,7 +9,7 @@
   </tr>
   <tr>
     <td>Build</td>
-    <td>[![REST CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/rest_test.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)</td>
+    <td><a href="https://github.com/fabilab/cell_atlas_approximations_API/actions"><img src="https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/rest_test.yml/badge.svg"></a></td>
     <td>[![Python CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/python_build.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)</td>
     <td>(missing)</td>
     <td>[![JS CI](https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/js_test.yml/badge.svg)](https://github.com/fabilab/cell_atlas_approximations_API/actions)</td>
