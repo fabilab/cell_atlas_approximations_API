@@ -1,11 +1,11 @@
 <table>
   <tr>
     <td></td>
-    <td>REST</td>
-    <td>Python</td>
-    <td>R</td>
-    <td>JS</td>
-    <td>Shell</td>
+    <td><b>REST</b></td>
+    <td><b>Python</b></td>
+    <td><b>R</b></td>
+    <td><b>JavaScript</b></td>
+    <td><b>Shell</b></td>
   </tr>
   <tr>
     <td>Build</td>
