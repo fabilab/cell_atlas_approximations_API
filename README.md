@@ -133,7 +133,6 @@ Note that the output is a serialized JSON string: you'll probably need some kind
 </details>
 
 ## Repo contents
-- `preprocess`: scripts used for the approximations
 - `web`: webserver code in Flask that implements the RESTful API
 - `rest`: testing code for the RESTful API
 - `Python`: package code providing a Python interface
