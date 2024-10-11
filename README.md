@@ -11,7 +11,7 @@
     <td>Build</td>
     <td><a href="https://github.com/fabilab/cell_atlas_approximations_API/actions"><img src="https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/rest_test.yml/badge.svg"></a></td>
     <td><a href="https://github.com/fabilab/cell_atlas_approximations_API/actions"><img src="https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/python_build.yml/badge.svg"></a></td>
-    <td>(missing)</td>
+    <td><a href="https://github.com/fabilab/cell_atlas_approximations_API/actions"><img src="https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/shell_test.yml/badge.svg"></a></td>
     <td><a href="https://github.com/fabilab/cell_atlas_approximations_API/actions"><img src="https://github.com/fabilab/cell_atlas_approximations_API/actions/workflows/js_test.yml/badge.svg"></a></td>
     <td>(missing)</td>
   </tr>
