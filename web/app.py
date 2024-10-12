@@ -1,8 +1,10 @@
 """
 Web application supporting the cell atlas approximation API
 """
+
 from flask import (
     Flask,
+    send_from_directory,
 )
 from flask_restful import Api
 from flask_cors import CORS
@@ -13,11 +15,11 @@ from api import api_dict
 ##############################
 app = Flask(__name__, static_url_path="/static", template_folder="templates")
 app_api = Api(app)
-with open('secret_key.txt') as f:
-    app.config['SECRET_KEY'] = f.read()
+with open("secret_key.txt") as f:
+    app.config["SECRET_KEY"] = f.read()
 ##############################
 
-api_authorized_versions = [config['api_version']]
+api_authorized_versions = [config["api_version"]]
 authorized_resources = {}
 for api_version in api_authorized_versions:
     # Connect to endpoints

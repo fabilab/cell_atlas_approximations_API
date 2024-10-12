@@ -21,6 +21,7 @@ from api.v1.objects.neighborhood import Neighborhood
 from api.v1.objects.dotplot import Dotplot
 from api.v1.objects.interaction_partners import InteractionPartners
 from api.v1.objects.homologs import Homologs
+from api.v1.objects.approximation_file import ApproximationFile
 
 
 __all__ = (
@@ -47,4 +48,5 @@ __all__ = (
     "CelltypeLocation",
     "InteractionPartners",
     "Homologs",
+    "ApproximationFile",
 )

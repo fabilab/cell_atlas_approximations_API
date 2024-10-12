@@ -25,6 +25,7 @@ from api.v1.objects import (
     Neighborhood,
     InteractionPartners,
     Homologs,
+    ApproximationFile,
 )
 
 __all__ = ("api_dict",)
@@ -55,5 +56,6 @@ api_dict = {
         "celltypexorganism": CelltypeXOrganism,
         "celltype_location": CelltypeLocation,
         "data_sources": DataSources,
+        "approximation": ApproximationFile,
     },
 }

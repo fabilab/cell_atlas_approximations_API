@@ -42,6 +42,7 @@ Quick start
 Getting started
 ---------------
 - The API generally accepts **GET** requests only.
+- The API returns **JSON** data except for the ``approximation`` endpoint, which returns an HDF5 file.
 - For data involving gene expression, only 50 features at a time are supported to reduce egress throughput.
 - No aliases for names (e.g. organisms, genes) are supported yet: please double check your spelling.
 - If you can use one of the languge-dedicated APIs (e.g. the Python API), please do so instead of using the REST API. Language-specific packages use caching to reduce load on our servers and also give you faster answers, so it's a win-win.
@@ -486,6 +487,15 @@ Similar cell types
   - ``similar_celltypes``: A list of similar cell types. This should be interpreted in tandem with the ``similar_organs`` key below.
   - ``similar_organs``: A list of the organs for the similar cell types. This should be interpreted together with the ``similar_celltypes`` key above. Each pair of ``(organ, celltype)`` fully specifies a similar cell type.
   - ``distances``: Distances of the listed cell types in the method chosen. For correlation/cosine methods, the distance is 1 - correlation.
+
+Approximation file
+++++++++++++++++++
+**Endpoint**: ``/approximation``
+
+**Parameters**:
+  - ``organism``: The organism of interest. Must be one of the available ones as returned by ``organisms``.
+
+**Returns**: A binary (HDF5) file containing the approximation of the cell atlas for the chosen organism. You probably want to name the file something like ``approximation.h5``.
 
 Data Sources
 ++++++++++++

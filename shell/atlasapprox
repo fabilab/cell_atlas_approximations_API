@@ -31,9 +31,7 @@ HAS_ENDPOINT=0
 print_help () {
   echo "Bash interface to Atlas Approxmations API."
   echo ""
-  echo "Cell atlas approximations aim to provide a simplified but"
-  echo "faithful representation of single cell data sets covering"
-  echo "entire organisms (e.g. Tabula Sapiens)."
+  echo "Cell atlas approximations aim to provide a simplified but faithful representation of single cell data sets covering entire organisms (e.g. Tabula Sapiens)."
   echo ""
   echo "Usage:"
   echo "  atlasapprox [(-v | --verbose)] <endpoint> [--<key1>=<value1>] [--<key2>=<value2>]"
@@ -46,20 +44,37 @@ print_help () {
   echo "  organisms: A list of available organisms."
   echo "  organs: A list of sampled organs from one organism."
   echo "  celltypes: A list of cell types from one organ and organism."
+  echo "  features: A list of features (e.g. genes) in an organism."
   echo "  celltypexorgan: A presence matrix (boolean) in a selected organism for each cell type in each organ, starting from the most common cell types."
+  echo "  organxorganism: A presence matrix (boolean) in a selected organism for each organ."
+  echo "  celltypexorganism: A presence matrix (boolean) with each cell type in each organism."
   echo "  average: Average measurement (e.g. gene expression) for an organ, organism, and list of features (genes)."
   echo "  fraction_detected: Fraction of cells with a detected measurement (e.g. gene expression) for an organ, organism, and list of features (genes). Together with \`average\` it can be used to build dot plots."
+  echo "  dotplot: Average measurement and fraction of cells with a detected measurement (e.g. gene expression) for an organ, organism, and list of features (genes)."
   echo "  markers: Marker genes for a cell type in an organ and organism."
   echo "  highest_measurement: A list of cell types across a whole organism with the highest measurement (e.g. expression) of one feature (gene)."
   echo "  similar_features: A list of features similar to the specified one in an organism and organ."
   echo "  similar_celltypes: A list of cell types similar to the specified one across an entire organism."
   echo "  highest_measurement: A list of cell types across a whole organism with the highest measurement (e.g. expression) of one feature (gene)."
+  echo "  approximation: The .h5 file containing the approximation of the cell atlas."
+  echo "  homologs: The homologs of a list of genes in a different organism."
+  echo "  data_sources: The data sources used to build the approximations."
+  echo "  neighbors: Cell state-level data for an organ and organism, including measurements and embedding coordinates if requested."
+  echo ""
+  echo "Data is returned in JSON format, except for the \`approximation\` endpoint that returns an HDF5 (binary) file (see examples below)."
   echo ""
   echo "Examples:"
   echo "  atlasapprox organisms"
   echo "  atlasapprox organs --organism=m_musculus"
   echo "  atlasapprox average --organism=m_musculus --organ=Lung --features=Col1a1,Ptprc"
   echo "  atlasapprox celltypexorgan --organism=h_sapiens"
+  echo "  atlasapprox approximation --organism=c_gigas > c_gigas_approximation.h5"
+  echo ""
+  echo "Websitet: https://atlasapprox.org."
+  echo "GitHub: https://github.com/fabilab/cell_atlas_approximations_API."
+  echo "YouTube: https://www.youtube.com/@fabilab."
+  echo ""
+  echo "Have fun!"
 }
 
 if [ $# -eq 0 ]; then
@@ -85,7 +100,7 @@ for i in "$@"; do
     *)
       if [ $HAS_ENDPOINT == "0" ]; then
         endpoint=$i;
-	HAS_ENDPOINT=1;
+	      HAS_ENDPOINT=1;
       else
         echo "Arguments not formatted properly. Each argument must be in the form --<key>=<value>" > /dev/stderr
         exit 2;
@@ -103,4 +118,8 @@ if [ $VERBOSE == "1" ]; then
   echo ${cmd}
 fi
 
-curl --get -H "Accept: application/json" ${optstring} https://api.atlasapprox.org/v1/${endpoint}
+if [ $endpoint != "approximation" ]; then
+  curl --get -H "Accept: application/json" ${optstring} https://api.atlasapprox.org/v1/${endpoint}
+else
+  curl --get -H "Accept: application/octet-stream" ${optstring} https://api.atlasapprox.org/v1/${endpoint}
+fi

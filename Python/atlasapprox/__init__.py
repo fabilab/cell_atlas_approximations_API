@@ -3,6 +3,8 @@ Cell atlas approximations, Python API interface.
 """
 
 import os
+import pathlib
+from pandas.core.series import missing
 import requests
 import numpy as np
 import pandas as pd
@@ -761,6 +763,30 @@ class API:
             index=pd.Index(resp_result["celltypes"], name="cell types"),
         )
         return result
+
+    def approximation(
+        self,
+        organism: str,
+        output_path: Union[pathlib.Path, str],
+    ):
+        """Download the HDF5 file with the approximation.
+
+        Args:
+            output_path: The path (filename) to save the approximation to.
+        """
+        params = {
+            "organism": organism,
+        }
+        response = requests.get(
+            baseurl + "celltypexorgan",
+            params=params,
+        )
+        if not response.ok:
+            raise BadRequestError(response.json()["message"])
+
+        # Save the file
+        with open(output_path, "wb") as f:
+            f.write(response.content)
 
     def data_sources(self):
         """List the cell atlases used as data sources."""
