@@ -12,6 +12,8 @@ URL: https://atlasapprox.readthedocs.io/R, https://github.com/fabilab/atlasappro
 BugReports: https://github.com/fabilab/atlasapprox/issues
 Depends:
   httr
+Imports:
+  testthat
 Config/Needs/build: roxygen2, devtools
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

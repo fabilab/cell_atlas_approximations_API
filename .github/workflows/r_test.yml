@@ -1,0 +1,39 @@
+name: Build
+
+on: [push, pull_request]
+
+jobs:
+  build_ubuntu:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        r-version: ['4.4.1']
+    # Use the operating system specified in the matrix
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    # Check out the repository code
+    - uses: actions/checkout@v4
+
+    # Set up R environment
+    - name: Set up R ${{ matrix.r-version }}
+      uses: r-lib/actions/setup-r@v2
+      with:
+        r-version: ${{ matrix.r-version }}
+    
+    # Install required R packages and dependencies
+    - name: Install dependencies for testing
+      env:
+        OS_NAME: ${{ matrix.os }}
+      run: |
+        install.packages(c("testthat", "devtools"))
+        devtools::install_deps("R/atlasapprox", dependencies = TRUE)
+      shell: Rscript {0}
+    
+    - name: Test with testthat
+      env:
+        OS_NAME: ${{ matrix.os }}
+      run: |
+        devtools::load_all("R/atlasapprox")
+        testthat::test_dir("R/tests/testthat")
+      shell: Rscript {0}
