@@ -3,7 +3,7 @@ name: Build
 on: [push, pull_request]
 
 jobs:
-  build_ubuntu:
+  R_build_ubuntu:
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -23,12 +23,16 @@ jobs:
       with:
         extra-packages: |
           any::testthat
-          any::devtools
-        working-directory: R
+        working-directory: R/atlasapprox
 
-    - name: Test with testthat
-      env:
-        OS_NAME: ${{ matrix.os }}
+    - name: Install package
+      run: R CMD INSTALL R/atlasapprox
+
+    - name: Run test with testthat
       working-directory: R
       run: |
-        Rscript -e 'devtools::load_all("atlasapprox"); testthat::test_dir("tests/testthat")'
+        Rscript -e '
+          library(testthat)
+          library(atlasapprox)
+          test_dir("tests/testthat", reporter = "progress")
+        '
