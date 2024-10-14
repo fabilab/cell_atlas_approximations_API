@@ -35,5 +35,6 @@ jobs:
         OS_NAME: ${{ matrix.os }}
       working-directory: R
       run: |
-        Rscript -e 'devtools::load_all("atlasapprox"); testthat::test_dir("tests/testthat")'
+        devtools::load_all("atlasapprox")
+        testthat::test_dir("tests/testthat")
       shell: Rscript {0}
