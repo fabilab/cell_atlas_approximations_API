@@ -25,15 +25,15 @@ jobs:
     - name: Install dependencies for testing
       env:
         OS_NAME: ${{ matrix.os }}
+      working-directory: R
       run: |
         install.packages(c("testthat", "devtools"))
-        devtools::install_deps("R/atlasapprox", dependencies = TRUE)
       shell: Rscript {0}
     
     - name: Test with testthat
       env:
         OS_NAME: ${{ matrix.os }}
+      working-directory: R
       run: |
-        devtools::load_all("R/atlasapprox")
-        testthat::test_dir("R/tests/testthat")
+        Rscript -e 'devtools::load_all("atlasapprox"); testthat::test_dir("tests/testthat")'
       shell: Rscript {0}
