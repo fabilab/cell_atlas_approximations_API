@@ -502,3 +502,9 @@ Data Sources
 **Endpoint**: ``/data_sources``
 
 **Returns**: A dict with a key per organism listing the cell atlases (data sources) used for the approximations.
+
+Full atlas data files
++++++++++++++++++++++
+**Endpoint**: ``/full_atlas_files``
+
+**Returns**: A URL to a public cloud folder where you can download the full atlas data files for each organism. Read the README.md file. Some organisms are missing because their atlases are very large and already shared on FigShare.

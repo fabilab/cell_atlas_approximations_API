@@ -100,6 +100,11 @@ def get_data_sources():
     return data_sources
 
 
+def get_full_atlas_files():
+    """Get a hyperlink to a public cloud folder containing full cell atlases."""
+    return "https://unsw-my.sharepoint.com/:f:/g/personal/z3528476_ad_unsw_edu_au/EoTk9jUCHuNCtELqBVpWZqQBDRe06EVomVU8XgteN4OTjw"
+
+
 def get_organs(
     organism,
     measurement_type="gene_expression",

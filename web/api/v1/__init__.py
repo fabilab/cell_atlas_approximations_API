@@ -26,6 +26,7 @@ from api.v1.objects import (
     InteractionPartners,
     Homologs,
     ApproximationFile,
+    FullAtlasFiles,
 )
 
 __all__ = ("api_dict",)
@@ -57,5 +58,6 @@ api_dict = {
         "celltype_location": CelltypeLocation,
         "data_sources": DataSources,
         "approximation": ApproximationFile,
+        "full_atlas_files": FullAtlasFiles,
     },
 }

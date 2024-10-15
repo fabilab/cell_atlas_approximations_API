@@ -33,7 +33,7 @@ api_version = "v1"
 
 baseurl = os.getenv(
     "ATLASAPPROX_BASEURL",
-    "http://api.atlasapprox.org",
+    "https://api.atlasapprox.org",
 )
 baseurl = baseurl.rstrip("/") + "/"
 baseurl += f"{api_version}/"
@@ -761,6 +761,45 @@ class API:
             np.array(resp_result["detected"]).astype(dtype),
             columns=pd.Index(resp_result["organs"], name="organs"),
             index=pd.Index(resp_result["celltypes"], name="cell types"),
+        )
+        return result
+
+    def homologs(
+        self,
+        source_organism: str,
+        features: Sequence[str],
+        target_organism: str,
+    ):
+        """Get the homologs of features between two organisms.
+
+        Args:
+            source_organism: The organism to query.
+            features: The features (e.g. genes) to query.
+            target_organism: The organism to find homologs for.
+
+        Returns: A pandas.DataFrame with the homologs.
+        """
+
+        params = {
+            "source_organism": source_organism,
+            "features": ",".join(features),
+            "target_organism": target_organism,
+        }
+
+        response = requests.get(
+            baseurl + "homologs",
+            params=params,
+        )
+        if not response.ok:
+            raise BadRequestError(response.json()["message"])
+
+        resp_result = response.json()
+        result = pd.DataFrame(
+            {
+                "queries": resp_result["queries"],
+                "targets": resp_result["targets"],
+                "distances": resp_result["distances"],
+            }
         )
         return result
 
