@@ -769,6 +769,7 @@ class API:
         source_organism: str,
         features: Sequence[str],
         target_organism: str,
+        max_distance_over_min: float = 8.0,
     ):
         """Get the homologs of features between two organisms.
 
@@ -776,6 +777,10 @@ class API:
             source_organism: The organism to query.
             features: The features (e.g. genes) to query.
             target_organism: The organism to find homologs for.
+            max_distance_over_min: This is a threshold determining how far from
+            the closest homolog to look for additional hits. Setting this to zero
+            will return only the closest homolog. Values above about 50 are not
+            useful as there is a hard cutoff at absolute distance 60.
 
         Returns: A pandas.DataFrame with the homologs.
         """
@@ -784,6 +789,7 @@ class API:
             "source_organism": source_organism,
             "features": ",".join(features),
             "target_organism": target_organism,
+            "max_distance_over_min": max_distance_over_min,
         }
 
         response = requests.get(

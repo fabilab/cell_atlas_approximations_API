@@ -378,6 +378,7 @@ Homologous features
   - ``source_organism``: The source organism of interest, for which the features are known. Must be one of the available ones as returned by ``organisms``.
   - ``features``: The features to look for.
   - ``target_organism``: The target organism of interest, for which the features are unknown. Must be one of the available ones as returned by ``organisms`` and, of course, must be different from ``source_organism``.
+  - ``max_distance_over_min``: This argument sets the threshold for additional homologs beyond the closest match. If set to zero, only the closest match across speces will be returned. Setting this parameter above around 50 is pointless as there is a hard cutoff on the absolute distance at 60.
 
 **Returns**: A dictionary with the following key-value pairs:
   - ``queries``: A list of features queried in ``source_organism``.
@@ -387,6 +388,11 @@ Homologous features
 The three lists have equal length and are paired. Each triplet of entries indicates a homology relationship. Because each feature can have multiple homologs (i.e. paralogs), queried features might (and typically do) appear multiple times.
 
 Currently, homology is estimated using `PROST <https://doi.org/10.1073/pnas.2211823120>`_. Therefore, only gene expression for protein-coding genes is supported.
+
+.. note::
+   Setting the source and target organisms to the same species can be used to search for paralogs within that species. Increasing ``max_distance_over_min``
+   might be necessary in that case since the closest match is by definition the query itself, which is at distance zero. Values of 20-30 are usually
+   reasonable for this purpose.
 
 Highest-measurement
 ++++++++++++++++++++++++++++++
