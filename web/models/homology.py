@@ -4,6 +4,7 @@ import h5py
 import hdf5plugin
 
 from models.paths import get_protein_embeddings_path
+from models.exceptions import OrganismNotFoundError, FeaturesNotPairedError
 
 
 def _get_prost_embeddings(organism=None, features=None):
@@ -85,4 +86,61 @@ def get_homologs(
             result["queries"].append(feature)
             result["targets"].append(homolog)
             result["distances"].append(float(dis_homolog))
+    return result
+
+
+def get_homology_distances(
+    query_organism,
+    query_features,
+    target_organism,
+    target_features,
+):
+    """Get homology distance between two sets of features."""
+
+    if len(query_features) != len(target_features):
+        raise FeaturesNotPairedError(
+            message="The number of query and target features must be equal.",
+            features1=query_features,
+            features2=target_features,
+        )
+
+    emb_queries = _get_prost_embeddings(
+        organism=query_organism, features=query_features
+    )
+    emb_targets = _get_prost_embeddings(
+        organism=target_organism,
+        features=target_features,
+    )
+    found_queries = pd.Index(query_features).isin(emb_queries["features"])
+    found_targets = pd.Index(target_features).isin(emb_targets["features"])
+    found_both = found_queries & found_targets
+
+    query_features_found = np.array(query_features)[found_both]
+    target_features_found = np.array(target_features)[found_both]
+
+    # NOTE: the subfunction returns deduplicated features, so we need to realign them here
+    emb_queries_dup = []
+    emb_targets_dup = []
+    for fea in query_features_found:
+        # There is always only one match
+        idx = emb_queries["features"] == fea
+        emb_queries_dup.append(emb_queries["embeddings"][idx][0])
+    for fea in target_features_found:
+        idx = emb_targets["features"] == fea
+        emb_targets_dup.append(emb_targets["embeddings"][idx][0])
+
+    emb_queries_dup = np.array(emb_queries_dup)
+    emb_targets_dup = np.array(emb_targets_dup)
+
+    # PROST requires L1 distance
+    dis = np.abs(emb_queries_dup - emb_targets_dup).sum(axis=1)
+
+    result = pd.DataFrame(
+        {
+            "queries": query_features_found,
+            "targets": target_features_found,
+            "distances": dis,
+        }
+    )
+
     return result

@@ -394,6 +394,23 @@ Currently, homology is estimated using `PROST <https://doi.org/10.1073/pnas.2211
    might be necessary in that case since the closest match is by definition the query itself, which is at distance zero. Values of 20-30 are usually
    reasonable for this purpose.
 
+Homology distance between pairs of features
++++++++++++++++++++++++++++++++++++++++++++
+**ENDPOINT**: ``/homology_distances``
+
+**Parameters**:
+  - ``source_organism``: The source organism of interest. Must be one of the available ones as returned by ``organisms``.
+  - ``source_features``: The features to look for in the source organism.
+  - ``target_organism``: The target organism of interest. Must be one of the available ones as returned by ``organisms``. It can be the same as the source organism.
+  - ``target_features``: The features to look for in the target organism. Must be the same number as ``source_features``.
+
+  **Returns**: A dictionary with the following key-value pairs:
+  - ``queries``: A list of features queried in ``source_organism``.
+  - ``targets``: A list of features queried in ``target_organism``.
+  - ``distances``: A list of distances between each pair of features. Lower values indicate stronger homology.
+
+See ``/homologs`` for more information on the distance metric used.
+
 Highest-measurement
 ++++++++++++++++++++++++++++++
 **Endpoint**: ``/highest_measurement``

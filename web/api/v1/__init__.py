@@ -27,6 +27,7 @@ from api.v1.objects import (
     Homologs,
     ApproximationFile,
     FullAtlasFiles,
+    HomologyDistances,
 )
 
 __all__ = ("api_dict",)
@@ -59,5 +60,6 @@ api_dict = {
         "data_sources": DataSources,
         "approximation": ApproximationFile,
         "full_atlas_files": FullAtlasFiles,
+        "homology_distances": HomologyDistances,
     },
 }

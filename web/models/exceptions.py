@@ -64,3 +64,10 @@ class NeighborhoodNotFoundError(KeyError):
         self.organ = organ
         msg = f"Neighborhood not found: {organism} {organ}"
         super().__init__(self, msg)
+
+
+class FeaturesNotPairedError(ValueError):
+    def __init__(self, msg, features1, features2):
+        self.features1 = features1
+        self.features2 = features2
+        super().__init__(self, msg)

@@ -26,6 +26,7 @@ from models.exceptions import (
     CellTypeNotFoundError,
     SimilarityMethodError,
     NeighborhoodNotFoundError,
+    FeaturesNotPairedError,
 )
 from models.features import (
     get_features,
@@ -64,6 +65,7 @@ from models.interactions import (
 )
 from models.homology import (
     get_homologs,
+    get_homology_distances,
 )
 from models.surface import (
     get_surface_genes,

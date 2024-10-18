@@ -23,6 +23,7 @@ from api.v1.objects.interaction_partners import InteractionPartners
 from api.v1.objects.homologs import Homologs
 from api.v1.objects.approximation_file import ApproximationFile
 from api.v1.objects.full_atlas_files import FullAtlasFiles
+from api.v1.objects.homology_distances import HomologyDistances
 
 
 __all__ = (
@@ -51,4 +52,5 @@ __all__ = (
     "Homologs",
     "ApproximationFile",
     "FullAtlasFiles",
+    "HomologyDistances",
 )

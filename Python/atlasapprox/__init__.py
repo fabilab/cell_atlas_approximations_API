@@ -809,6 +809,46 @@ class API:
         )
         return result
 
+    def homology_distances(
+        self,
+        source_organism: str,
+        source_features: Sequence[str],
+        target_organism: str,
+        target_features: Sequence[str],
+    ):
+        """Get homology distance between pairs of features.
+
+        Args:
+            source_organism: The organism to query.
+            source_features: The features (e.g. genes) to query in the source organism.
+            target_organism: The organism to find homologs for.
+            target_features: The features (e.g. genes) to query in the target organism. These must be the same number as ``source_features``.
+
+        Returns: A pandas.DataFrame with the paired features and distances, "zipping" the two feature sequences, and computing the distance between each pair of features.
+        """
+        params = {
+            "source_organism": source_organism,
+            "source_features": ",".join(source_features),
+            "target_organism": target_organism,
+            "target_features": ",".join(target_features),
+        }
+        response = requests.get(
+            baseurl + "homology_distances",
+            params=params,
+        )
+        if not response.ok:
+            raise BadRequestError(response.json()["message"])
+
+        resp_result = response.json()
+        result = pd.DataFrame(
+            {
+                "queries": resp_result["queries"],
+                "targets": resp_result["targets"],
+                "distances": resp_result["distances"],
+            }
+        )
+        return result
+
     def approximation(
         self,
         organism: str,
