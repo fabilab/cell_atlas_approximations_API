@@ -26,6 +26,7 @@ from models.exceptions import (
     CellTypeNotFoundError,
     SimilarityMethodError,
     NeighborhoodNotFoundError,
+    FeaturesNotPairedError,
 )
 from models.features import (
     get_features,
@@ -64,6 +65,7 @@ from models.interactions import (
 )
 from models.homology import (
     get_homologs,
+    get_homology_distances,
 )
 from models.surface import (
     get_surface_genes,
@@ -98,6 +100,11 @@ def get_data_sources():
                 )
         data_sources[organism] = data_source
     return data_sources
+
+
+def get_full_atlas_files():
+    """Get a hyperlink to a public cloud folder containing full cell atlases."""
+    return "https://unsw-my.sharepoint.com/:f:/g/personal/z3528476_ad_unsw_edu_au/EoTk9jUCHuNCtELqBVpWZqQBDRe06EVomVU8XgteN4OTjw"
 
 
 def get_organs(

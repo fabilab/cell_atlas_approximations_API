@@ -33,7 +33,7 @@ api_version = "v1"
 
 baseurl = os.getenv(
     "ATLASAPPROX_BASEURL",
-    "http://api.atlasapprox.org",
+    "https://api.atlasapprox.org",
 )
 baseurl = baseurl.rstrip("/") + "/"
 baseurl += f"{api_version}/"
@@ -761,6 +761,91 @@ class API:
             np.array(resp_result["detected"]).astype(dtype),
             columns=pd.Index(resp_result["organs"], name="organs"),
             index=pd.Index(resp_result["celltypes"], name="cell types"),
+        )
+        return result
+
+    def homologs(
+        self,
+        source_organism: str,
+        features: Sequence[str],
+        target_organism: str,
+        max_distance_over_min: float = 8.0,
+    ):
+        """Get the homologs of features between two organisms.
+
+        Args:
+            source_organism: The organism to query.
+            features: The features (e.g. genes) to query.
+            target_organism: The organism to find homologs for.
+            max_distance_over_min: This is a threshold determining how far from
+            the closest homolog to look for additional hits. Setting this to zero
+            will return only the closest homolog. Values above about 50 are not
+            useful as there is a hard cutoff at absolute distance 60.
+
+        Returns: A pandas.DataFrame with the homologs.
+        """
+
+        params = {
+            "source_organism": source_organism,
+            "features": ",".join(features),
+            "target_organism": target_organism,
+            "max_distance_over_min": max_distance_over_min,
+        }
+
+        response = requests.get(
+            baseurl + "homologs",
+            params=params,
+        )
+        if not response.ok:
+            raise BadRequestError(response.json()["message"])
+
+        resp_result = response.json()
+        result = pd.DataFrame(
+            {
+                "queries": resp_result["queries"],
+                "targets": resp_result["targets"],
+                "distances": resp_result["distances"],
+            }
+        )
+        return result
+
+    def homology_distances(
+        self,
+        source_organism: str,
+        source_features: Sequence[str],
+        target_organism: str,
+        target_features: Sequence[str],
+    ):
+        """Get homology distance between pairs of features.
+
+        Args:
+            source_organism: The organism to query.
+            source_features: The features (e.g. genes) to query in the source organism.
+            target_organism: The organism to find homologs for.
+            target_features: The features (e.g. genes) to query in the target organism. These must be the same number as ``source_features``.
+
+        Returns: A pandas.DataFrame with the paired features and distances, "zipping" the two feature sequences, and computing the distance between each pair of features.
+        """
+        params = {
+            "source_organism": source_organism,
+            "source_features": ",".join(source_features),
+            "target_organism": target_organism,
+            "target_features": ",".join(target_features),
+        }
+        response = requests.get(
+            baseurl + "homology_distances",
+            params=params,
+        )
+        if not response.ok:
+            raise BadRequestError(response.json()["message"])
+
+        resp_result = response.json()
+        result = pd.DataFrame(
+            {
+                "queries": resp_result["queries"],
+                "targets": resp_result["targets"],
+                "distances": resp_result["distances"],
+            }
         )
         return result
 
