@@ -144,3 +144,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+.Rproj.user
+
+# Files generated during package build and CMD check, unnecessary for the package
+atlasapprox.Rcheck/
+.Rhistory
+.RData
