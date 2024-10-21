@@ -32,5 +32,5 @@ A dataframe of similar features and their distances from the focal feature accor
 Get features with similar expression patterns to a specified feature in a given organism and organ.
 }
 \examples{
-GetSimilarFeatures("h_sapiens", "Lung", "PTPRC", 5, "correlation")
+GetSimilarFeatures("h_sapiens", "lung", "PTPRC", 5, "correlation")
 }
