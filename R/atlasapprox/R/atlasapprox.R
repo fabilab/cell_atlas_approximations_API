@@ -6,6 +6,8 @@ if (baseurl == "") {
     baseurl <- paste('http://api.atlasapprox.org/', api_version, '/', sep="")
 }
 
+#' @importFrom utils URLencode
+NULL
 
 ###########################
 # INTERNALS
@@ -280,7 +282,7 @@ GetCelltypeLocation <- function(organism, cell_type) {
 #' @param feature The feature to check (e.g. gene)
 #' @param number The number of cell types to return
 #'
-#' @return An array of cell types, organs, and averages for the
+#' @return An dataframe of cell types, organs, and averages for the
 #'         cell types with the highest measurement for that feature
 #' @export
 #'
@@ -299,10 +301,6 @@ GetHighestMeasurement <- function(organism, feature, number) {
     organs <- array(unlist(httr::content(response)$organs))
     average <- array(unlist(httr::content(response)$average))
 
-    print(cell_types)
-    print(organs)
-    print(average)
-
     # Make data frame with all three arrays
     df <- data.frame(cell_types, organs, average)
     colnames(df) <- c("Cell type", "Organ", "Average")
@@ -312,38 +310,43 @@ GetHighestMeasurement <- function(organism, feature, number) {
 
 
 #' GetSimilarFeatures
-#'
+#' 
 #' @param organism The organism you would like to query
 #' @param organ The organ you would like to query
-#' @param feature The feature to check (e.g. gene)
+#' @param feature The feature to find similarities for
 #' @param number The number of similar features to return
 #' @param method The method used for the distance computation.
 #'        Available methods are: "correlation" (default), "cosine",
 #'        "euclidean", "manhattan", "log-euclidean".
 #'
-#' @return An array of features and their distance from the focal feature
+#' @return An dataframe of similar features and their distances from the focal feature
 #'         according to the method chosen.
 #' @export
 #'
-#' @examples GetSimilarFeatures("h_sapiens", "Lung", "PTPRC", 5, "correlation")
-GetHighestMeasurement <- function(organism, organ, feature, number, method) {
-    params <- list(organism = organism,
-                organ = organ,
+#' @examples GetSimilarFeatures("h_sapiens", "lung", "PTPRC", 5, "correlation")
+GetSimilarFeatures <- function(organism, organ, feature, number, method) {
+    params <- list(
+        organism = organism,
+        organ = organ,
 		feature = feature,
 		number = number,
-                method = method)
-    root_uri <- paste(baseurl, 'similar-features', sep="")
+        method = method
+    )
+    root_uri <- paste(baseurl, 'similar_features', sep="")
     uri <- .GetParams(root_uri, params)
+
     response <- httr::GET(uri)
+
     if (response$status != 200) {
         stop(paste("Bad request: server returned", response))
     }
+    
     similar_features <- array(unlist(httr::content(response)$similar_features))
     distances <- array(unlist(httr::content(response)$distances))
 
     # Make data frame
     df <- data.frame(similar_features, distances)
-    colnames(df) <- c("Features", "distances")
+    colnames(df) <- c("Similar features", "distances")
 
     return(df)
 }
@@ -361,6 +364,6 @@ GetDataSources <- function() {
     if (response$status != 200) {
         stop(paste("Bad request: server returned", response))
     }
-    result <- httr::content(response)$data_sources
+    result <- httr::content(response)
     return(result)
 }
