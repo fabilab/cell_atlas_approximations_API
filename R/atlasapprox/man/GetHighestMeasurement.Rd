@@ -9,16 +9,16 @@ GetHighestMeasurement(organism, feature, number)
 \arguments{
 \item{organism}{The organism you would like to query}
 
-\item{feature}{The feature to check (e.g. gene)}
+\item{feature}{The feature you would like to query}
 
-\item{number}{The number of cell types to return}
+\item{number}{The number of highest expressors you would like to get}
 }
 \value{
-An dataframe of cell types, organs, and averages for the
+A dataframe of cell types, organs, and averages for the
 cell types with the highest measurement for that feature
 }
 \description{
-GetHighestMeasurement
+Get the cell types with the highest expression of a specified feature in a given organism.
 }
 \examples{
 GetHighestMeasurement("h_sapiens", "PTPRC", 5)

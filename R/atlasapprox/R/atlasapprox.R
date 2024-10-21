@@ -60,10 +60,13 @@ NULL
 
 #' GetOrganisms
 #'
+#' Get a list of organisms available for querying in the atlasapprox api.
+#' 
 #' @return An array of available organisms
 #' @export
 #'
-#' @examples GetOrganisms()
+#' @examples
+#' GetOrganisms()
 GetOrganisms <- function() {
     if (!.HasCache('organisms')) {
         uri <- paste(baseurl, 'organisms', sep="")
@@ -82,12 +85,15 @@ GetOrganisms <- function() {
 
 #' GetOrgans
 #'
+#' Get all available organs for an organism
+
 #' @param organism The organism you would like to query
 #'
 #' @return An array of available organs from that organism
 #' @export
 #'
-#' @examples GetOrgans("h_sapiens")
+#' @examples
+#' GetOrgans("h_sapiens")
 GetOrgans <- function(organism) {
     cacheKey <- paste('organs', organism, sep = ":")
     if (!.HasCache(cacheKey)) {
@@ -109,12 +115,15 @@ GetOrgans <- function(organism) {
 
 #' GetFeatures
 #'
+#' Get a list of available features (typically genes) for a specified organism.
+#' 
 #' @param organism The organism you would like to query
 #'
 #' @return An array of available features (genes) from that organism
 #' @export
 #'
-#' @examples GetFeatures("h_sapiens")
+#' @examples
+#' GetFeatures("h_sapiens")
 GetFeatures <- function(organism) {
     cacheKey <- paste('features', organism, sep = ":")
     if (!.HasCache(cacheKey)) {
@@ -136,13 +145,16 @@ GetFeatures <- function(organism) {
 
 #' GetCelltypes
 #'
+#' Get all available cell types for a specified organism and organ.
+#' 
 #' @param organism The organism you would like to query
 #' @param organ The organ you would like to query
 #'
 #' @return An array of available cell types from that organism and organ
 #' @export
 #'
-#' @examples GetCelltypes("h_sapiens", "Lung")
+#' @examples
+#' GetCelltypes("h_sapiens", "Lung")
 GetCelltypes <- function(organism, organ) {
     cacheKey <- paste('celltypes', organism, organ, sep = ":")
     if (!.HasCache(cacheKey)) {
@@ -164,14 +176,17 @@ GetCelltypes <- function(organism, organ) {
 
 #' GetAverage
 #'
+#' Get the average gene expression for specified features across cell types in a given organism and organ.
+#'
 #' @param organism The organism you would like to query
-#' @param organ The organ you would like to query
-#' @param features An array/list of features (e.g. genes) you would like to query
+#' @param organ The organism you would like to query
+#' @param features The features (genes) you would like to query
 #'
 #' @return A data.frame of average gene expression by cell type in that organism and organ
 #' @export
 #'
-#' @examples GetAverage("h_sapiens", "Lung", c("COL1A1", "PTPRC"))
+#' @examples
+#' GetAverage("h_sapiens", "Lung", c("COL1A1", "PTPRC"))
 GetAverage <- function(organism, organ, features) {
     features_string <- paste(features, collapse = ",")
     params <- list(organism = organism, organ = organ, features = features_string)
@@ -196,14 +211,17 @@ GetAverage <- function(organism, organ, features) {
 
 #' GetFractionDetected
 #'
+#' Get the fraction of cells expressing specified features across cell types in a given organism and organ.
+#'
 #' @param organism The organism you would like to query
 #' @param organ The organ you would like to query
-#' @param features An array/list of features (e.g. genes) you would like to query
+#' @param features The features (genes) you would like to query
 #'
 #' @return A data.frame of fraction of expressing cells by cell type in that organism and organ
 #' @export
 #'
-#' @examples GetFractionDetected("h_sapiens", "Lung", c("COL1A1", "PTPRC"))
+#' @examples
+#' GetFractionDetected("h_sapiens", "Lung", c("COL1A1", "PTPRC"))
 GetFractionDetected <- function(organism, organ, features) {
     features_string <- paste(features, collapse = ",")
     params <- list(organism = organism, organ = organ, features = features_string)
@@ -225,18 +243,20 @@ GetFractionDetected <- function(organism, organ, features) {
     return(result)
 }
 
-
 #' GetMarkers
 #'
+#' Get marker genes for a specified cell type in a given organism and organ.
+#'
 #' @param organism The organism you would like to query
-#' @param organ The organ you would like to query
-#' @param cell_type The cell type to find markers for
-#' @param number The number of markers to return
+#' @param organ The organism you would like to query
+#' @param cell_type The cell type you would like to query
+#' @param number The number of markers you would like to get
 #'
 #' @return An array of markers for that cell type in that organism and organ
 #' @export
 #'
-#' @examples GetMarkers("h_sapiens", "Lung", "fibroblast", 5)
+#' @examples
+#' GetMarkers("h_sapiens", "Lung", "fibroblast", 5)
 GetMarkers <- function(organism, organ, cell_type, number) {
     params <- list(organism = organism,
    		organ = organ,
@@ -255,13 +275,16 @@ GetMarkers <- function(organism, organ, cell_type, number) {
 
 #' GetCelltypeLocation
 #'
-#' @param organism The organism you would like to query
-#' @param cell_type The cell type to find markers for
+#' Get the organs where a specified cell type is found in a given organism.
 #'
-#' @return An array of organs in which that cell type is found.
+#' @param organism The organism you would like to query
+#' @param cell_type The cell type you would like to query
+#'
+#' @return An array of organs in which that cell type is found
 #' @export
 #'
-#' @examples GetCelltypeLocation("h_sapiens", "fibroblast")
+#' @examples
+#' GetCelltypeLocation("h_sapiens", "fibroblast")
 GetCelltypeLocation <- function(organism, cell_type) {
     params <- list(organism = organism,
                    celltype = cell_type)
@@ -278,15 +301,18 @@ GetCelltypeLocation <- function(organism, cell_type) {
 
 #' GetHighestMeasurement
 #'
-#' @param organism The organism you would like to query
-#' @param feature The feature to check (e.g. gene)
-#' @param number The number of cell types to return
+#' Get the cell types with the highest expression of a specified feature in a given organism.
 #'
-#' @return An dataframe of cell types, organs, and averages for the
+#' @param organism The organism you would like to query
+#' @param feature The feature you would like to query
+#' @param number The number of highest expressors you would like to get
+#'
+#' @return A dataframe of cell types, organs, and averages for the
 #'         cell types with the highest measurement for that feature
 #' @export
 #'
-#' @examples GetHighestMeasurement("h_sapiens", "PTPRC", 5)
+#' @examples
+#' GetHighestMeasurement("h_sapiens", "PTPRC", 5)
 GetHighestMeasurement <- function(organism, feature, number) {
     params <- list(organism = organism,
    		feature = feature,
@@ -311,19 +337,27 @@ GetHighestMeasurement <- function(organism, feature, number) {
 
 #' GetSimilarFeatures
 #' 
+#' Get features with similar expression patterns to a specified feature in a given organism and organ.
+#'
 #' @param organism The organism you would like to query
 #' @param organ The organ you would like to query
 #' @param feature The feature to find similarities for
-#' @param number The number of similar features to return
-#' @param method The method used for the distance computation.
-#'        Available methods are: "correlation" (default), "cosine",
-#'        "euclidean", "manhattan", "log-euclidean".
+#' @param number The number of similar features you would like to get.
+#' @param method The method used to compute similarity between features. 
+#'             The following methods are available:
+#'             - correlation (default): Pearson correlation of the fraction_detected
+#'             - cosine: Cosine similarity/distance of the fraction_detected
+#'             - euclidean: Euclidean distance of average measurement (e.g. expression)
+#'             - manhattan: Taxicab/Manhattan/L1 distance of average measurement
+#'             - log-euclidean: Log the average measurement with a pseudocount
+#'               of 0.001, then compute euclidean distance. This tends to
+#'               highlight sparsely measured features
 #'
-#' @return An dataframe of similar features and their distances from the focal feature
-#'         according to the method chosen.
+#' @return A dataframe of similar features and their distances from the focal feature according to the method chosen
 #' @export
 #'
-#' @examples GetSimilarFeatures("h_sapiens", "lung", "PTPRC", 5, "correlation")
+#' @examples
+#' GetSimilarFeatures("h_sapiens", "lung", "PTPRC", 5, "correlation")
 GetSimilarFeatures <- function(organism, organ, feature, number, method) {
     params <- list(
         organism = organism,
@@ -351,13 +385,15 @@ GetSimilarFeatures <- function(organism, organ, feature, number, method) {
     return(df)
 }
 
-
 #' GetDataSources
 #'
-#' @return The cell atlases used as data sources for the approximations
+#' Get information about the cell atlases used as data sources for the approximations.
+#'
+#' @return A list containing information about the cell atlases used as data sources
 #' @export
 #'
-#' @examples GetDataSources()
+#' @examples
+#' GetDataSources()
 GetDataSources <- function() {
     uri <- paste(baseurl, 'data_sources', sep="")
     response <- httr::GET(uri)

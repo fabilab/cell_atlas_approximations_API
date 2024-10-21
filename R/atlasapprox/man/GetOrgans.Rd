@@ -13,7 +13,7 @@ GetOrgans(organism)
 An array of available organs from that organism
 }
 \description{
-GetOrgans
+Get all available organs for an organism
 }
 \examples{
 GetOrgans("h_sapiens")

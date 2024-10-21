@@ -13,7 +13,7 @@ GetFeatures(organism)
 An array of available features (genes) from that organism
 }
 \description{
-GetFeatures
+Get a list of available features (typically genes) for a specified organism.
 }
 \examples{
 GetFeatures("h_sapiens")

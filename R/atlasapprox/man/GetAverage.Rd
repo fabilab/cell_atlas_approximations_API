@@ -9,15 +9,15 @@ GetAverage(organism, organ, features)
 \arguments{
 \item{organism}{The organism you would like to query}
 
-\item{organ}{The organ you would like to query}
+\item{organ}{The organism you would like to query}
 
-\item{features}{An array/list of features (e.g. genes) you would like to query}
+\item{features}{The features (genes) you would like to query}
 }
 \value{
 A data.frame of average gene expression by cell type in that organism and organ
 }
 \description{
-GetAverage
+Get the average gene expression for specified features across cell types in a given organism and organ.
 }
 \examples{
 GetAverage("h_sapiens", "Lung", c("COL1A1", "PTPRC"))

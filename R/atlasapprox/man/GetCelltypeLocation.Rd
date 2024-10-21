@@ -9,13 +9,13 @@ GetCelltypeLocation(organism, cell_type)
 \arguments{
 \item{organism}{The organism you would like to query}
 
-\item{cell_type}{The cell type to find markers for}
+\item{cell_type}{The cell type you would like to query}
 }
 \value{
-An array of organs in which that cell type is found.
+An array of organs in which that cell type is found
 }
 \description{
-GetCelltypeLocation
+Get the organs where a specified cell type is found in a given organism.
 }
 \examples{
 GetCelltypeLocation("h_sapiens", "fibroblast")

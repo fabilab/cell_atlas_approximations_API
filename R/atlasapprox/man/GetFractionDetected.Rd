@@ -11,13 +11,13 @@ GetFractionDetected(organism, organ, features)
 
 \item{organ}{The organ you would like to query}
 
-\item{features}{An array/list of features (e.g. genes) you would like to query}
+\item{features}{The features (genes) you would like to query}
 }
 \value{
 A data.frame of fraction of expressing cells by cell type in that organism and organ
 }
 \description{
-GetFractionDetected
+Get the fraction of cells expressing specified features across cell types in a given organism and organ.
 }
 \examples{
 GetFractionDetected("h_sapiens", "Lung", c("COL1A1", "PTPRC"))

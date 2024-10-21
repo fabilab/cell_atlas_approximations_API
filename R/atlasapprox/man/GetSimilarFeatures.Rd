@@ -13,19 +13,24 @@ GetSimilarFeatures(organism, organ, feature, number, method)
 
 \item{feature}{The feature to find similarities for}
 
-\item{number}{The number of similar features to return}
+\item{number}{The number of similar features you would like to get.}
 
-\item{method}{The method used for the distance computation.
-Available methods are: "correlation" (default), "cosine",
-"euclidean", "manhattan", "log-euclidean".}
+\item{method}{The method used to compute similarity between features.
+The following methods are available:
+- correlation (default): Pearson correlation of the fraction_detected
+- cosine: Cosine similarity/distance of the fraction_detected
+- euclidean: Euclidean distance of average measurement (e.g. expression)
+- manhattan: Taxicab/Manhattan/L1 distance of average measurement
+- log-euclidean: Log the average measurement with a pseudocount
+of 0.001, then compute euclidean distance. This tends to
+highlight sparsely measured features}
 }
 \value{
-An dataframe of similar features and their distances from the focal feature
-according to the method chosen.
+A dataframe of similar features and their distances from the focal feature according to the method chosen
 }
 \description{
-GetSimilarFeatures
+Get features with similar expression patterns to a specified feature in a given organism and organ.
 }
 \examples{
-GetSimilarFeatures("h_sapiens", "lung", "PTPRC", 5, "correlation")
+GetSimilarFeatures("h_sapiens", "Lung", "PTPRC", 5, "correlation")
 }
