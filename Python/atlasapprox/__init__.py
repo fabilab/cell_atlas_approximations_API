@@ -648,8 +648,8 @@ class API:
             baseurl + "highest_measurement_multiple",
             params={
                 "organism": organism,
-                "features": features,
-                "features_negative": features_negative,
+                "features": ",".join(features),
+                "features_negative": ",".join(features_negative),
                 "number": number,
                 "measurement_type": measurement_type,
             },
@@ -669,18 +669,18 @@ class API:
         )
         result.set_index(["celltype", "organ"], inplace=True)
 
-        features_both += resp_result["features"]
+        features_both = resp_result["features"]
         if "features_negative" in resp_result:
             features_both += resp_result["features_negative"]
 
         # Average and fraction detected
         result_average = pd.DataFrame(
-            resp_result["average"],
+            np.asarray(resp_result["average"]).T,
             index=result.index,
             columns=features_both,
         )
         result_fraction = pd.DataFrame(
-            resp_result["fraction_detected"],
+            np.asarray(resp_result["fraction_detected"]).T,
             index=result.index,
             columns=features_both,
         )
