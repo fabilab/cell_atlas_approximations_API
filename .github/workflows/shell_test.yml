@@ -1,4 +1,4 @@
-name: Build
+name: Test shell script
 
 on: [push, pull_request]
 
