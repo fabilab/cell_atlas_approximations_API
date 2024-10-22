@@ -1,4 +1,4 @@
-name: Build
+name: Test JavaScript package
 
 on: [push, pull_request]
 

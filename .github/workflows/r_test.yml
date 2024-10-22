@@ -1,4 +1,4 @@
-name: Check and Build R
+name: Test R package
 
 on: [push, pull_request]
 

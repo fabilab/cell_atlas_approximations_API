@@ -1,4 +1,4 @@
-name: Build
+name: Test RESTful API
 
 on: [push, pull_request]
 
