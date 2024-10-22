@@ -13,7 +13,7 @@ NULL
 # INTERNALS
 ###########################
 # A new environment storing cache info (e.g. list of organisms)
-# Thse act a little like Python dictionaries
+# These act a little like Python dictionaries
 .atlas_approx_cache <- new.env()
 
 
@@ -102,7 +102,7 @@ GetOrgans <- function(organism) {
         uri <- .GetParams(root_uri, params)
         response <- httr::GET(uri)
         if (response$status != 200) {
-            stop(paste("Bad request: server returned", response))
+            stop(paste("Bad request: server returned", response$status))
         }
         result <- array(unlist(httr::content(response)$organs))
 	.SetCache(cacheKey, result)
@@ -132,7 +132,7 @@ GetFeatures <- function(organism) {
         uri <- .GetParams(root_uri, params)
         response <- httr::GET(uri)
         if (response$status != 200) {
-            stop(paste("Bad request: server returned", response))
+            stop(paste("Bad request: server returned", response$status))
         }
         result <- array(unlist(httr::content(response)$features))
 	.SetCache(cacheKey, result)
@@ -158,12 +158,15 @@ GetFeatures <- function(organism) {
 GetCelltypes <- function(organism, organ) {
     cacheKey <- paste('celltypes', organism, organ, sep = ":")
     if (!.HasCache(cacheKey)) {
-        params <- list(organism = organism, organ = organ)
+        params <- list(
+            organism = organism, 
+            organ = organ
+        )
         root_uri <- paste(baseurl, 'celltypes', sep="")
         uri <- .GetParams(root_uri, params)
         response <- httr::GET(uri)
         if (response$status != 200) {
-            stop(paste("Bad request: server returned", response))
+            stop(paste("Bad request: server returned", response$status))
         }
         result <- array(unlist(httr::content(response)$celltypes))
 	.SetCache(cacheKey, result)
@@ -179,7 +182,7 @@ GetCelltypes <- function(organism, organ) {
 #' Get the average gene expression for specified features across cell types in a given organism and organ.
 #'
 #' @param organism The organism you would like to query
-#' @param organ The organism you would like to query
+#' @param organ The organ you would like to query
 #' @param features The features (genes) you would like to query
 #'
 #' @return A data.frame of average gene expression by cell type in that organism and organ
@@ -189,12 +192,16 @@ GetCelltypes <- function(organism, organ) {
 #' GetAverage("h_sapiens", "Lung", c("COL1A1", "PTPRC"))
 GetAverage <- function(organism, organ, features) {
     features_string <- paste(features, collapse = ",")
-    params <- list(organism = organism, organ = organ, features = features_string)
+    params <- list(
+        organism = organism, 
+        organ = organ, 
+        features = features_string
+    )
     root_uri <- paste(baseurl, 'average', sep="")
     uri <- .GetParams(root_uri, params)
     response <- httr::GET(uri)
     if (response$status != 200) {
-        stop(paste("Bad request: server returned", response))
+        stop(paste("Bad request: server returned", response$status))
     }
     res <- (httr::content(response)$average)
     nrows <- length(res)
@@ -224,12 +231,16 @@ GetAverage <- function(organism, organ, features) {
 #' GetFractionDetected("h_sapiens", "Lung", c("COL1A1", "PTPRC"))
 GetFractionDetected <- function(organism, organ, features) {
     features_string <- paste(features, collapse = ",")
-    params <- list(organism = organism, organ = organ, features = features_string)
+    params <- list(
+        organism = organism, 
+        organ = organ, 
+        features = features_string
+    )
     root_uri <- paste(baseurl, 'fraction_detected', sep="")
     uri <- .GetParams(root_uri, params)
     response <- httr::GET(uri)
     if (response$status != 200) {
-        stop(paste("Bad request: server returned", response))
+        stop(paste("Bad request: server returned", response$status))
     }
     res <- (httr::content(response)$fraction_detected)
     nrows <- length(res)
@@ -248,7 +259,7 @@ GetFractionDetected <- function(organism, organ, features) {
 #' Get marker genes for a specified cell type in a given organism and organ.
 #'
 #' @param organism The organism you would like to query
-#' @param organ The organism you would like to query
+#' @param organ The organ you would like to query
 #' @param cell_type The cell type you would like to query
 #' @param number The number of markers you would like to get
 #'
@@ -258,15 +269,17 @@ GetFractionDetected <- function(organism, organ, features) {
 #' @examples
 #' GetMarkers("h_sapiens", "Lung", "fibroblast", 5)
 GetMarkers <- function(organism, organ, cell_type, number) {
-    params <- list(organism = organism,
-   		organ = organ,
+    params <- list(
+        organism = organism, 
+        organ = organ,
    		celltype = cell_type,
-   		number = number)
+   		number = number
+    )
     root_uri <- paste(baseurl, 'markers', sep="")
     uri <- .GetParams(root_uri, params)
     response <- httr::GET(uri)
     if (response$status != 200) {
-        stop(paste("Bad request: server returned", response))
+        stop(paste("Bad request: server returned", response$status))
     }
     result <- array(unlist(httr::content(response)$markers))
     return(result)
@@ -286,13 +299,15 @@ GetMarkers <- function(organism, organ, cell_type, number) {
 #' @examples
 #' GetCelltypeLocation("h_sapiens", "fibroblast")
 GetCelltypeLocation <- function(organism, cell_type) {
-    params <- list(organism = organism,
-                   celltype = cell_type)
+    params <- list(
+        organism = organism, 
+        celltype = cell_type
+    )
     root_uri <- paste(baseurl, 'celltype_location', sep="")
     uri <- .GetParams(root_uri, params)
     response <- httr::GET(uri)
     if (response$status != 200) {
-        stop(paste("Bad request: server returned", response))
+        stop(paste("Bad request: server returned", response$status))
     }
     result <- array(unlist(httr::content(response)$organs))
     return(result)
@@ -314,14 +329,16 @@ GetCelltypeLocation <- function(organism, cell_type) {
 #' @examples
 #' GetHighestMeasurement("h_sapiens", "PTPRC", 5)
 GetHighestMeasurement <- function(organism, feature, number) {
-    params <- list(organism = organism,
+    params <- list(
+        organism = organism,
    		feature = feature,
-   		number = number)
+   		number = number
+    )
     root_uri <- paste(baseurl, 'highest_measurement', sep="")
     uri <- .GetParams(root_uri, params)
     response <- httr::GET(uri)
     if (response$status != 200) {
-        stop(paste("Bad request: server returned", response))
+        stop(paste("Bad request: server returned", response$status))
     }
     cell_types <- array(unlist(httr::content(response)$celltypes))
     organs <- array(unlist(httr::content(response)$organs))
@@ -372,7 +389,7 @@ GetSimilarFeatures <- function(organism, organ, feature, number, method) {
     response <- httr::GET(uri)
 
     if (response$status != 200) {
-        stop(paste("Bad request: server returned", response))
+        stop(paste("Bad request: server returned", response$status))
     }
     
     similar_features <- array(unlist(httr::content(response)$similar_features))
@@ -398,7 +415,7 @@ GetDataSources <- function() {
     uri <- paste(baseurl, 'data_sources', sep="")
     response <- httr::GET(uri)
     if (response$status != 200) {
-        stop(paste("Bad request: server returned", response))
+        stop(paste("Bad request: server returned", response$status))
     }
     result <- httr::content(response)
     return(result)

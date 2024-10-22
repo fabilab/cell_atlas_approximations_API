@@ -19,7 +19,7 @@ This project enables biologists, doctors, and data scientist to quickly find ans
 - *What fraction of cells (of a specific type) express a gene of interest?*
 
 ***
-**NOTE:** These questions can be also asked in Python or in a language agnostic manner using the REST API (see [https://atlasapprox.readthedocs.io](https://atlasapprox.readthedocs.io)).
+**NOTE:** These questions can be also asked in R, Python, JavaScript or in a language agnostic manner using the REST API (see [https://atlasapprox.readthedocs.io](https://atlasapprox.readthedocs.io)).
 
 ***
 
@@ -47,6 +47,7 @@ The easiest way to explore atlas approximations is to query a list of available 
 
 ```{r}
 organisms <- GetOrganisms()
+print(organisms)
 ```
 
 ## Organs in a single organism
@@ -54,6 +55,7 @@ Once you know what species you are interested in, you can explore the list of or
 
 ```{r}
 human_organs <- GetOrgans(organism = 'h_sapiens')
+print(human_organs)
 ```
 
 ## Cell types within an organ
@@ -61,6 +63,7 @@ The next level of zoom is to query the list of cell types that make up an organ 
 
 ```{r}
 cell_types <- GetCelltypes(organism = 'h_sapiens', organ = 'Lung')
+print(cell_types)
 ```
 
 ***
@@ -73,18 +76,22 @@ If you have some genes you are interested in, you can query their expression acr
 
 ```{r}
 expression <- GetAverage(organism = 'h_sapiens', organ = 'Lung', features = c('PTPRC', 'COL1A1'))
+print(expression)
 ```
 
 You can also request not only the average *level* of expression, but the *fraction* of cells within each type that express the gene:
 
 ```{r}
 fraction_expressing <- GetFractionDetected(organism = 'h_sapiens', organ = 'Lung', features = c('PTPRC', 'COL1A1'))
+print(fraction_expressing)
 ```
 
 To get a list of all available features (e.g. genes) for an organism, you can use:
 
 ```{r}
 genes <- GetFeatures(organism = 'h_sapiens')
+# To show just the first 20 genes
+print(head(genes, 20))
 ```
 
 ## Markers
@@ -92,6 +99,7 @@ Each cell type expressed specific genes that contribute to its unique biological
 
 ```{r}
 markers <- GetMarkers(organism = 'h_sapiens', organ = 'Lung', cell_type = 'fibroblast', number = 5)
+print(markers)
 ```
 
 ***
@@ -99,21 +107,71 @@ markers <- GetMarkers(organism = 'h_sapiens', organ = 'Lung', cell_type = 'fibro
 
 ***
 
+## Finding cells that highly express a gene
+If you're interested in knowing which cell types express your gene of interest the most, across all organs:
 
+```{r}
+highest_expressors <- GetHighestMeasurement(organism = 'h_sapiens', feature = 'PTPRC', number = 5)
+print(highest_expressors)
+```
+
+
+## Finding similar features
+If you want to find other features (genes) that show similar expression patterns to a feature of interest. To get a list of similar features for your gene of choice:
+```{r}
+similar_genes <- GetSimilarFeatures(organism = 'h_sapiens', organ = 'lung', feature = 'PTPRC', number = 5, method = 'correlation')
+print(similar_genes)
+```
+
+***
+**NOTE:** There are multiple methods to compute feature similarity. The available methods are:
+
+- correlation (default): Pearson correlation of the fraction of cells expressing each gene
+- cosine: Cosine similarity of the fraction of expressing cells 
+- euclidean: Euclidean distance of average expression levels
+- manhattan: Manhattan distance of average expression levels 
+- log-euclidean: Euclidean distance after log-transformation (useful for sparse features)
+
+***
 ## Data sources
 `atlasapprox` relies upon available cell atlases kindly released for public use:
 
-- [Tabula Sapiens](https://www.science.org/doi/10.1126/science.abl4896)
-- [Tabula Muris Senis](https://www.nature.com/articles/s41586-020-2496-1)
-- [Tabula Microcebus](https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
-- [C elegans]((https://www.science.org/doi/10.1126/science.aam8940): Cao et al. 2017
-- [Zebrafish embryo (24 hours post fertilisation)](https://www.science.org/doi/10.1126/science.aar4362): Wagner et al. 2018
+- [A. queenslandica - Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)
+- A. thaliana: [Shahan et al 2022](https://www.sciencedirect.com/science/article/pii/S1534580722000338) [root], [Xu et al 2024](https://doi.org/10.1101/2024.03.04.583414) [shoot]
+- [C. elegans - Cao et al. 2017](https://www.science.org/doi/10.1126/science.aam8940)
+- [C. gigas - Piovani et al 2023](https://doi.org/10.1126/sciadv.adg6034)
+- [C. hemisphaerica - Chari et al. 2021](https://www.science.org/doi/10.1126/sciadv.abh1683)
+- [D. melanogaster - Li et al. 2022](https://doi.org/10.1126/science.abk2432)
+- [D. rerio - Wagner et al. 2018](https://www.science.org/doi/10.1126/science.aar4362)
+- [F. vesca - Bai et al 2022](https://doi.org/10.1093/hr/uhab055)
+- [H. miamia - Hulett et al. 2023](https://www.nature.com/articles/s41467-023-38016-4)
+- H. sapiens: [ATAC - Zhang et al. Ren](https://doi.org/10.1016/j.cell.2021.10.024), [RNA - Tabula Sapiens](https://www.science.org/doi/10.1126/science.abl4896)
+- [H. vulgaris - Sieert et al 2019](https://doi.org/10.1126/science.aav9314)
+- [I. pulchra - Duruz et al. 2020](https://academic.oup.com/mbe/article/38/5/1888/6045962)
+- [L. minuta - Abramson et al. 2022](https://doi.org/10.1093/plphys/kiab564)
+- [M. leidyi - Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)
+- [M. murinus - Tabula Microcebus](https://www.biorxiv.org/content/10.1101/2021.12.12.469460v2)
+- [M. musculus - Tabula Muris Senis 2020](https://www.nature.com/articles/s41586-020-2496-1)
+- [N. vectensis - Steger et al 2022](https://doi.org/10.1016/j.celrep.2022.111370)
+- [O. sativa - Zhang et al 2021](https://doi.org/10.1038/s41467-021-22352-4)
+- [P. crozieri - Piovani et al 2023](https://doi.org/10.1126/sciadv.adg6034)
+- [P. dumerilii - Achim et al 2017](https://academic.oup.com/mbe/article/35/5/1047/4823215)
+- [S. lacustris - Musser et al. 2021](https://www.science.org/doi/10.1126/science.abj2949)
+- [S. mansoni - Li et al. 2021](https://www.nature.com/articles/s41467-020-20794-w)
+- [S. mediterranea - Plass et al. 2018](https://doi.org/10.1126/science.aaq1723)
+- [S. pistillata - Levi et al. 2021](https://www.sciencedirect.com/science/article/pii/S0092867421004402)
+- [S. purpuratus - Paganos et al 2021](https://doi.org/10.7554/eLife.70416)
+- [T. adhaerens - Sebé-Pedrós et al 2018](https://www.nature.com/articles/s41559-018-0575-6)
+- [T. aestivum - Zhang et al 2023](https://genomebiology.biomedcentral.com/articles/10.1186/s13059-023-02908-x)
+- [X. laevis - Liao et al. 2022](https://www.nature.com/articles/s41467-022-31949-2)
+- Z. mays: [Marand et al 2021](https://www.cell.com/cell/pdf/S0092-8674(21)00493-1.pdf) [seedling], [Xu et al 2024](https://doi.org/10.1101/2024.03.04.583414) [eartip]
 
 We are grateful to all authors above for their help and committment to open science.
 
 To get the data sources in the package, call:
 ```{r eval = FALSE}
-markers <- GetDataSources()
+data_sources <- GetDataSources()
+print(data_sources)
 ```
 
 ***
