@@ -2,3 +2,10 @@
 ^_pkgdown\.yml$
 ^docs$
 ^pkgdown$
+^build_docs\.R$
+^build_docs_rtd\.R$
+^atlasapprox\.Rproj$
+^\.Rcheck$
+^.*\.Rcheck$
+^doc$
+^Meta$

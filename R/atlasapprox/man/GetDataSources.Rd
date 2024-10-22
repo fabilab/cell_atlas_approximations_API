@@ -7,10 +7,10 @@
 GetDataSources()
 }
 \value{
-The cell atlases used as data sources for the approximations
+A list containing information about the cell atlases used as data sources
 }
 \description{
-GetDataSources
+Get information about the cell atlases used as data sources for the approximations.
 }
 \examples{
 GetDataSources()

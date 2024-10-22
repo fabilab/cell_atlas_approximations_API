@@ -4,36 +4,22 @@
 \alias{GetHighestMeasurement}
 \title{GetHighestMeasurement}
 \usage{
-GetHighestMeasurement(organism, organ, feature, number, method)
-
-GetHighestMeasurement(organism, organ, feature, number, method)
+GetHighestMeasurement(organism, feature, number)
 }
 \arguments{
 \item{organism}{The organism you would like to query}
 
-\item{organ}{The organ you would like to query}
+\item{feature}{The feature you would like to query}
 
-\item{feature}{The feature to check (e.g. gene)}
-
-\item{number}{The number of similar features to return}
-
-\item{method}{The method used for the distance computation.
-Available methods are: "correlation" (default), "cosine",
-"euclidean", "manhattan", "log-euclidean".}
+\item{number}{The number of highest expressors you would like to get}
 }
 \value{
-An array of cell types, organs, and averages for the
+A dataframe of cell types, organs, and averages for the
 cell types with the highest measurement for that feature
-
-An array of features and their distance from the focal feature
-according to the method chosen.
 }
 \description{
-GetHighestMeasurement
-
-GetSimilarFeatures
+Get the cell types with the highest expression of a specified feature in a given organism.
 }
 \examples{
 GetHighestMeasurement("h_sapiens", "PTPRC", 5)
-GetSimilarFeatures("h_sapiens", "Lung", "PTPRC", 5, "correlation")
 }

@@ -10,7 +10,7 @@ GetOrganisms()
 An array of available organisms
 }
 \description{
-GetOrganisms
+Get a list of organisms available for querying in the atlasapprox api.
 }
 \examples{
 GetOrganisms()

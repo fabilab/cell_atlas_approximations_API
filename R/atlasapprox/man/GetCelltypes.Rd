@@ -15,7 +15,7 @@ GetCelltypes(organism, organ)
 An array of available cell types from that organism and organ
 }
 \description{
-GetCelltypes
+Get all available cell types for a specified organism and organ.
 }
 \examples{
 GetCelltypes("h_sapiens", "Lung")

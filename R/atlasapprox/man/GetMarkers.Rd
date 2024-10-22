@@ -9,17 +9,17 @@ GetMarkers(organism, organ, cell_type, number)
 \arguments{
 \item{organism}{The organism you would like to query}
 
-\item{organ}{The organ you would like to query}
+\item{organ}{The organism you would like to query}
 
-\item{cell_type}{The cell type to find markers for}
+\item{cell_type}{The cell type you would like to query}
 
-\item{number}{The number of markers to return}
+\item{number}{The number of markers you would like to get}
 }
 \value{
 An array of markers for that cell type in that organism and organ
 }
 \description{
-GetMarkers
+Get marker genes for a specified cell type in a given organism and organ.
 }
 \examples{
 GetMarkers("h_sapiens", "Lung", "fibroblast", 5)
