@@ -1,5 +1,5 @@
 # R
-The R interface can be used to access the atlas approximation API from R. It uses caching to speed up multiple requests so it is generally as fast or faster than using the [REST API](../index.html) directly.
+The R interface can be used to access the atlas approximation API from R. It uses caching to speed up multiple requests so it is generally as fast or faster than using the [REST API](https://atlasapprox.readthedocs.io/en/latest/rest/index.html) directly.
 
 ## Requirements
 You need the following R packages:
