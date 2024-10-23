@@ -8,7 +8,7 @@ Authors@R:
       person("Ying", "Xu", , "ying.xu3@unsw.edu.au", role = c("aut", "cre"))
     )
 Maintainer: Ying Xu <ying.xu3@unsw.edu.au>
-Description: Provides an interface in R to cell atlas approximations. See the vignette under "Getting started" for instructionsFor detailed instructions. You can also explore the reference documentation for specific functions. Additional interfaces and resources are available at <https://atlasapprox.readthedocs.io>.
+Description: Provides an interface in R to cell atlas approximations. See the vignette under "Getting started" for instructions. You can also explore the reference documentation for specific functions. Additional interfaces and resources are available at <https://atlasapprox.readthedocs.io>.
 License: MIT + file LICENSE
 URL: https://atlasapprox.readthedocs.io/en/latest/R/index.html, https://github.com/fabilab/cell_atlas_approximations_API
 BugReports: https://github.com/fabilab/cell_atlas_approximations_API/issues
