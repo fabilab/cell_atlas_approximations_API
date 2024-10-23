@@ -6,21 +6,11 @@ description: This package provides an interface in R to cell atlas approximation
 
 template:
   bootstrap: 5
-  html5: true  # Add this line to enable HTML5 mode
   #bootswatch: materia
   bslib:
     primary: "#0054AD"
     border-radius: 0.5rem
     btn-border-radius: 0.25rem
-  includes:
-    in_header: >
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-  params:
-    noindex: true
-
-development:
-  mode: auto
 
 navbar:
   structure:
