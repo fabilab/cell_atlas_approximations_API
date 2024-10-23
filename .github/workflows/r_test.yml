@@ -21,6 +21,21 @@ jobs:
     - name: Setup Pandoc
       uses: r-lib/actions/setup-pandoc@v2
 
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y tidy
+        sudo apt-get install -y texlive-full
+
+    - name: Install dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install tidy-html5
+        Rscript -e "if (!require('tinytex')) install.packages('tinytex')"
+        Rscript -e "tinytex::install_tinytex(force = TRUE)"
+        Rscript -e "tinytex::tlmgr_install(c('latex-bin', 'inconsolata'))"
+
     - name: Install R dependencies
       uses: r-lib/actions/setup-r-dependencies@v2
       with:
@@ -33,4 +48,31 @@ jobs:
       with:
         error-on: '"note"'
         working-directory: R/atlasapprox
-        
+    
+    - name: Build package (Windows)
+      if: runner.os == 'Windows'
+      shell: cmd
+      run: |
+        R.exe CMD build .
+      working-directory: R/atlasapprox
+
+    - name: Run CRAN check (Windows)
+      if: runner.os == 'Windows'
+      shell: cmd
+      run: |
+        R.exe CMD check --no-manual --as-cran atlasapprox_0.1.0.tar.gz
+      working-directory: R/atlasapprox
+
+    - name: Build R package (other systems)
+      if: runner.os != 'Windows'
+      shell: bash
+      run: |
+        R CMD build .
+      working-directory: R/atlasapprox
+
+    - name: Run R CMD check --as-cran
+      if: runner.os != 'Windows'
+      shell: bash
+      run: |
+        R CMD check --as-cran atlasapprox_*.tar.gz
+      working-directory: R/atlasapprox
