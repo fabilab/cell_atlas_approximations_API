@@ -546,24 +546,38 @@ class API:
         self,
         organism: str,
         organ: str,
-        cell_type: str,
+        cell_type: Union[str, Sequence[str]],
         number: int,
         measurement_type: str = "gene_expression",
+        versus: str = "other_celltypes",
     ):
         """Get marker features (e.g. genes) for a cell type within an organ.
 
         Args:
             organism: The organism to query.
             organ: The organ to query.
-            cell_type: The cell type to get markers for.
+            cell_type: The cell type to get markers for. This parameter can
+                also be a sequence of cell types. In that case, the measurements in
+                any of those cell types are averaged and considered as a single
+                cell type of interest. Setting this as a sequence can lead to
+                subtle mistakes, so use with care. The most common use is to group
+                together cell types that are similar, e.g. various kinds of muscle
+                cells.
             number: The number of markers to look for. The actual number might
                 be lower if not enough distinctive features were found.
             measurement_type: The measurement type to query.
+            versus: Either "other_celltypes" or "other_organs". This determines
+                what cells to use as a background, whether the other cell types
+                in the same organ (default) or the same cell type in other
+                organs.
 
         Returns: A list of markers for the specified cell type in that organ.
             The number of markers might be less than requested if the cell type
             lacks distinctive features.
         """
+        if not isinstance(cell_type, str):
+            cell_type = ",".join(cell_type)
+
         response = requests.get(
             baseurl + "markers",
             params={
@@ -572,6 +586,7 @@ class API:
                 "celltype": cell_type,
                 "number": number,
                 "measurement_type": measurement_type,
+                "versus": versus,
             },
         )
         if response.ok:

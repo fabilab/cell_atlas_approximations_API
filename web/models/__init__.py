@@ -91,7 +91,6 @@ def get_data_sources():
                     "gene_expression": "RNA",
                     "chromatin_accessibility": "ATAC",
                 }
-                print(data_source)
                 data_source = ", ".join(
                     [
                         tmp_map[mt] + ": " + val.rstrip(".")

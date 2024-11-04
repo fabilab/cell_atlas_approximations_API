@@ -14,6 +14,7 @@ from models import (
     FeaturesNotPairedError,
     NeighborhoodNotFoundError,
 )
+from models.exceptions import OneOrganError
 
 
 class FeatureStringFormatError(Exception):
@@ -71,6 +72,16 @@ def model_exceptions(func):
                     "type": "invalid_parameter",
                     "invalid_parameter": "organ",
                     "invalid_value": exc.organ,
+                },
+            )
+        except OneOrganError as exc:
+            abort(
+                400,
+                message="Only one organ found.",
+                error={
+                    "type": "invalid_parameter",
+                    "invalid_parameter": "versus",
+                    "invalid_value": "other_organs",
                 },
             )
         except CellTypeNotFoundError as exc:

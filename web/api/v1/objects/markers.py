@@ -13,14 +13,14 @@ from api.v1.exceptions import (
 )
 from api.v1.utils import (
     clean_organ_string,
-    clean_celltype_string,
+    clean_celltypes_string,
 )
 
 
 class Markers(Resource):
     """Get average measurement by cell type"""
 
-    @required_parameters('organism', 'organ', 'celltype', 'number')
+    @required_parameters("organism", "organ", "celltype", "number")
     @model_exceptions
     def get(self):
         """Get list of cell types for an organ and organism"""
@@ -29,16 +29,20 @@ class Markers(Resource):
         organism = args.get("organism")
         organ = args.get("organ")
         organ = clean_organ_string(organ)
-        cell_type = args.get("celltype")
-        cell_type = clean_celltype_string(cell_type)
         number = args.get("number")
         versus = args.get("versus", "other_celltypes")
-        surface_only = str(args.get("surface_only", 'false')).lower() != 'false'
+        surface_only = str(args.get("surface_only", "false")).lower() != "false"
+
+        # One can request a single or multiple cell types. Markers for the average of the chosen
+        # cell types against the background will be returned.
+        cell_type = args.get("celltype")
+        cell_type = clean_celltypes_string(cell_type)
 
         if versus not in ("other_celltypes", "other_organs"):
             abort(
                 400,
-                message='The "versus" parameter should be either "other_celltypes" or "other_organs".')
+                message='The "versus" parameter should be either "other_celltypes" or "other_organs".',
+            )
 
         try:
             number = int(number)
@@ -57,7 +61,7 @@ class Markers(Resource):
                 measurement_type=measurement_type,
                 surface_only=surface_only,
             )
-            if cell_type == 'all':
+            if cell_type == "all":
                 markers, targets = markers
         else:
             markers = get_markers_vs_other_tissues(
@@ -68,10 +72,12 @@ class Markers(Resource):
                 measurement_type=measurement_type,
                 surface_only=surface_only,
             )
-            if organ == 'all':
+            if organ == "all":
                 markers, targets = markers
 
-        result =  {
+        cell_type = ", ".join(cell_type)
+
+        result = {
             "organism": organism,
             "organ": organ,
             "measurement_type": measurement_type,
@@ -79,9 +85,12 @@ class Markers(Resource):
             "markers": list(markers),
         }
 
-        if (versus == "other_celltypes") and (cell_type == 'all'):
-            result['targets'] = targets
-        elif (versus == "other_organs") and (organ == 'all'):
-            result['targets'] = targets
+        if (versus == "other_celltypes") and (cell_type == "all"):
+            result["targets"] = targets
+        elif (versus == "other_organs") and (organ == "all"):
+            result["targets"] = targets
+
+        # FIXME: what?
+        print(result)
 
         return result

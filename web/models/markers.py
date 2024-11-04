@@ -32,7 +32,8 @@ from models.surface import (
 )
 
 
-
+# FIXME: refactoring the "cell_type" variable in both functions would be a great idea. The only current issue is that it
+# modifies the function signature and therefore requires an internal audit across the codebase.
 def get_markers_vs_other_celltypes(
     organism,
     organ,
@@ -41,13 +42,22 @@ def get_markers_vs_other_celltypes(
     measurement_type="gene_expression",
     surface_only=False,
 ):
-    """Get marker features for a specific cell type in an organ."""
+    """Get marker features for a specific cell type in an organ.
+
+    NOTE: cell_type can actually be a sequence of cell types. In the function body below, it is in fact
+    converted to a list pretty early on and treated as one for the rest of the function. That appears to
+    be technically correct, nonetheless it requires care when reading the code.
+    """
     # In theory, one could use various methods to find markers
     if measurement_type == "gene_expression":
         method = "fraction"
     # For ATAC-Seq, average and fraction are the same thing
     else:
         method = "average"
+
+    # One can request multiple types as focal, the average will be used
+    if isinstance(cell_type, str):
+        cell_type = [cell_type]
 
     features = get_feature_names(organism, measurement_type)
     if surface_only:
@@ -57,64 +67,76 @@ def get_markers_vs_other_celltypes(
 
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
-        if measurement_type not in db['measurements']:
+        if measurement_type not in db["measurements"]:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}",
                 measurement_type=measurement_type,
             )
 
-        gby = db['measurements'][measurement_type]['grouped_by']['tissue->celltype']
-        if organ not in gby['values']['tissue'].asstr()[:]:
+        gby = db["measurements"][measurement_type]["grouped_by"]["tissue->celltype"]
+        if organ not in gby["values"]["tissue"].asstr()[:]:
             raise OrganNotFoundError(
                 f"Organ not found: {organ}",
                 organ=organ,
             )
 
-        data = db['measurements'][measurement_type]['data']['tissue->celltype'][organ]
+        data = db["measurements"][measurement_type]["data"]["tissue->celltype"][organ]
 
         # Cell types and indices
         cell_types = data["obs_names"].asstr()[:]
 
         # If all markers for the tissue are requested, merge a recursive call and bail
         # TODO: do this explicitely, it's probably faster by a decent bit
-        if cell_type == 'all':
+        if cell_type == ["all"]:
             markers = []
             targets = []
             for ct in cell_types:
-                markers_ct = list(get_markers_vs_other_celltypes(
-                    organism,
-                    organ,
-                    ct,
-                    number,
-                    measurement_type=measurement_type,
-                ))
+                markers_ct = list(
+                    get_markers_vs_other_celltypes(
+                        organism,
+                        organ,
+                        ct,
+                        number,
+                        measurement_type=measurement_type,
+                    )
+                )
                 markers.extend(markers_ct)
                 targets.extend([ct] * len(markers_ct))
             return markers, targets
 
-        if cell_type not in cell_types:
+        # All those cell types must be there, because this request is focused on a specific organ
+        if not pd.Index(cell_type).isin(cell_types).all():
             raise CellTypeNotFoundError(
                 f"Cell type not found: {cell_type}",
-                cell_type=cell_type,
+                cell_type=", ".join(cell_type),
             )
 
         # Matrix of measurements (rows are cell types)
-        mat = data[method]
+        # The last colon is needed to load from memory, which means unordered indexing can be used
+        mat = data[method][:]
         if surface_only:
             mat = mat[:, surface_ser_sorted.index.values]
 
-        # Index cell types
-        ncell_types = len(cell_types)
-        celltype_index_dict = get_celltype_index(cell_type, cell_types)
-        cell_type = celltype_index_dict["celltype"]
-        idx = celltype_index_dict["index"]
-        idx_other = [i for i in range(ncell_types) if i != idx]
+        # Compute focal cell type(s): if a single cell type is requested, the
+        # average is not doing anything. If multiple cell types are requested,
+        # then average across them so they do not compete with each other. this
+        # is useful for cell types that are similar, such as different types of
+        # muscle cells.
+        idx = []
+        for cell_typei in cell_type:
+            celltype_index_dict = get_celltype_index(cell_typei, cell_types)
+            cell_typei = celltype_index_dict["celltype"]
+            idxi = celltype_index_dict["index"]
+            idx.append(idxi)
+        vector = mat[idx].mean(axis=0)
 
-        vector = mat[idx]
+        # Compute background (other cell types)
+        ncell_types = len(cell_types)
+        idx_other = [i for i in range(ncell_types) if i not in idx]
         mat_other = mat[idx_other]
 
         # If the data is quantised, undo the quantisation to get real values
-        dequantise = "quantisation" in db['measurements'][measurement_type]
+        dequantise = "quantisation" in db["measurements"][measurement_type]
         if dequantise:
             quantisation = get_quantisation(organism, measurement_type)
             vector = quantisation[vector]
@@ -124,7 +146,7 @@ def get_markers_vs_other_celltypes(
     mat_other -= vector
     mat_other *= -1
 
-    # Find closest cell type for each feature
+    # Find closest cell type among backgroun types, separately for each feature
     closest_value = mat_other.min(axis=0)
 
     # Take top features
@@ -151,13 +173,22 @@ def get_markers_vs_other_tissues(
     measurement_type="gene_expression",
     surface_only=False,
 ):
-    """Get marker features for a specific cell type in an organ."""
+    """Get marker features for a specific cell type in an organ.
+
+    NOTE: cell_type can actually be a sequence of cell types. In the function body below, it is in fact
+    converted to a list pretty early on and treated as one for the rest of the function. That appears to
+    be technically correct, nonetheless it requires care when reading the code.
+    """
     # In theory, one could use various methods to find markers
     if measurement_type == "gene_expression":
         method = "fraction"
     # For ATAC-Seq, average and fraction are the same thing
     else:
         method = "average"
+
+    # One can request multiple types as focal, the average will be used
+    if isinstance(cell_type, str):
+        cell_type = [cell_type]
 
     features = get_feature_names(organism, measurement_type)
     if surface_only:
@@ -167,28 +198,30 @@ def get_markers_vs_other_tissues(
 
     approx_path = get_atlas_path(organism)
     with ApproximationFile(approx_path) as db:
-        if measurement_type not in db['measurements']:
+        if measurement_type not in db["measurements"]:
             raise MeasurementTypeNotFoundError(
                 f"Measurement type not found: {measurement_type}",
                 measurement_type=measurement_type,
             )
 
-        gby = db['measurements'][measurement_type]['grouped_by']['tissue->celltype']
-        organs = gby['values']['tissue'].asstr()[:]
+        gby = db["measurements"][measurement_type]["grouped_by"]["tissue->celltype"]
+        organs = gby["values"]["tissue"].asstr()[:]
         if len(organs) == 1:
             raise OneOrganError("Only one organ found")
-        if organ == 'all':
+        if organ == "all":
             markers = []
             targets = []
             for tissue in organs:
                 try:
-                    markers_organ = list(get_markers_vs_other_tissues(
-                        organism,
-                        tissue,
-                        cell_type,
-                        number,
-                        measurement_type=measurement_type,
-                    ))
+                    markers_organ = list(
+                        get_markers_vs_other_tissues(
+                            organism,
+                            tissue,
+                            cell_type,
+                            number,
+                            measurement_type=measurement_type,
+                        )
+                    )
                 except CellTypeNotFoundError:
                     continue
                 markers.extend(markers_organ)
@@ -203,19 +236,31 @@ def get_markers_vs_other_tissues(
         mat = []
         organs_mat = []
         for tissue in organs:
-            data_tissue = db['measurements'][measurement_type]['data']['tissue->celltype'][tissue]
+            data_tissue = db["measurements"][measurement_type]["data"][
+                "tissue->celltype"
+            ][tissue]
             # Cell types and indices
             cell_types = list(data_tissue["obs_names"].asstr()[:])
 
-            if cell_type not in cell_types:
+            # This request is across organs, and different variants of a cell type can be found across organs.
+            # Therefore, it is reasonalbe that only some of the mentioned cell types are found in each organ.
+            # At least one of them must be in the focal organ. Moreover, we can skip organs in which none of
+            # those cell types is found.
+            if not pd.Index(cell_type).isin(cell_types).any():
                 if tissue == organ:
                     raise CellTypeNotFoundError(
                         f"Cell type not found in {organ}: {cell_type}",
-                        cell_type=cell_type,
+                        cell_type=", ".join(cell_type),
                     )
                 continue
 
-            vect_tissue = data_tissue[method][cell_types.index(cell_type)]
+            idx = [cell_types.index(ct) for ct in cell_type if ct in cell_types]
+            # Sort it to access only those numbers from disk (HDF5 requirement)
+            idx = np.sort(idx)
+
+            # Average across focal cell types if more than one selected
+            vect_tissue = data_tissue[method][idx].mean(axis=0)
+
             if surface_only:
                 vect_tissue = vect_tissue[surface_ser_sorted.index.values]
             mat.append(vect_tissue)
@@ -234,7 +279,7 @@ def get_markers_vs_other_tissues(
         mat_other = mat[idx_other]
 
         # If the data is quantised, undo the quantisation to get real values
-        dequantise = "quantisation" in db['measurements'][measurement_type]
+        dequantise = "quantisation" in db["measurements"][measurement_type]
         if dequantise:
             quantisation = get_quantisation(organism, measurement_type)
             vector = quantisation[vector]
@@ -261,5 +306,3 @@ def get_markers_vs_other_tissues(
         markers = features[idx_markers]
 
     return markers
-
-
