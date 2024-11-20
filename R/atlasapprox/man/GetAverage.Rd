@@ -9,7 +9,7 @@ GetAverage(organism, organ, features)
 \arguments{
 \item{organism}{The organism you would like to query}
 
-\item{organ}{The organism you would like to query}
+\item{organ}{The organ you would like to query}
 
 \item{features}{The features (genes) you would like to query}
 }

@@ -390,14 +390,12 @@ use:</p>
 available organisms:</p>
 <pre class="r"><code>organisms &lt;- GetOrganisms()
 print(organisms)</code></pre>
-<pre><code>##  [1] &quot;a_queenslandica&quot; &quot;a_thaliana&quot;      &quot;c_elegans&quot;       &quot;c_gigas&quot;        
-##  [5] &quot;c_hemisphaerica&quot; &quot;d_melanogaster&quot;  &quot;d_rerio&quot;         &quot;f_vesca&quot;        
-##  [9] &quot;h_miamia&quot;        &quot;h_sapiens&quot;       &quot;h_vulgaris&quot;      &quot;i_pulchra&quot;      
-## [13] &quot;l_minuta&quot;        &quot;m_leidyi&quot;        &quot;m_murinus&quot;       &quot;m_musculus&quot;     
-## [17] &quot;n_vectensis&quot;     &quot;o_sativa&quot;        &quot;p_crozieri&quot;      &quot;p_dumerilii&quot;    
-## [21] &quot;s_lacustris&quot;     &quot;s_mansoni&quot;       &quot;s_mediterranea&quot;  &quot;s_pistillata&quot;   
-## [25] &quot;s_purpuratus&quot;    &quot;t_adhaerens&quot;     &quot;t_aestivum&quot;      &quot;x_laevis&quot;       
-## [29] &quot;z_mays&quot;</code></pre>
+<pre><code>##  [1] &quot;a_queenslandica&quot; &quot;a_thaliana&quot;      &quot;c_elegans&quot;       &quot;c_gigas&quot;         &quot;c_hemisphaerica&quot;
+##  [6] &quot;d_melanogaster&quot;  &quot;d_rerio&quot;         &quot;f_vesca&quot;         &quot;h_miamia&quot;        &quot;h_sapiens&quot;      
+## [11] &quot;h_vulgaris&quot;      &quot;i_pulchra&quot;       &quot;l_minuta&quot;        &quot;m_leidyi&quot;        &quot;m_murinus&quot;      
+## [16] &quot;m_musculus&quot;      &quot;n_vectensis&quot;     &quot;o_sativa&quot;        &quot;p_crozieri&quot;      &quot;p_dumerilii&quot;    
+## [21] &quot;s_lacustris&quot;     &quot;s_mansoni&quot;       &quot;s_mediterranea&quot;  &quot;s_pistillata&quot;    &quot;s_purpuratus&quot;   
+## [26] &quot;t_adhaerens&quot;     &quot;t_aestivum&quot;      &quot;x_laevis&quot;        &quot;z_mays&quot;</code></pre>
 </div>
 <div id="organs-in-a-single-organism" class="section level2">
 <h2>Organs in a single organism</h2>
@@ -406,10 +404,10 @@ list of organs from that species for which an atlas approximation is
 available:</p>
 <pre class="r"><code>human_organs &lt;- GetOrgans(organism = &#39;h_sapiens&#39;)
 print(human_organs)</code></pre>
-<pre><code>##  [1] &quot;bladder&quot;   &quot;blood&quot;     &quot;colon&quot;     &quot;eye&quot;       &quot;fat&quot;       &quot;gut&quot;      
-##  [7] &quot;heart&quot;     &quot;kidney&quot;    &quot;liver&quot;     &quot;lung&quot;      &quot;lymphnode&quot; &quot;mammary&quot;  
-## [13] &quot;marrow&quot;    &quot;muscle&quot;    &quot;pancreas&quot;  &quot;prostate&quot;  &quot;salivary&quot;  &quot;skin&quot;     
-## [19] &quot;spleen&quot;    &quot;thymus&quot;    &quot;tongue&quot;    &quot;trachea&quot;   &quot;uterus&quot;</code></pre>
+<pre><code>##  [1] &quot;bladder&quot;   &quot;blood&quot;     &quot;colon&quot;     &quot;eye&quot;       &quot;fat&quot;       &quot;gut&quot;       &quot;heart&quot;    
+##  [8] &quot;kidney&quot;    &quot;liver&quot;     &quot;lung&quot;      &quot;lymphnode&quot; &quot;mammary&quot;   &quot;marrow&quot;    &quot;muscle&quot;   
+## [15] &quot;pancreas&quot;  &quot;prostate&quot;  &quot;salivary&quot;  &quot;skin&quot;      &quot;spleen&quot;    &quot;thymus&quot;    &quot;tongue&quot;   
+## [22] &quot;trachea&quot;   &quot;uterus&quot;</code></pre>
 </div>
 <div id="cell-types-within-an-organ" class="section level2">
 <h2>Cell types within an organ</h2>
@@ -513,10 +511,10 @@ you can use:</p>
 <pre class="r"><code>genes &lt;- GetFeatures(organism = &#39;h_sapiens&#39;)
 # To show just the first 20 genes
 print(head(genes, 20))</code></pre>
-<pre><code>##  [1] &quot;A1BG&quot;        &quot;A1BG-AS1&quot;    &quot;A1CF&quot;        &quot;A2M&quot;         &quot;A2M-AS1&quot;    
-##  [6] &quot;A2ML1&quot;       &quot;A2ML1-AS1&quot;   &quot;A2ML1-AS2&quot;   &quot;A2MP1&quot;       &quot;A3GALT2&quot;    
-## [11] &quot;A4GALT&quot;      &quot;A4GNT&quot;       &quot;AAAS&quot;        &quot;AACS&quot;        &quot;AACSP1&quot;     
-## [16] &quot;AADAC&quot;       &quot;AADACL2&quot;     &quot;AADACL2-AS1&quot; &quot;AADACL3&quot;     &quot;AADACL4&quot;</code></pre>
+<pre><code>##  [1] &quot;A1BG&quot;        &quot;A1BG-AS1&quot;    &quot;A1CF&quot;        &quot;A2M&quot;         &quot;A2M-AS1&quot;     &quot;A2ML1&quot;      
+##  [7] &quot;A2ML1-AS1&quot;   &quot;A2ML1-AS2&quot;   &quot;A2MP1&quot;       &quot;A3GALT2&quot;     &quot;A4GALT&quot;      &quot;A4GNT&quot;      
+## [13] &quot;AAAS&quot;        &quot;AACS&quot;        &quot;AACSP1&quot;      &quot;AADAC&quot;       &quot;AADACL2&quot;     &quot;AADACL2-AS1&quot;
+## [19] &quot;AADACL3&quot;     &quot;AADACL4&quot;</code></pre>
 </div>
 <div id="markers" class="section level2">
 <h2>Markers</h2>
@@ -580,9 +578,9 @@ released for public use:</p>
 <ul>
 <li><a href="https://www.nature.com/articles/s41559-018-0575-6">A.
 queenslandica - Sebé-Pedrós et al 2018</a></li>
-<li>A. thaliana: <a href="https://www.sciencedirect.com/science/article/pii/S1534580722000338">Shahan
-et al 2022</a> [root], <a href="https://doi.org/10.1101/2024.03.04.583414">Xu et al 2024</a>
-[shoot]</li>
+<li>A. thaliana: <a href="https://doi.org/10.1016/j.devcel.2022.01.008">Shahan et al
+2022</a> [root], <a href="https://doi.org/10.1101/2024.03.04.583414">Xu
+et al 2024</a> [shoot]</li>
 <li><a href="https://www.science.org/doi/10.1126/science.aam8940">C.
 elegans - Cao et al. 2017</a></li>
 <li><a href="https://doi.org/10.1126/sciadv.adg6034">C. gigas - Piovani
@@ -602,8 +600,8 @@ al. Ren</a>, <a href="https://www.science.org/doi/10.1126/science.abl4896">RNA 
 Sapiens</a></li>
 <li><a href="https://doi.org/10.1126/science.aav9314">H. vulgaris -
 Sieert et al 2019</a></li>
-<li><a href="https://academic.oup.com/mbe/article/38/5/1888/6045962">I.
-pulchra - Duruz et al. 2020</a></li>
+<li><a href="https://doi.org/10.1093/molbev/msaa333">I. pulchra - Duruz
+et al. 2020</a></li>
 <li><a href="https://doi.org/10.1093/plphys/kiab564">L. minuta -
 Abramson et al. 2022</a></li>
 <li><a href="https://www.nature.com/articles/s41559-018-0575-6">M.
@@ -618,16 +616,16 @@ musculus - Tabula Muris Senis 2020</a></li>
 Zhang et al 2021</a></li>
 <li><a href="https://doi.org/10.1126/sciadv.adg6034">P. crozieri -
 Piovani et al 2023</a></li>
-<li><a href="https://academic.oup.com/mbe/article/35/5/1047/4823215">P.
-dumerilii - Achim et al 2017</a></li>
+<li><a href="https://doi.org/10.1093/molbev/msx336">P. dumerilii - Achim
+et al 2017</a></li>
 <li><a href="https://www.science.org/doi/10.1126/science.abj2949">S.
 lacustris - Musser et al. 2021</a></li>
 <li><a href="https://www.nature.com/articles/s41467-020-20794-w">S.
 mansoni - Li et al. 2021</a></li>
 <li><a href="https://doi.org/10.1126/science.aaq1723">S. mediterranea -
 Plass et al. 2018</a></li>
-<li><a href="https://www.sciencedirect.com/science/article/pii/S0092867421004402">S.
-pistillata - Levi et al. 2021</a></li>
+<li><a href="https://doi.org/10.1016/j.cell.2021.04.005">S. pistillata -
+Levi et al. 2021</a></li>
 <li><a href="https://doi.org/10.7554/eLife.70416">S. purpuratus -
 Paganos et al 2021</a></li>
 <li><a href="https://www.nature.com/articles/s41559-018-0575-6">T.
@@ -636,8 +634,8 @@ adhaerens - Sebé-Pedrós et al 2018</a></li>
 aestivum - Zhang et al 2023</a></li>
 <li><a href="https://www.nature.com/articles/s41467-022-31949-2">X.
 laevis - Liao et al. 2022</a></li>
-<li>Z. mays: <a href="https://www.cell.com/cell/pdf/S0092-8674(21)00493-1.pdf">Marand et
-al 2021</a> [seedling], <a href="https://doi.org/10.1101/2024.03.04.583414">Xu et al 2024</a>
+<li>Z. mays: <a href="https://doi.org/10.1016/j.cell.2021.04.014">Marand
+et al 2021</a> [seedling], <a href="https://doi.org/10.1101/2024.03.04.583414">Xu et al 2024</a>
 [eartip]</li>
 </ul>
 <p>We are grateful to all authors above for their help and committment

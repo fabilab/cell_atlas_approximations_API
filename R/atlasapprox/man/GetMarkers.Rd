@@ -9,7 +9,7 @@ GetMarkers(organism, organ, cell_type, number)
 \arguments{
 \item{organism}{The organism you would like to query}
 
-\item{organ}{The organism you would like to query}
+\item{organ}{The organ you would like to query}
 
 \item{cell_type}{The cell type you would like to query}
 
