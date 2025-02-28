@@ -48,7 +48,7 @@ def clean_celltype_string(cell_type):
 
 
 def clean_celltypes_string(celltypes_string):
-    """Clean cell types string."""
+    """Clean cell types string into multiple cell types."""
     if celltypes_string is None:
         return []
     cell_types = celltypes_string.replace('"', "").replace("'", "")

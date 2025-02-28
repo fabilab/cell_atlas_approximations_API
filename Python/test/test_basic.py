@@ -36,3 +36,6 @@ class TestBasic(unittest.TestCase):
         self.assertEqual(avg.shape[0], 2)
         self.assertEqual(avg.index.tolist(), ["CD4", "CD8A"])
         self.assertTrue((avg.values >= 0).all())
+
+
+# TODO: add a lot more tests
